@@ -1,0 +1,12 @@
+{
+  "name": "VaultPanel",
+  "dimensions": [
+    1149,
+    337
+  ],
+  "ranges": [
+    "Simulated range: 12–28%.",
+    "Simulated range: 14–32%."
+  ],
+  "repository": "https://github.com/gc2k10/VaultPanel"
+}
