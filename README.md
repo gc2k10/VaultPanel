@@ -41,4 +41,4 @@ Never expose the administration interface directly to the internet. Do not publi
 
 ## License and support
 
-Licensed under the [MIT License](LICENSE). Optional funding links are pending. No payment is required to view this repository.
+Licensed under the [MIT License](LICENSE). Optional support: [Buy Me a Coffee](https://buymeacoffee.com/gc2k10f). No payment is required to view this repository.
