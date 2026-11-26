@@ -1,5 +1,9 @@
 # VaultPanel
 
+<img src="frontend/assets/brand/vaultpanel.png" alt="VaultPanel logo" width="480">
+
+[Project website](https://gc2k10.github.io/VaultPanel/about.html) · [Interactive demo](https://gc2k10.github.io/VaultPanel/)
+
 A self-hosted infrastructure dashboard for Raspberry Pi and home servers.
 
 VaultPanel aims to bring storage, services, networking, hardware health and alerts into a single responsive interface.
@@ -42,3 +46,4 @@ Never expose the administration interface directly to the internet. Do not publi
 ## License and support
 
 Licensed under the [MIT License](LICENSE). Optional support: [Buy Me a Coffee](https://buymeacoffee.com/gc2k10f). No payment is required to view this repository.
+
