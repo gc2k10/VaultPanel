@@ -1,0 +1,29 @@
+# Local secrets; examples remain reviewable
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+# Private intake and generated/runtime data
+private-intake/
+exports/
+review-output/
+*.log
+*.sqlite*
+*.db
+*.sql
+*.dump
+*.tar
+*.tar.gz
+*.zip
+node_modules/
+dist/
+build/
+coverage/
+__pycache__/
+.venv/
+.DS_Store
