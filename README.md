@@ -35,4 +35,4 @@ The heuristic scanner intentionally reports some code references and synthetic t
 - [Security](SECURITY.md), [licensing](docs/LICENSING.md), and [contributing](CONTRIBUTING.md)
 - [Earlier intake audit](docs/AUDIT.md), [source export procedure](docs/SOURCE_EXPORT.md)
 
-No license grant is added by this work. The owner confirmed authorship and redistribution rights on 2026-11-27. License selection, target-device telemetry and isolated hardware validation remain open; see docs/ALPHA_READINESS.md. The live NAS was not contacted or modified.
+Licensed under [MIT](LICENSE), selected by the owner on 2026-11-27 after confirming authorship and redistribution rights. The first alpha is approved as monitoring-only. Target-device telemetry and manual accessibility validation remain open; see [alpha readiness](docs/ALPHA_READINESS.md). The live NAS was not contacted or modified.

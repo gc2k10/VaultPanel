@@ -1,24 +1,13 @@
-> Intake-stage record. A sanitized read-only application is now present; see [SOURCE_REVIEW.md](SOURCE_REVIEW.md), [CONFIGURATION.md](CONFIGURATION.md) and [VALIDATION.md](VALIDATION.md) for the current evidence. Earlier statements about missing application source describe the original baseline. Licensing and release gates remain open.
+# Licensing and dependency provenance
 
-# Licensing and dependency intake
+## Project license
 
-The baseline repository has no license. This preparation does not assign a license to missing, vendor or third-party code. MIT is a candidate for original project code only after ownership is confirmed; no license grant is asserted here.
+The owner selected the MIT License on 2026-11-27 after confirming that the team wrote VaultPanel and holds rights to its code and design. The original project code and documentation are covered by the root [LICENSE](../LICENSE). The copyright notice uses the owner's existing public project handle and VaultPanel contributors; no private identity or contact information is added.
 
-Before importing a component, record:
+The owner statement is an attestation, not an independent provenance determination. MIT does not relicense third-party dependencies or vendor software. Preserve their applicable license and copyright notices.
 
-| Field | Required information |
-| --- | --- |
-| Component and location | Exact files and module |
-| Provenance | Author, upstream URL, version/commit, acquisition method |
-| Permission | Applicable license and evidence of redistribution rights |
-| Obligations | Notices, attribution, source availability and modifications |
-| Dependencies | Direct/transitive versions, lockfile and license inventory |
-| Assets | Separate rights for icons, fonts, photos, logos and screenshots |
+## Dependency evidence
 
-Current inventory: original baseline README; newly authored preparation documents and Node.js tools; no application dependencies or vendored assets. The tools import only Node.js built-ins and require no package installation. This is not an SBOM for the missing application or Raspberry Pi operating system.
+The application dependency versions and installed wheel license metadata/hashes are recorded in [dependency-inventory.json](dependency-inventory.json) and the tested requirements files. This is evidence for the tested environment, not an inventory of the NAS operating system. Intake tools use Node.js built-ins; optional browser/security test tools have their own licenses and are not bundled in the source export.
 
-Do not infer licenses of Samba, Nextcloud, Pi-hole, Unbound, Netdata, Tailscale, display drivers or vendor software from their names. Check the exact versions and files actually imported. Prefer referencing upstream installation instructions over copying vendor code until rights are established. Preserve existing notices when importing permitted material.
-
-## Owner statement — 2026-11-27
-
-The owner confirmed that the team wrote VaultPanel and holds the rights to the code and design. This is an owner attestation, not an independent provenance determination. No application license has been selected or granted. Dependency notices remain separate; do not infer rights to external vendor code that has not been imported.
+Before importing external code or assets, record the author, upstream location, exact revision, applicable license, redistribution permission and required notices. Do not infer licenses of services, display drivers or vendor software from their names. Reference upstream installation instructions rather than copying unreviewed vendor code. No production hardware scripts or private configuration are included in this license grant or export.
