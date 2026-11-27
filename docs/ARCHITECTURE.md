@@ -1,29 +1,27 @@
-# Architecture and evidence
+# Architecture and hardware boundaries
 
-## Recovered implementation
+## Implemented read-only candidate
 
-Browser → Flask (`vaultpanel/app.py`) → Python collectors → Linux commands, proc/sys files and local service state.
+Browser (classic or retro layout) -> local Flask API -> collectors -> psutil, bounded state-file reads and optional allowlisted diagnostic commands.
 
-Classic and retro HTML templates share collector API routes, with separate CSS and JavaScript. The source intake adds a Basic-auth and loopback-host boundary, read-only HTTP policy, escaped dynamic HTML and restrictive browser headers. No proxy headers are trusted. This does not establish a production security model.
+The application binds to loopback and enforces loopback client/Host guards. Optional local authentication and response security headers are implemented. No proxy headers are trusted. Deployment for remote access is outside this candidate's scope.
 
-| Module | Evidence in recovered source | Still missing |
-| --- | --- | --- |
-| Frontend | Both templates, CSS and JS | Browser/device QA; seven assets reviewed, personal OLED logo excluded |
-| Backend | Flask routes, collectors, alert history logic | Production authentication, concurrency and deployment |
-| Storage | Operator-confirmed mdraid RAID1 with BTRFS single/DUP on top; diagnostic readers | SMART trends, provisioning, repair and failure tests |
-| Backup/snapshots | Seven operator-confirmed read-only snapshots; directory readers; backup entry point disabled | Consistent backup/restore and safe retention implementation |
-| Samba | smbd status entry | Share configuration and permission model |
-| Nextcloud | Named Docker container status | Deployment, PostgreSQL/Redis configuration and version inventory |
-| Pi-hole | pihole-FTL service status | Resolver settings and Unbound integration |
-| Netdata | Service status | Access control and deployment |
-| Tailscale | Status/IP collection | Access policy and deployment |
-| UPS | Operator reports disconnected; testing explicitly excluded | No shutdown/power-return validation or protection claim |
-| OLED/RGB/fans | Python/shell adapters plus service/timer references | Vendor version, pin mapping, safe privilege model and hardware tests |
+Command diagnostics default to disabled. Configured reads use a fixed allowlist, no shell or sudo, a timeout and bounded output. State-file reads use regular files with size/schema checks. The API does not persist alert history on GET. All four write endpoints (backup, fan, LED, OLED) return HTTP 403; direct mutation adapters also deny operations. There is no switch to enable writes.
 
-No imported module configures Samba, Nextcloud, DNS, RAID or UPS. Hardware adapters remain disabled by default. Even after manual opt-in, they must be reviewed against the exact hardware revision. The app must never be given unrestricted root, shell or Docker-socket access.
+## Hardware evidence
 
-See [service audit](SERVICE_AUDIT.md) for the 14 supplied unit definitions and their compatibility limitations. The operator also listed Unbound as installed/enabled, but its configuration was not supplied.
+The owner reports Raspberry Pi 5 Model B Rev 1.1, Debian 13 ARM64, Python 3.13.5 and a Pironman 5-MAX case with an extra SSD heatsink. The product description lists dual NVMe, PWM cooling, RGB fans and a 0.96-inch OLED. This does not establish installed SSD count, RAID topology, Hailo presence, GPIO wiring, vendor driver versions or verified sensor paths.
 
-The [configuration audit](CONFIGURATION_AUDIT.md) documents recovered snapshot/cleanup schedules, broad host privileges and HTTP proxy behavior. These are evidence of the existing installation, not supported defaults.
+No vendor controller code, GPIO library, privileged helper, service unit or production configuration is installed by this review. All production hardware scripts were excluded. Thermal safety continues to depend on the existing independent cooling setup; VaultPanel does not replace it.
 
-See [storage evidence](STORAGE_AUDIT.md) for the observed topology and the boot/root partitions outside the data mirror.
+## Evidence boundaries
+
+- Synthetic fixtures exercise the API and both layouts without contacting hardware.
+- Python tests cover disabled writes, parsing, configuration, authentication and bounded reads.
+- Linux ARM64 CI with Python 3.13.5 is configured separately from the x64 matrix. It tests application portability, not a Raspberry Pi kernel, Debian image or physical case.
+- Real sensor integration remains unvalidated. Missing readings must remain unknown.
+- Snapshot names and RAID status do not prove backups. Backup/restore and future hardware controls require separate design and validation before implementation.
+
+Third-party services are not bundled merely because their names appear in documentation. License and configuration review must precede any new integration.
+
+Subsequent operator-provided storage evidence establishes mdraid RAID1 under BTRFS, with boot/root outside that mirror and seven read-only snapshots at observation time; see [storage audit](STORAGE_AUDIT.md). This does not certify restoration or current health. UPS is disconnected and excluded from work.

@@ -1,10 +1,12 @@
+> Historical intake evidence. The alpha runtime is now at the repository root. The earlier `vaultpanel/` runtime and executable hardware scripts were removed from the release tree during integration; reference units are not installable. Current behavior is documented in CONFIGURATION.md and INSTALLATION.md.
+
 # Asset review — 2026-11-28
 
-The owner supplied eight graphics and confirmed ownership. They explicitly excluded one personal OLED logo and authorized public/MIT distribution for the remaining seven. The excluded image is not present in the repository or its new commits; the private original intake is preserved. Both OLED scripts display generic VaultPanel text when the optional logo file is absent. Hardware execution remains gated.
+The owner supplied eight graphics and confirmed ownership. They explicitly excluded one personal OLED logo and authorized public/MIT distribution for the remaining seven. The excluded image is not present in the repository or its new commits; the private original intake is preserved. Earlier OLED fallback checks are historical only; executable OLED scripts are not shipped in the alpha.
 
 ## Included images
 
-| Repository path under vaultpanel/ | Dimensions | Use |
+| Repository path | Dimensions | Use |
 | --- | --- | --- |
 | static/img/vplogo.png | 1099 × 565 | Optional retro header logo; existing ASCII header remains the default |
 | static/android-chrome-192x192.png | 192 × 192 | Web manifest icon |
@@ -18,6 +20,6 @@ All included images were visually inspected, with ICO also converted privately f
 
 The large PNG contained EXIF and international text chunks. These were removed by filtering PNG chunks, without regenerating pixels or recompressing IDAT data. Remaining PNGs contained only structural/image chunks. PNG CRCs and source-to-publication IDAT equality were checked. ICO headers, frame bounds and trailing zero padding were checked; the ICO was not modified. Private hash inventories record the original and prepared files.
 
-The manifest now has a VaultPanel name and icon paths relative to its `/static/` location. Both templates reference icons via Flask static URLs. Authentication still applies to static assets, so installed-app icon fetching by an operating system may vary; no offline/PWA support is claimed. No service worker was added.
+The manifest now has a VaultPanel name and icon paths relative to its `/static/` location. Both templates reference icons via Flask static URLs. When optional local authentication is configured it also applies to static assets, so installed-app icon fetching by an operating system may vary; no offline/PWA support is claimed. No service worker was added.
 
 The repository MIT license applies to these seven images as authorized by their owner. Do not reintroduce the withheld personal OLED image or raw private metadata in a later import.

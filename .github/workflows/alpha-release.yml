@@ -1,0 +1,43 @@
+name: Publish validated v0.1.0-alpha
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/alpha-release.yml'
+      - 'docs/RELEASE_NOTES_ALPHA.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: publish-v0.1.0-alpha
+  cancel-in-progress: false
+jobs:
+  application:
+    uses: ./.github/workflows/review-tests.yml
+  demo:
+    uses: ./.github/workflows/demo-checks.yml
+  publish:
+    needs: [application, demo]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Verify package and publish owner-authorized prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 scripts/package-alpha.py
+          cp docs/RELEASE_NOTES_ALPHA.md "$RUNNER_TEMP/alpha-notes.md"
+          printf '\n## Validation evidence\n\nSource commit: %s\n\nAll application and demo checks passed: https://github.com/%s/actions/runs/%s\n' "$GITHUB_SHA" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" >> "$RUNNER_TEMP/alpha-notes.md"
+          if gh release view v0.1.0-alpha --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo 'Release already exists; refusing replacement.'
+            exit 1
+          fi
+          gh release create v0.1.0-alpha dist/alpha/VaultPanel-v0.1.0-alpha.zip dist/alpha/SOURCE_COMMIT.txt dist/alpha/SHA256SUMS.txt \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "v0.1.0-alpha — Experimental read-only VaultPanel" \
+            --notes-file "$RUNNER_TEMP/alpha-notes.md" --prerelease --latest=false

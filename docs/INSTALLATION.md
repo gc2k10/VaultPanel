@@ -1,37 +1,31 @@
-# Local read-only preview
+# Local evaluation of the alpha candidate
 
-## Requirements
+This is a read-only review candidate, not a production NAS installer. Use a separate development machine or disposable VM. Do not install it over an existing VaultPanel or change any NAS services. No second physical NAS is required.
 
-Use an isolated checkout on a test machine. The intended runtime is Python 3.11+ on Linux; the intake tests were also run with the available Python 3.9.6 on macOS. A supported Raspberry Pi OS/Python combination and production deployment have not yet been validated. Node.js 22+ is needed only for repository tooling/frontend tests.
+## Start from the reviewed source archive
+
+Extract the reviewed source ZIP into a new empty directory. Use the ZIP checksum supplied with the candidate to verify the exact download before extraction. Open a terminal in the extracted VaultPanel directory. Python 3.10+ with venv support is required; Node is needed only for developer tests.
 
 ```sh
 python3 -m venv .venv
 . .venv/bin/activate
-python -m pip install -r vaultpanel/requirements.txt
-python -m unittest discover -s tests -p 'test_*.py'
-node --test tests/*.test.mjs
+python -m pip install -r requirements-alpha.txt
+python -m pip check
+python -B app.py
 ```
 
-Generate a fresh session password locally, without placing it in shell history:
+These commands install dependencies only into the local virtual environment. Do not use sudo. Open `http://127.0.0.1:8090/` or `/retro` on that same machine. If the port is already in use, stop this evaluation attempt; do not stop an unknown service or overwrite a live installation. The Flask development server is only for local evaluation.
 
-```sh
-export VAULTPANEL_PASSWORD="$(python -c 'import secrets; print(secrets.token_urlsafe(32))')"
-printf '%s\n' "$VAULTPANEL_PASSWORD"
-python vaultpanel/app.py
-```
+Start with no VAULTPANEL environment overrides. `.env.example` is documentation and is not loaded automatically. Diagnostic commands default to disabled, service/device lists are empty and missing readings remain unknown. All four write endpoints deny requests. No disks, accounts, services, firewall rules or startup tasks are configured. The displayed telemetry belongs to the evaluation machine, not the NAS.
 
-Open `http://127.0.0.1:8090` or `http://127.0.0.1:8090/retro`. The browser requests username `vaultpanel` and the generated password. Keep the password local; do not paste it into issues, screenshots or logs. The application does not automatically load `.env` files.
+The optional `VAULTPANEL_ACCESS_TOKEN` protects local access with Basic authentication; configure it privately if needed. Local-only binding is not isolation from other local users/processes. Do not expose this build through a proxy or tunnel. See [configuration](CONFIGURATION.md).
 
-The development server binds only to loopback. For a remote test host, use an SSH tunnel such as `ssh -N -L 8090:127.0.0.1:8090 USER@HOST`, replacing USER and HOST locally. HTTP Basic authentication must stay inside loopback/SSH; this is not a public HTTPS deployment. Do not expose the port, run as root, grant blanket sudo or add the process to the Docker group to make diagnostics work.
+## Stop and remove the evaluation
 
-## Expected limitations
+Press Ctrl+C in the terminal running the server, then run `deactivate`. Remove only the new directory created for this evaluation if no longer needed. No system service is installed, so there is no service uninstall or reboot step. Do not delete an existing deployment or its data. This procedure is not an upgrade or rollback plan for a production installation.
 
-- All write methods are blocked after authentication, including backup, OLED, LED and fan endpoints. No environment switch enables web writes.
-- Missing Linux tools or privileges yield missing/unknown data. Collectors may probe external connectivity; review `check_internet` and `check_dns` before use.
-- Storage paths and device names reflect recovered assumptions and require operator review. No formatting, RAID creation or service installation is performed.
-- The diagnostic script assumes mdraid, while other collectors assume BTRFS. Confirm actual topology before trusting storage indicators.
-- Hardware dependencies are listed separately in `vaultpanel/requirements-hardware.txt`; do not install or execute these adapters for a browser preview. Their opt-in gate is not a validation certificate.
-- Seven reviewed graphics are included. The personal OLED logo, installable sudo rules and OLED state files are not included. Existing host privileges and cleanup jobs are documented in [configuration audit](CONFIGURATION_AUDIT.md), not provided as installation defaults. Sanitized services/timers are reference material only, not installation units; see [service audit](SERVICE_AUDIT.md). Both frontends have restored icons. The retro layout retains its existing ASCII title; the large logo remains available in its original optional header block. OLED code has a text fallback when no logo is supplied.
-- The development server, synchronous collectors and Basic authentication are not a production architecture. Rate limiting, managed authentication, privilege separation, recovery and device testing remain release blockers.
+## Checks performed and limits
 
-Stop with Ctrl-C and unset the password with `unset VAULTPANEL_PASSWORD`. The preview does not install a system service or alter the existing Raspberry Pi deployment.
+A fresh local Python environment installs the pinned dependency set and passes `pip check`. The distribution smoke test creates a source ZIP from tracked files, extracts it into a temporary directory, and imports it in a new isolated Python process from a different working directory. It requests both pages, local assets, eight read APIs and four denied write APIs. Command execution and outbound socket connections are trapped; source hashes and the empty working directory must remain unchanged. API response contents are not printed or published.
+
+CI repeats the test on Linux x64 and ARM64. This uses the Flask request test client, not a production HTTP server or the physical Raspberry Pi. Browser tests use synthetic fixtures. Never deploy `tests/browser_server.py`.

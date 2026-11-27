@@ -1,10 +1,10 @@
-# VaultPanel — stan projektu
+# VaultPanel — przygotowania do alfy
 
-Odzyskano 24 pliki tekstowe z działającej instalacji: backend Flask, oba interfejsy i skrypty sprzętowe. Przygotowana kopia ma logowanie, nasłuch tylko lokalny i blokadę operacji sterujących. Nie zmieniono działającego urządzenia.
+Repozytorium zawiera oczyszczony panel tylko do odczytu z dwoma widokami. Pierwsza alfa i licencja MIT zostały zatwierdzone; wydanie nie zostało jeszcze opublikowane. Sterowanie sprzętem i backup są wyłączone.
 
-- [Uruchomienie podglądu](INSTALLATION.md)
-- [Audyt odzyskanego kodu](SOURCE_AUDIT.md)
-- [Architektura i braki](ARCHITECTURE.md)
-- [Licencja i zależności](LICENSING.md)
+- [Warunki wydania i ograniczenia](ALPHA_READINESS.md)
+- [Lokalne uruchomienie kopii testowej](INSTALLATION.md)
+- [Wyniki testów](VALIDATION.md)
+- [Projekt informacji o wydaniu](RELEASE_NOTES_ALPHA.md)
 
-Kod własny jest na licencji MIT. Brakuje grafik po przeglądzie, jednostek usług, harmonogramów i konfiguracji infrastruktury. To wersja do testów, nie gotowy instalator NAS.
+Nie potrzeba dostępu do NAS ani jego danych do dalszych testów lokalnych. Nie publikuj haseł, tokenów, kluczy, prywatnej konfiguracji ani transkryptów terminala. Nie instaluj tej wersji na produkcyjnym NAS w ramach przeglądu.

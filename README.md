@@ -1,42 +1,46 @@
 # VaultPanel
 
-A Raspberry Pi infrastructure dashboard with classic and retro web interfaces.
+A read-only review build of the existing Flask dashboard, with classic and retro layouts. The production-source intake has been reviewed and sanitized. **This is experimental v0.1.0-alpha code, not a production-validated version. Check GitHub Releases for publication status and verified archives.**
 
-**Status: recovered source, authenticated read-only preview. Not a production release or a NAS installer.** The owner supplied 24 text files from an active installation. This branch preserves the available frontend, backend and hardware adapter source while disabling privileged web actions and adding a local authentication boundary.
+The dashboard reads CPU, memory, uptime and configured storage telemetry. Optional Linux command-based reads are disabled by default. All four administration endpoints return HTTP 403; backup, fan, LED and OLED operations are intentionally unavailable. The original hardware scripts are excluded from the application.
 
-## Start here
+## Local evaluation
 
-- [Installation and local preview](docs/INSTALLATION.md)
-- [Recovered-source audit and changes](docs/SOURCE_AUDIT.md)
-- [Service and schedule audit](docs/SERVICE_AUDIT.md)
-- [Privilege, cron and proxy audit](docs/CONFIGURATION_AUDIT.md)
-- [Architecture and integration evidence](docs/ARCHITECTURE.md)
-- [Observed storage topology](docs/STORAGE_AUDIT.md)
-- [Safe source export](docs/SOURCE_EXPORT.md)
-- [Licensing and dependencies](docs/LICENSING.md)
-- [Security](SECURITY.md) and [contributing](CONTRIBUTING.md)
-- [Polski](docs/README.pl.md)
-
-## What is included
-
-`vaultpanel/` contains the Flask backend, collectors, both HTML/CSS/JavaScript frontends and gated OLED/RGB/fan adapters. Monitoring covers host resources, storage diagnostics, service status and networking. Observing a service is not installing or managing that service.
-
-Hardware controls and backup POST endpoints return an explicit refusal. Sanitized service/timer definitions are retained as non-installable reference files. No sudo rules, NAS data, databases, logs, private history are imported. Seven owner-authorized images are included; one personal OLED logo is deliberately excluded. See [asset review](docs/ASSETS.md).
-
-## Validation
+Use a disposable development environment, never a live NAS for this review. Python 3.10+ is the target for further validation. Tests passed on Python 3.10/3.12/3.13 on Linux x64 and Python 3.13.5 on Linux ARM64; current results are tracked in the PR. This does not validate physical Raspberry Pi sensors.
 
 ```sh
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements-alpha.txt
+python app.py
+```
+
+Open the loopback address `127.0.0.1:8090`; `/retro` selects the retro layout. Do not run as root. The Flask development server is for local evaluation only. No service installer, privileged permissions, disk changes or deployment are performed by these steps.
+
+Configuration uses environment variables documented in [.env.example](.env.example) and [CONFIGURATION.md](docs/CONFIGURATION.md). The example is not loaded automatically. No private network address, service selection, disk name or host identity is bundled.
+
+## Review and validation
+
+```sh
+python -m unittest discover -s tests -v
 node --test tests/*.test.mjs
-python -m unittest discover -s tests -p 'test_*.py'
 node scripts/review-files.mjs .
 ```
 
-Python tests require `vaultpanel/requirements.txt`; see the installation guide. The heuristic scanner also flags public URLs and synthetic security tests for manual review. It does not certify privacy or inspect Git history.
+The heuristic scanner intentionally reports some code references and synthetic test data; review its findings, do not treat an exit code as a privacy guarantee. Node.js 22+ is required for the intake tools and JavaScript tests.
 
-## License
+- [Local evaluation and removal](docs/INSTALLATION.md)
+- [Draft alpha release notes](docs/RELEASE_NOTES_ALPHA.md)
+- [Source audit, all 24 original files](docs/SOURCE_REVIEW.md)
+- [Validation results and release blockers](docs/VALIDATION.md)
+- [Configuration and API changes](docs/CONFIGURATION.md)
+- [Security](SECURITY.md), [licensing](docs/LICENSING.md), and [contributing](CONTRIBUTING.md)
+- [Earlier intake audit](docs/AUDIT.md), [source export procedure](docs/SOURCE_EXPORT.md)
 
-Original project code and documentation are available under [MIT](LICENSE), authorized by the owner. Third-party dependencies retain their own licenses; the seven included owner-supplied graphics are also MIT. No rights are asserted over vendor components.
+Licensed under [MIT](LICENSE), selected by the owner on 2026-11-27 after confirming authorship and redistribution rights. The first alpha is approved as monitoring-only. Target-device telemetry and manual accessibility validation remain open; see [alpha readiness](docs/ALPHA_READINESS.md). The live NAS was not contacted or modified.
 
-## Standalone synthetic demo
+## Existing demo and audited NAS evidence
 
-The existing [frontend demo](frontend/README.md) and [project site](https://gc2k10.github.io/VaultPanel/about.html) remain available. They use synthetic data and do not connect to a NAS. See [demo validation](docs/demo-validation.md).
+The [standalone frontend demo](frontend/README.md) and [project site](https://gc2k10.github.io/VaultPanel/about.html) remain synthetic and independent of the local Flask panel.
+
+Reviewed evidence from the parallel source intake is retained: [assets](docs/ASSETS.md), [services](docs/SERVICE_AUDIT.md), [host configuration](docs/CONFIGURATION_AUDIT.md), and [storage](docs/STORAGE_AUDIT.md). Historical scripts and unit references are not production installation instructions. UPS work is explicitly excluded. See [next work](docs/NEXT_WORK.md).

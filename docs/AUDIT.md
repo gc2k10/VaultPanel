@@ -1,3 +1,5 @@
+> Intake-stage record. A sanitized read-only application is now present; see [SOURCE_REVIEW.md](SOURCE_REVIEW.md), [CONFIGURATION.md](CONFIGURATION.md) and [VALIDATION.md](VALIDATION.md) for the current evidence. Earlier statements about missing application source describe the original baseline. Licensing and release gates remain open.
+
 # Baseline audit — 2026-11-26
 
 This is the historical pre-intake baseline. See [the source audit](SOURCE_AUDIT.md) for the later recovery of application code, owner-approved MIT licensing and local Git availability.

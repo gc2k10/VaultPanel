@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import Mock
 import zlib
 
-ROOT = Path(__file__).resolve().parents[1] / 'vaultpanel'
+ROOT = Path(__file__).resolve().parents[1]
 
 
 class AssetTests(unittest.TestCase):
@@ -32,17 +32,15 @@ class AssetTests(unittest.TestCase):
             self.assertEqual(kinds[0], b'IHDR')
             self.assertEqual(kinds[-1], b'IEND')
 
-    def test_oled_missing_logo_falls_back_without_opening_image_or_hardware(self):
-        # Compile only the drawing function: never import hardware initialization.
-        for name, expected in [('vaultpanel_oled.py', 'VaultPanel'),
-                               ('vaultpanel_oled_custom.py', ['VaultPanel'])]:
-            tree = ast.parse((ROOT / 'scripts' / name).read_text())
-            function = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == 'draw_logo')
-            draw = Mock()
-            image = Mock()
-            namespace = {'os': types.SimpleNamespace(path=types.SimpleNamespace(exists=lambda _: False)),
-                         'LOGO_PATH': 'missing.png', 'draw_text': draw, 'Image': image}
-            exec(compile(ast.Module(body=[function], type_ignores=[]), name, 'exec'), namespace)
-            namespace['draw_logo']()
-            draw.assert_called_once_with(expected)
-            image.open.assert_not_called()
+    def test_manifest_icons_resolve(self):
+        import json
+        from urllib.parse import urljoin
+        from app import create_app
+        client = create_app({'ACCESS_TOKEN': ''}).test_client()
+        with client.get('/static/site.webmanifest') as response:
+            manifest = json.loads(response.data)
+        self.assertEqual(manifest['name'], 'VaultPanel')
+        for item in manifest['icons']:
+            with client.get(urljoin('/static/site.webmanifest', item['src'])) as response:
+                self.assertEqual(response.status_code, 200)
+                self.assertTrue(response.data.startswith(b'\x89PNG\r\n\x1a\n'))

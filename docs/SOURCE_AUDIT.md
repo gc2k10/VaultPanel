@@ -1,3 +1,5 @@
+> Historical intake evidence. The alpha runtime is now at the repository root. The earlier `vaultpanel/` runtime and executable hardware scripts were removed from the release tree during integration; reference units are not installable. Current behavior is documented in CONFIGURATION.md and INSTALLATION.md.
+
 # Recovered-source audit — 2026-11-26
 
 ## Intake evidence

@@ -36,3 +36,4 @@ instance/
 # Demo test and release outputs
 playwright-report/
 test-results/
+state/
