@@ -7,10 +7,11 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style_retro.css') }}">
 </head>
 <body>
+  <a class="skip-link" href="#dashboard-content">Skip to dashboard</a>
   <p id="telemetryStatus" role="status" aria-live="polite">READ-ONLY REVIEW BUILD — hardware controls and backups are disabled.</p>
-  <main class="terminal-shell">
+  <main id="dashboard-content" tabindex="-1" class="terminal-shell">
     <header class="terminal-header">
-      <div class="terminal-title">┓┏&nbsp;&nbsp;&nbsp;&nbsp;┓&nbsp;┏┓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┓</br>┃┃┏┓┓┏┃╋┃┃┏┓┏┓┏┓┃</br>┗┛┗┻┗┻┗┗┣┛┗┻┛┗┗ ┗</br>VAULTPANEL RPI CONTROL TERMINAL</div>
+      <div class="terminal-title" role="heading" aria-level="1" aria-label="VaultPanel control terminal">┓┏&nbsp;&nbsp;&nbsp;&nbsp;┓&nbsp;┏┓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┓</br>┃┃┏┓┓┏┃╋┃┃┏┓┏┓┏┓┃</br>┗┛┗┻┗┻┗┗┣┛┗┻┛┗┗ ┗</br>VAULTPANEL RPI CONTROL TERMINAL</div>
 
       <div class="terminal-topright">
         <span id="platformTop">INITIALIZING...</span>
@@ -26,19 +27,19 @@
 
     <div class="ascii-line"></div>
 
-    <nav class="retro-nav">
-      <button class="nav-btn active" data-tab="overview">F1 OVERVIEW</button>
-      <button class="nav-btn" data-tab="cooling">F2 COOLING</button>
-      <button class="nav-btn" data-tab="storage">F3 STORAGE</button>
-      <button class="nav-btn" data-tab="services">F4 SERVICES</button>
-      <button class="nav-btn" data-tab="network">F5 NETWORK</button>
-      <button class="nav-btn" data-tab="alerts">F6 ALERTS</button>
+    <nav class="retro-nav" aria-label="Dashboard sections">
+      <button class="nav-btn active" data-tab="overview" aria-controls="tab-overview" aria-pressed="true">F1 OVERVIEW</button>
+      <button class="nav-btn" data-tab="cooling" aria-controls="tab-cooling" aria-pressed="false">F2 COOLING</button>
+      <button class="nav-btn" data-tab="storage" aria-controls="tab-storage" aria-pressed="false">F3 STORAGE</button>
+      <button class="nav-btn" data-tab="services" aria-controls="tab-services" aria-pressed="false">F4 SERVICES</button>
+      <button class="nav-btn" data-tab="network" aria-controls="tab-network" aria-pressed="false">F5 NETWORK</button>
+      <button class="nav-btn" data-tab="alerts" aria-controls="tab-alerts" aria-pressed="false">F6 ALERTS</button>
 
     </nav>
 
     <section id="tab-overview" class="tab active">
       <div class="terminal-section">
-        <h3>> SYSTEM SUMMARY</h3>
+        <h2>> SYSTEM SUMMARY</h2>
 
         <div class="kv"><span>CPU LOAD</span><span class="dots"></span><strong id="cpuUsage">--</strong></div>
         <div class="kv"><span>CPU TEMP</span><span class="dots"></span><strong id="cpuTemp">--</strong></div>
@@ -48,7 +49,7 @@
       </div>
 
       <div class="terminal-section">
-        <h3>> NETWORK</h3>
+        <h2>> NETWORK</h2>
 
         <div class="kv"><span>LAN IP</span><span class="dots"></span><strong id="lanIp">--</strong></div>
         <div class="kv"><span>TAILSCALE</span><span class="dots"></span><strong id="tsIp">--</strong></div>
@@ -56,7 +57,7 @@
       </div>
 
       <div class="terminal-section">
-        <h3>> STORAGE</h3>
+        <h2>> STORAGE</h2>
 
         <div class="kv"><span>LAST BACKUP</span><span class="dots"></span><strong id="lastBackup">--</strong></div>
         <div class="kv"><span>LAST SCRUB</span><span class="dots"></span><strong id="lastScrub">--</strong></div>
@@ -68,14 +69,14 @@
       </div>
 
       <div class="terminal-section">
-        <h3>> SERVICES</h3>
+        <h2>> SERVICES</h2>
         <div id="quickHealth" class="service-list"></div>
       </div>
     </section>
 
     <section id="tab-cooling" class="tab">
       <div class="terminal-section">
-        <h3>> COOLING CONTROL</h3>
+        <h2>> COOLING CONTROL</h2>
         <div class="kv"><span>REAR FANS</span><span class="dots"></span><strong id="rearFansView">--</strong></div>
         <div class="kv"><span>THERMAL STATE</span><span class="dots"></span><strong id="thermalState">--</strong></div>
         <div class="kv"><span>FAN PROFILE</span><span class="dots"></span><strong id="fanProfile">--</strong></div>
@@ -94,7 +95,7 @@
       </div>
 
       <div class="terminal-section">
-        <h3>> LED CONTROL</h3>
+        <h2>> LED CONTROL</h2>
 
         <div class="kv"><span>MODE</span><span class="dots"></span><strong id="ledMode">--</strong></div>
         <div class="kv"><span>BRIGHTNESS</span><span class="dots"></span><strong id="ledBrightness">--</strong></div>
@@ -126,7 +127,7 @@
   <div class="control-label">COLOR</div>
   <div class="ascii-color" id="colorAsciiWrap">
     <span class="ascii-color-value" id="colorAscii">#7CFC00 [ ████████ ]</span>
-    <input type="color" id="colorInput" class="ascii-color-native" value="#7cfc00">
+    <input type="color" aria-label="IO color" id="colorInput" class="ascii-color-native" value="#7cfc00">
   </div>
 </div>
 
@@ -202,7 +203,7 @@
 
 <section id="tab-storage" class="tab">
   <div class="terminal-section">
-    <h3>> STORAGE STATUS</h3>
+    <h2>> STORAGE STATUS</h2>
     <div class="kv"><span>USED</span><span class="dots"></span><strong id="rootUsed"></strong></div>
     <div class="kv"><span>FREE</span><span class="dots"></span><strong id="rootFree"></strong></div>
     <div class="kv"><span>TOTAL</span><span class="dots"></span><strong id="rootTotal"></strong></div>
@@ -211,7 +212,7 @@
   </div>
 
   <div class="terminal-section">
-    <h3>> ARRAY / SNAPSHOTS</h3>
+    <h2>> ARRAY / SNAPSHOTS</h2>
     <div class="kv"><span>RAID STATUS</span><span class="dots"></span><strong id="raidStatus">--</strong></div>
     <div class="kv"><span>FILESYSTEM</span><span class="dots"></span><strong id="filesystemType">--</strong></div>
     <div class="kv"><span>MOUNTPOINT</span><span class="dots"></span><strong id="storageMountpoint">--</strong></div>
@@ -227,21 +228,21 @@
   </div>
 
   <div class="terminal-section">
-    <h3>> BLOCK DEVICES</h3>
+    <h2>> BLOCK DEVICES</h2>
     <div id="devices"></div>
   </div>
 </section>
 
     <section id="tab-services" class="tab">
       <div class="terminal-section">
-        <h3>> SERVICE MATRIX</h3>
+        <h2>> SERVICE MATRIX</h2>
         <div id="servicesTable"></div>
       </div>
     </section>
 
     <section id="tab-network" class="tab">
       <div class="terminal-section">
-        <h3>> NETWORK STATUS</h3>
+        <h2>> NETWORK STATUS</h2>
         <div class="kv"><span>LAN IP</span><span class="dots"></span><strong id="netLan"></strong></div>
         <div class="kv"><span>TAILSCALE IP</span><span class="dots"></span><strong id="netTs"></strong></div>
         <div class="kv"><span>GATEWAY</span><span class="dots"></span><strong id="gateway"></strong></div>
@@ -250,7 +251,7 @@
       </div>
 
       <div class="terminal-section">
-        <h3>> LINK DETAIL</h3>
+        <h2>> LINK DETAIL</h2>
         <pre id="tsStatus" class="terminal-box"></pre></br>
         <pre id="resolvConf" class="terminal-box"></pre>
       </div>
@@ -258,7 +259,7 @@
 
     <section id="tab-alerts" class="tab">
       <div class="terminal-section">
-        <h3>> ALERT STREAM</h3>
+        <h2>> ALERT STREAM</h2>
         <div id="alertsList"></div>
 <div class="subsection-title">&gt; PREVIOUS ALERTS</div>
 <div id="alertsHistory"></div>

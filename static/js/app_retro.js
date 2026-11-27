@@ -48,7 +48,11 @@ async function fetchJson(url, options) {
 }
 
 function activateTab(name) {
-  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === name));
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    const selected = btn.dataset.tab === name;
+    btn.classList.toggle('active', selected);
+    btn.setAttribute('aria-pressed', String(selected));
+  });
   document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.id === `tab-${name}`));
 }
 

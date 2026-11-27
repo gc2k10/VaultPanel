@@ -106,3 +106,12 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   .app-shell { grid-template-columns: 1fr; }
   .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
 }
+
+.skip-link { position: absolute; left: 12px; top: -100px; z-index: 10; padding: 8px; background: var(--bg); color: var(--text); }
+.skip-link:focus { top: 8px; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+.card h2 { font-size: 1.17em; margin-block: 1em; }

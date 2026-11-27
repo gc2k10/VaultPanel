@@ -35,4 +35,4 @@ The heuristic scanner intentionally reports some code references and synthetic t
 - [Security](SECURITY.md), [licensing](docs/LICENSING.md), and [contributing](CONTRIBUTING.md)
 - [Earlier intake audit](docs/AUDIT.md), [source export procedure](docs/SOURCE_EXPORT.md)
 
-No license grant is added by this work. Source ownership, asset provenance, supported Linux runtimes and isolated hardware validation remain release gates. The live NAS was not contacted or modified.
+No license grant is added by this work. The owner confirmed authorship and redistribution rights on 2026-11-27. License selection, target-device telemetry and isolated hardware validation remain open; see docs/ALPHA_READINESS.md. The live NAS was not contacted or modified.

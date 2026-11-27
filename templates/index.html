@@ -7,26 +7,27 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+  <a class="skip-link" href="#dashboard-content">Skip to dashboard</a>
   <p id="telemetryStatus" role="status" aria-live="polite">READ-ONLY REVIEW BUILD — hardware controls and backups are disabled.</p>
   <div class="screen"></div>
   <div class="app-shell">
     <aside class="sidebar">
       <div class="brand">
-        <div class="brand-title">VaultPanel</div>
+        <div class="brand-title" role="heading" aria-level="1">VaultPanel</div>
         <div class="brand-sub">RPI CONTROL TERMINAL</div>
       </div>
-      <nav>
-        <button class="nav-btn active" data-tab="overview">Overview</button>
-        <button class="nav-btn" data-tab="cooling">Cooling / LED</button>
-        <button class="nav-btn" data-tab="storage">Storage</button>
-        <button class="nav-btn" data-tab="services">Services</button>
-        <button class="nav-btn" data-tab="network">Network</button>
-        <button class="nav-btn" data-tab="alerts">Alerts / Logs</button>
+      <nav aria-label="Dashboard sections">
+        <button class="nav-btn active" data-tab="overview" aria-controls="tab-overview" aria-pressed="true">Overview</button>
+        <button class="nav-btn" data-tab="cooling" aria-controls="tab-cooling" aria-pressed="false">Cooling / LED</button>
+        <button class="nav-btn" data-tab="storage" aria-controls="tab-storage" aria-pressed="false">Storage</button>
+        <button class="nav-btn" data-tab="services" aria-controls="tab-services" aria-pressed="false">Services</button>
+        <button class="nav-btn" data-tab="network" aria-controls="tab-network" aria-pressed="false">Network</button>
+        <button class="nav-btn" data-tab="alerts" aria-controls="tab-alerts" aria-pressed="false">Alerts / Logs</button>
       </nav>
       <div class="footer-note">TERMINAL UI // FALLBACK SAFE MODE</div>
     </aside>
 
-    <main class="content">
+    <main id="dashboard-content" tabindex="-1" class="content">
       <header class="topbar">
         <div>
           <div id="hostname">VAULTPANEL</div>
@@ -50,7 +51,7 @@
         </div>
         <div class="grid two-col">
           <div class="card">
-            <h3>System summary</h3>
+            <h2>System summary</h2>
             <div class="kv"><span>Generated at</span><strong id="generatedAt"></strong></div>
             <div class="kv"><span>Uptime</span><strong id="uptime"></strong></div>
             <div class="kv"><span>Load avg</span><strong id="loadAvg"></strong></div>
@@ -62,7 +63,7 @@
           </div>
 
           <div class="card">
-            <h3>Quick health</h3>
+            <h2>Quick health</h2>
             <div id="quickHealth" class="service-list"></div>
           </div>
         </div>
@@ -71,7 +72,7 @@
       <section id="tab-cooling" class="tab">
         <div class="grid two-col">
           <div class="card">
-            <h3>Fan telemetry</h3>
+            <h2>Fan telemetry</h2>
             <div id="fans"></div>
             <div class="kv"><span>Thermal state</span><strong id="thermalState"></strong></div>
             <div class="kv"><span>Fan profile</span><strong id="fanProfile"></strong></div>
@@ -83,7 +84,7 @@
             </div>
           </div>
           <div class="card">
-            <h3>IO Lighting + Fan LED</h3>
+            <h2>IO Lighting + Fan LED</h2>
             <div class="kv"><span>Current scene</span><strong id="ledScene"></strong></div>
             <div class="kv"><span>Current mode</span><strong id="ledMode"></strong></div>
             <div class="kv"><span>Brightness</span><strong id="ledBrightness"></strong></div>
@@ -96,7 +97,7 @@
                 </select>
               </label>
               <label>IO Color
-                <input type="color" id="colorInput" value="#7cfc00">
+                <input type="color" aria-label="IO color" id="colorInput" value="#7cfc00">
               </label>
               <label>Brightness
                 <input type="range" id="brightnessInput" min="0" max="100" value="62">
@@ -139,7 +140,7 @@
       <section id="tab-storage" class="tab">
         <div class="grid two-col">
           <div class="card">
-            <h3>Filesystem</h3>
+            <h2>Filesystem</h2>
             <div class="kv"><span>Used</span><strong id="rootUsed"></strong></div>
             <div class="kv"><span>Free</span><strong id="rootFree"></strong></div>
             <div class="kv"><span>Total</span><strong id="rootTotal"></strong></div>
@@ -147,7 +148,7 @@
             <pre id="btrfsStatus" class="terminal-box"></pre>
           </div>
           <div class="card">
-            <h3>Block devices</h3>
+            <h2>Block devices</h2>
             <div id="devices"></div>
           </div>
         </div>
@@ -155,7 +156,7 @@
 
       <section id="tab-services" class="tab">
         <div class="card">
-          <h3>Service status</h3>
+          <h2>Service status</h2>
           <div id="servicesTable"></div>
         </div>
       </section>
@@ -163,7 +164,7 @@
       <section id="tab-network" class="tab">
         <div class="grid two-col">
           <div class="card">
-            <h3>Network summary</h3>
+            <h2>Network summary</h2>
             <div class="kv"><span>LAN IP</span><strong id="netLan"></strong></div>
             <div class="kv"><span>Tailscale IP</span><strong id="netTs"></strong></div>
             <div class="kv"><span>Gateway</span><strong id="gateway"></strong></div>
@@ -171,7 +172,7 @@
             <div class="kv"><span>DNS</span><strong id="dnsStatus"></strong></div>
           </div>
           <div class="card">
-            <h3>Tailscale / DNS detail</h3>
+            <h2>Tailscale / DNS detail</h2>
             <pre id="tsStatus" class="terminal-box"></pre>
             <pre id="resolvConf" class="terminal-box"></pre>
           </div>
@@ -180,7 +181,7 @@
 
       <section id="tab-alerts" class="tab">
         <div class="card">
-          <h3>Current alerts</h3>
+          <h2>Current alerts</h2>
           <div id="alertsList"></div>
         </div>
       </section>

@@ -1,12 +1,14 @@
 // Start tests/browser_server.py first. Requires Playwright and a Chrome installation.
-const {chromium} = require('playwright');
+const playwright = require('playwright');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, 'telemetry.json'), 'utf8'));
 
 (async () => {
-  const browser = await chromium.launch({channel: 'chrome', headless: true});
+  const engine = process.env.VAULTPANEL_BROWSER || 'chromium';
+  assert.ok(['chromium', 'firefox', 'webkit'].includes(engine));
+  const browser = await playwright[engine].launch({...(engine === 'chromium' ? {channel: 'chrome'} : {}), headless: true});
   let passed = 0;
   try {
     for (const route of ['/', '/retro']) {
@@ -100,7 +102,7 @@ const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, 'telemetry.json'
       console.log(`PASS ${route}: hung API timeout, no overlapping refresh, recovery`);
       await slowPage.close();
     }
-    console.log(`${passed} browser scenarios passed; Chrome ${browser.version()}`);
+    console.log(`${passed} browser scenarios passed; ${engine} ${browser.version()}`);
   } finally {
     await browser.close();
   }

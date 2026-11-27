@@ -219,7 +219,7 @@ button {
   margin-bottom: 26px;
 }
 
-h3 {
+h2 {
   margin: 0 0 16px 0;
   font-size: 16px;
   font-weight: 400;
@@ -227,7 +227,7 @@ h3 {
   color: var(--text);
 }
 
-.terminal-section h3::before {
+.terminal-section h2::before {
   content: "";
 }
 
@@ -744,6 +744,10 @@ input[type="range"] {
 }
 
 .ascii-select-native {
+  appearance: none;
+  min-width: 0;
+  padding: 0;
+  border: 0;
   position: absolute;
   inset: 0;
   opacity: 0;
@@ -822,3 +826,10 @@ input[type="range"] {
 .row { grid-template-columns: minmax(0, auto) minmax(12px, 1fr) minmax(0, auto); }
 .row > span, .row > strong { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
 .row > span:first-child { white-space: normal; }
+
+.skip-link { position: absolute; left: 12px; top: -100px; z-index: 10; padding: 8px; background: var(--bg); color: var(--text); }
+.skip-link:focus { top: 8px; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

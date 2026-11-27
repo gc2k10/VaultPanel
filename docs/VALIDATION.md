@@ -2,6 +2,8 @@
 
 Date: 2026-11-27. Status: review candidate toward v0.1.0-alpha; **not released**.
 
+For current release decisions, use `ALPHA_READINESS.md` and the latest verification section below. Earlier sections retain historical results.
+
 ## Executed checks
 
 - Static/manual review of every one of the 24 original source files; archived code was never executed.
@@ -50,3 +52,14 @@ Install Playwright 1.62.1 in a separate development tools directory and make it 
 - Polling waits for every request to settle, so a fast error cannot start another refresh while a sibling request is still pending. Eight-second request timeouts remain in effect. Both layouts now wrap long host/service/alert values on mobile.
 
 The final 12 Chrome/Playwright scenarios passed, including long values and a mixed fast-failure/hung-request cycle with automatic recovery. Newest Linux CI outcomes are attached to the PR validation summary. No hardware writes, production deployment, merge or release was performed.
+
+## Accessibility and HTTP failure verification — 2026-11-27
+
+- 32 Python tests and 11 Node tests passed locally. Six new HTTP tests cover collector exceptions, invalid authentication, method/path rejection, cross-origin response headers, forwarded-header spoofing and malformed/oversized admin bodies. Unexpected collector failures return generic JSON HTTP 503 without exception details.
+- Playwright 1.62.1: 12 scenarios each in Chrome 158.0.8127.88, Firefox 153.0 and WebKit 26.5 (36 total), using only synthetic fixture telemetry. WebKit exposed native select overflow on the retro cooling page; resetting the hidden select appearance/padding fixed it. WebKit is an engine test, not a test of a physical Safari/iOS device.
+- axe-core 4.14.1: no automated violations in 12 desktop views after heading and input-label corrections. Keyboard tests cover the skip link, Enter activation and selected-navigation announcements; reduced-motion styling is enabled. Seven views retain incomplete contrast checks requiring manual review. Screen readers and full WCAG conformance have not been validated.
+- Bandit 1.9.4 repeated on the five runtime modules: 6 low findings, 0 medium/high.
+- Final source export: 46 files; 24 heuristic findings manually reviewed (configuration references, date patterns, loopback/public CI URLs and synthetic IPs). detect-secrets 1.5.0 with network verification disabled reported only the same six dependency license-file hashes. No credential was confirmed; private history and unknown/custom secret formats remain outside this assurance.
+- Owner confirmed team authorship and rights to code/design. License selection and the proposed monitoring-only alpha scope still require the owner's decision. See `ALPHA_READINESS.md`.
+
+To reproduce the browser matrix, run `tests/browser/check.cjs` with `VAULTPANEL_BROWSER=chromium`, `firefox` or `webkit` after installing the corresponding Playwright engines. Chromium uses the installed Chrome channel. Run `tests/browser/accessibility.cjs` with axe-core 4.14.1 and Playwright available in the separate tools directory. `VAULTPANEL_A11Y_REPORT` optionally saves the detailed JSON result. All tests use the local fixture server described above; never deploy it.

@@ -18,3 +18,7 @@ Before importing a component, record:
 Current inventory: original baseline README; newly authored preparation documents and Node.js tools; no application dependencies or vendored assets. The tools import only Node.js built-ins and require no package installation. This is not an SBOM for the missing application or Raspberry Pi operating system.
 
 Do not infer licenses of Samba, Nextcloud, Pi-hole, Unbound, Netdata, Tailscale, display drivers or vendor software from their names. Check the exact versions and files actually imported. Prefer referencing upstream installation instructions over copying vendor code until rights are established. Preserve existing notices when importing permitted material.
+
+## Owner statement — 2026-11-27
+
+The owner confirmed that the team wrote VaultPanel and holds the rights to the code and design. This is an owner attestation, not an independent provenance determination. No application license has been selected or granted. Dependency notices remain separate; do not infer rights to external vendor code that has not been imported.

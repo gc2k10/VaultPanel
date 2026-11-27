@@ -2,6 +2,7 @@
 import hmac
 from datetime import datetime, timezone
 from flask import Flask, jsonify, render_template, request
+from werkzeug.exceptions import HTTPException
 from config import settings
 import collectors
 from hardware import disabled_operation
@@ -13,6 +14,15 @@ def create_app(config=None):
                       MAX_CONTENT_LENGTH=4096, ACCESS_TOKEN=settings.access_token)
     if config:
         app.config.update(config)
+
+    @app.errorhandler(Exception)
+    def unavailable(error):
+        if isinstance(error, HTTPException):
+            return error
+        # Do not expose exception text, local paths, or upstream output.
+        if request.path.startswith('/api/'):
+            return jsonify(ok=False, error='Telemetry unavailable'), 503
+        return jsonify(ok=False, error='Page unavailable'), 500
 
     @app.before_request
     def guard():
