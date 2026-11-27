@@ -63,3 +63,12 @@ The final 12 Chrome/Playwright scenarios passed, including long values and a mix
 - Owner confirmed team authorship and rights to code/design. License selection and the proposed monitoring-only alpha scope still require the owner's decision. See `ALPHA_READINESS.md`.
 
 To reproduce the browser matrix, run `tests/browser/check.cjs` with `VAULTPANEL_BROWSER=chromium`, `firefox` or `webkit` after installing the corresponding Playwright engines. Chromium uses the installed Chrome channel. Run `tests/browser/accessibility.cjs` with axe-core 4.14.1 and Playwright available in the separate tools directory. `VAULTPANEL_A11Y_REPORT` optionally saves the detailed JSON result. All tests use the local fixture server described above; never deploy it.
+
+## Narrow-screen and ARM64 follow-up — 2026-11-27
+
+- Owner confirmed Pironman 5-MAX and an additional SSD heatsink. No installed RAID/SSD/AI configuration is inferred from the product name. MIT and the monitoring-only scope are approved.
+- 32 Python and 11 Node tests passed again locally.
+- Accessibility/keyboard checks now cover 24 views (both layouts, six sections, 320/1280 pixels). Zero automated violations. Testing found and fixed overlapping metric text at 320 pixels and retro disk-path overflow.
+- The classic gradient still produces axe incomplete results in the original view. All 24 contrast-bound checks (12 classic views at each of the two gradient endpoint colors) passed without violations or incomplete results, retaining nested translucent backgrounds. This is a controlled contrast check, not full rendered-pixel or WCAG certification. The remaining retro cooling incomplete result concerns a decorative color-block glyph, with its hex value separately visible; it is hidden from the accessibility tree. Real screen-reader interaction remains untested.
+- Reduced-motion testing now inspects the retro blinking pseudo-element, not only the main element. Skip-link and selected-navigation checks remain enabled.
+- Added an independent GitHub-hosted Ubuntu ARM64 job with Python 3.13.5 and explicit architecture/version assertions. Its remote outcome is recorded in the PR after execution; Ubuntu CI is not validation of the exact Debian/Raspberry Pi platform.

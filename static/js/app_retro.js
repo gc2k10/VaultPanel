@@ -129,7 +129,7 @@ function asciiColor(hex) {
   return safeHtml`
     <span class="color-hex">${c}</span>
     <span class="dots"></span>
-    <span class="color-bar">[ <span style="color:${c}">█</span> ]</span>
+    <span class="color-bar" aria-hidden="true">[ <span style="color:${c}">█</span> ]</span>
   `;
 }
 

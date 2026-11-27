@@ -115,3 +115,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .card h2 { font-size: 1.17em; margin-block: 1em; }
+
+@media (max-width: 380px) {
+  .metrics-grid { grid-template-columns: 1fr; }
+}
