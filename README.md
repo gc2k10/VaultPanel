@@ -9,6 +9,7 @@ A Raspberry Pi infrastructure dashboard with classic and retro web interfaces.
 - [Installation and local preview](docs/INSTALLATION.md)
 - [Recovered-source audit and changes](docs/SOURCE_AUDIT.md)
 - [Service and schedule audit](docs/SERVICE_AUDIT.md)
+- [Privilege, cron and proxy audit](docs/CONFIGURATION_AUDIT.md)
 - [Architecture and integration evidence](docs/ARCHITECTURE.md)
 - [Safe source export](docs/SOURCE_EXPORT.md)
 - [Licensing and dependencies](docs/LICENSING.md)

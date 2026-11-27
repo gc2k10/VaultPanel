@@ -23,3 +23,5 @@ Classic and retro HTML templates share collector API routes, with separate CSS a
 No imported module configures Samba, Nextcloud, DNS, RAID or UPS. Hardware adapters remain disabled by default. Even after manual opt-in, they must be reviewed against the exact hardware revision. The app must never be given unrestricted root, shell or Docker-socket access.
 
 See [service audit](SERVICE_AUDIT.md) for the 14 supplied unit definitions and their compatibility limitations. The operator also listed Unbound as installed/enabled, but its configuration was not supplied.
+
+The [configuration audit](CONFIGURATION_AUDIT.md) documents recovered snapshot/cleanup schedules, broad host privileges and HTTP proxy behavior. These are evidence of the existing installation, not supported defaults.

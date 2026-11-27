@@ -37,4 +37,4 @@ The supplied unit-file listing included apcupsd, Unbound, Samba, Pi-hole, Netdat
 
 ## Validation and next inputs
 
-Reference names and timer-to-service mappings were checked locally; script targets were matched to the supplied source tree. There is no `systemd-analyze verify` or target-device execution result. File suffixes are deliberately `.reference` and no installer is provided. Next collect selected sudo/cron and reverse-proxy configuration privately, then storage/UPS configuration and original assets. Review each before making public examples.
+Reference names and timer-to-service mappings were checked locally; script targets were matched to the supplied source tree. There is no `systemd-analyze verify` or target-device execution result. File suffixes are deliberately `.reference` and no installer is provided. Selected sudo/cron and reverse-proxy configuration has subsequently been reviewed in [configuration audit](CONFIGURATION_AUDIT.md). Storage/UPS configuration and effective privileges remain to be verified; graphics are covered in [asset review](ASSETS.md).
