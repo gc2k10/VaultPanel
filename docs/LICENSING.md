@@ -1,6 +1,6 @@
 # Licensing and dependencies
 
-The owner confirmed that the supplied VaultPanel source is original or generated for them and explicitly authorized MIT on 2026-11-26. The repository LICENSE applies to original project code, documentation and preparation tools. Original graphics were not transferred or licensed by this review. No vendor driver source is bundled.
+The owner confirmed that the supplied VaultPanel source is original or generated for them and explicitly authorized MIT on 2026-11-26. The repository LICENSE applies to original project code, documentation and preparation tools. On 2026-11-28 the owner also authorized MIT/public distribution for seven supplied graphics; one personal OLED logo was explicitly excluded. See [asset review](ASSETS.md). No vendor driver source is bundled.
 
 ## Tested dependency inventory
 

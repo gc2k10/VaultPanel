@@ -48,6 +48,9 @@ def draw_text(text):
 
 
 def draw_logo():
+    if not os.path.exists(LOGO_PATH):
+        draw_text("VaultPanel")
+        return
     img = Image.open(LOGO_PATH).convert("1")
     device.display(img)
 

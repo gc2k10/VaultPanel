@@ -10,7 +10,7 @@ The owner confirmed original/generated-for-owner provenance and authorized MIT. 
 
 The 18 initial scanner findings were manually inspected. Token matches were parser variable names used to process SMART output, not access tokens. Address matches were wildcard/loopback listeners and a public connectivity probe. The README URL was an illustrative device URL. No literal credential was identified in the 24 supplied files; this is not a guarantee for missing files or the running service environment.
 
-The public copy removes the device nickname, deployment-specific README instructions and references to unavailable frontend logos. Original graphics remain excluded pending metadata and rights review. Runtime diagnostics can still contain hostnames and network information: authentication does not make screenshots or exported API responses suitable for public sharing.
+The public copy removes the device nickname, deployment-specific README instructions and references to unavailable frontend logos. A later [asset review](ASSETS.md) includes seven authorized images with sensitive-capable metadata removed; one personal OLED logo remains excluded. Runtime diagnostics can still contain hostnames and network information: authentication does not make screenshots or exported API responses suitable for public sharing.
 
 The repository scanner flags expected public/loopback URLs, authentication code and date strings that resemble IPv6. These require manual classification; a zero-finding claim is not made for the imported source. The known private device addresses and local account paths were checked separately and were not found in the publication candidate.
 
@@ -40,7 +40,7 @@ The repository scanner flags expected public/loopback URLs, authentication code 
 - Fixed hwmon/device identifiers, mutable `/tmp` state, vendor restart behavior, privileged shell use and service failure handling need device-specific redesign before any hardware support is enabled. Gates are not a substitute for those fixes.
 - Collector errors, slow synchronous probes, mount assumptions and platform-specific diagnostics need target-system tests. External network probes remain in the recovered collectors.
 - No production authentication/session design, rate limiting, audited privilege broker, backup restore test, UPS implementation, NAS installer or container deployment is provided.
-- Images, OLED state configuration and several integration configurations are missing. Optional hardware dependency licenses and a target-platform dependency lock/vulnerability review remain pending.
+- OLED state configuration and several integration configurations are missing. Seven graphics have since been reviewed; the personal OLED logo remains excluded by owner request. Optional hardware dependency licenses and a target-platform dependency lock/vulnerability review remain pending.
 - Historical public commit metadata remains unchanged. The new source import must use the owner's noreply identity.
 
 ## Validation scope

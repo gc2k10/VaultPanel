@@ -76,7 +76,7 @@ def draw_text(lines):
 def draw_logo():
     try:
         if not os.path.exists(LOGO_PATH):
-            draw_text(["LOGO", "NOT FOUND"])
+            draw_text(["VaultPanel"])
             return
 
         img = Image.open(LOGO_PATH).convert("1")

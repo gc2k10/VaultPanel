@@ -69,6 +69,19 @@ class ApplicationBoundaryTests(unittest.TestCase):
             self.assertEqual(self.client.get('/api/alerts', headers=self.headers).status_code, 200)
             write.assert_not_called()
 
+    def test_manifest_icons_resolve_under_static(self):
+        from urllib.parse import urljoin
+        with self.client.get('/static/site.webmanifest', headers=self.headers) as response:
+            import json
+            manifest = json.loads(response.get_data(as_text=True))
+        self.assertEqual(manifest['name'], 'VaultPanel')
+        for icon in manifest['icons']:
+            url = urljoin('/static/site.webmanifest', icon['src'])
+            self.assertTrue(url.startswith('/static/'))
+            with self.client.get(url, headers=self.headers) as image:
+                self.assertEqual(image.status_code, 200)
+                self.assertTrue(image.get_data().startswith(b'\x89PNG\r\n\x1a\n'))
+
 
 class CollectorTests(unittest.TestCase):
     def test_failed_sudo_is_noninteractive_and_not_successful_data(self):

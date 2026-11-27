@@ -31,7 +31,7 @@ The development server binds only to loopback. For a remote test host, use an SS
 - Storage paths and device names reflect recovered assumptions and require operator review. No formatting, RAID creation or service installation is performed.
 - The diagnostic script assumes mdraid, while other collectors assume BTRFS. Confirm actual topology before trusting storage indicators.
 - Hardware dependencies are listed separately in `vaultpanel/requirements-hardware.txt`; do not install or execute these adapters for a browser preview. Their opt-in gate is not a validation certificate.
-- Original images, sudo rules and OLED state files are not included. Sanitized services/timers are reference material only, not installation units; see [service audit](SERVICE_AUDIT.md). The frontends use a text title instead of missing logos.
+- Seven reviewed graphics are included. The personal OLED logo, sudo rules and OLED state files are not included. Sanitized services/timers are reference material only, not installation units; see [service audit](SERVICE_AUDIT.md). Both frontends have restored icons. The retro layout retains its existing ASCII title; the large logo remains available in its original optional header block. OLED code has a text fallback when no logo is supplied.
 - The development server, synchronous collectors and Basic authentication are not a production architecture. Rate limiting, managed authentication, privilege separation, recovery and device testing remain release blockers.
 
 Stop with Ctrl-C and unset the password with `unset VAULTPANEL_PASSWORD`. The preview does not install a system service or alter the existing Raspberry Pi deployment.

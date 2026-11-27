@@ -19,7 +19,7 @@ A Raspberry Pi infrastructure dashboard with classic and retro web interfaces.
 
 `vaultpanel/` contains the Flask backend, collectors, both HTML/CSS/JavaScript frontends and gated OLED/RGB/fan adapters. Monitoring covers host resources, storage diagnostics, service status and networking. Observing a service is not installing or managing that service.
 
-Hardware controls and backup POST endpoints return an explicit refusal. Sanitized service/timer definitions are retained as non-installable reference files. No sudo rules, NAS data, databases, logs, private history or original images are imported. Graphics remain pending a separate rights/privacy review; the UI uses a text title.
+Hardware controls and backup POST endpoints return an explicit refusal. Sanitized service/timer definitions are retained as non-installable reference files. No sudo rules, NAS data, databases, logs, private history are imported. Seven owner-authorized images are included; one personal OLED logo is deliberately excluded. See [asset review](docs/ASSETS.md).
 
 ## Validation
 
@@ -33,4 +33,4 @@ Python tests require `vaultpanel/requirements.txt`; see the installation guide. 
 
 ## License
 
-Original project code and documentation are available under [MIT](LICENSE), authorized by the owner. Third-party dependencies retain their own licenses; no rights are asserted over missing graphics or vendor components.
+Original project code and documentation are available under [MIT](LICENSE), authorized by the owner. Third-party dependencies retain their own licenses; the seven included owner-supplied graphics are also MIT. No rights are asserted over vendor components.

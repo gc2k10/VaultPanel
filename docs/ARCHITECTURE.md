@@ -8,7 +8,7 @@ Classic and retro HTML templates share collector API routes, with separate CSS a
 
 | Module | Evidence in recovered source | Still missing |
 | --- | --- | --- |
-| Frontend | Both templates, CSS and JS | Original image rights/review, browser/device QA |
+| Frontend | Both templates, CSS and JS | Browser/device QA; seven assets reviewed, personal OLED logo excluded |
 | Backend | Flask routes, collectors, alert history logic | Production authentication, concurrency and deployment |
 | Storage | lsblk, SMART, BTRFS and mdstat readers | Actual RAID topology, provisioning, repair and failure tests |
 | Backup/snapshots | Snapshot directory readers; backup entry point disabled | Consistent backup/restore and safe retention implementation |
