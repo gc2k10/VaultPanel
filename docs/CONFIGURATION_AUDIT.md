@@ -43,7 +43,7 @@ The hardened preview accepts only loopback Host values, so forwarding the origin
 
 - Effective sudo policy, service account groups, and ownership/modes for privileged scripts and parent directories, collected without secrets.
 - Actual storage topology, mount/subvolume layout and independent backup/restore evidence.
-- UPS model and sanitized apcupsd shutdown configuration.
+- UPS review is excluded at the owner's request: the device is disconnected. No shutdown protection has been verified.
 - Selected complete proxy includes, container deployment definitions and exact software versions, privately reviewed before publication.
 
 The original Raspberry Pi remains unchanged. No automated remediation or deletion is authorized by this report alone.

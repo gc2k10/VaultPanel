@@ -11,6 +11,7 @@ A Raspberry Pi infrastructure dashboard with classic and retro web interfaces.
 - [Service and schedule audit](docs/SERVICE_AUDIT.md)
 - [Privilege, cron and proxy audit](docs/CONFIGURATION_AUDIT.md)
 - [Architecture and integration evidence](docs/ARCHITECTURE.md)
+- [Observed storage topology](docs/STORAGE_AUDIT.md)
 - [Safe source export](docs/SOURCE_EXPORT.md)
 - [Licensing and dependencies](docs/LICENSING.md)
 - [Security](SECURITY.md) and [contributing](CONTRIBUTING.md)

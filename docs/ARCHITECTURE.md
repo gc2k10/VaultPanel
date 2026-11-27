@@ -10,14 +10,14 @@ Classic and retro HTML templates share collector API routes, with separate CSS a
 | --- | --- | --- |
 | Frontend | Both templates, CSS and JS | Browser/device QA; seven assets reviewed, personal OLED logo excluded |
 | Backend | Flask routes, collectors, alert history logic | Production authentication, concurrency and deployment |
-| Storage | lsblk, SMART, BTRFS and mdstat readers | Actual RAID topology, provisioning, repair and failure tests |
-| Backup/snapshots | Snapshot directory readers; backup entry point disabled | Consistent backup/restore and safe retention implementation |
+| Storage | Operator-confirmed mdraid RAID1 with BTRFS single/DUP on top; diagnostic readers | SMART trends, provisioning, repair and failure tests |
+| Backup/snapshots | Seven operator-confirmed read-only snapshots; directory readers; backup entry point disabled | Consistent backup/restore and safe retention implementation |
 | Samba | smbd status entry | Share configuration and permission model |
 | Nextcloud | Named Docker container status | Deployment, PostgreSQL/Redis configuration and version inventory |
 | Pi-hole | pihole-FTL service status | Resolver settings and Unbound integration |
 | Netdata | Service status | Access control and deployment |
 | Tailscale | Status/IP collection | Access policy and deployment |
-| UPS | Operator-listed apcupsd unit, enabled at boot | Configuration, model, active status, shutdown and power-return tests |
+| UPS | Operator reports disconnected; testing explicitly excluded | No shutdown/power-return validation or protection claim |
 | OLED/RGB/fans | Python/shell adapters plus service/timer references | Vendor version, pin mapping, safe privilege model and hardware tests |
 
 No imported module configures Samba, Nextcloud, DNS, RAID or UPS. Hardware adapters remain disabled by default. Even after manual opt-in, they must be reviewed against the exact hardware revision. The app must never be given unrestricted root, shell or Docker-socket access.
@@ -25,3 +25,5 @@ No imported module configures Samba, Nextcloud, DNS, RAID or UPS. Hardware adapt
 See [service audit](SERVICE_AUDIT.md) for the 14 supplied unit definitions and their compatibility limitations. The operator also listed Unbound as installed/enabled, but its configuration was not supplied.
 
 The [configuration audit](CONFIGURATION_AUDIT.md) documents recovered snapshot/cleanup schedules, broad host privileges and HTTP proxy behavior. These are evidence of the existing installation, not supported defaults.
+
+See [storage evidence](STORAGE_AUDIT.md) for the observed topology and the boot/root partitions outside the data mirror.
