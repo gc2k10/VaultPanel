@@ -36,3 +36,7 @@ Python tests require `vaultpanel/requirements.txt`; see the installation guide. 
 ## License
 
 Original project code and documentation are available under [MIT](LICENSE), authorized by the owner. Third-party dependencies retain their own licenses; the seven included owner-supplied graphics are also MIT. No rights are asserted over vendor components.
+
+## Standalone synthetic demo
+
+The existing [frontend demo](frontend/README.md) and [project site](https://gc2k10.github.io/VaultPanel/about.html) remain available. They use synthetic data and do not connect to a NAS. See [demo validation](docs/demo-validation.md).

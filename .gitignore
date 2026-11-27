@@ -32,3 +32,7 @@ __pycache__/
 vaultpanel/state/
 vaultpanel/data/
 vaultpanel/backups/
+instance/
+# Demo test and release outputs
+playwright-report/
+test-results/
