@@ -1,0 +1,17 @@
+# REFERENCE ONLY — NOT AN INSTALLABLE OR VALIDATED UNIT
+# Deployment account replaced with the neutral name vaultpanel.
+# See ../../../docs/SERVICE_AUDIT.md before adapting this material.
+[Unit]
+Description=VaultPanel
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=vaultpanel
+WorkingDirectory=/opt/vaultpanel
+ExecStart=/opt/vaultpanel/venv/bin/python /opt/vaultpanel/app.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

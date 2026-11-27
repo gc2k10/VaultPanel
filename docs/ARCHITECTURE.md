@@ -23,3 +23,5 @@ No vendor controller code, GPIO library, privileged helper, service unit or prod
 - Snapshot names and RAID status do not prove backups. Backup/restore and future hardware controls require separate design and validation before implementation.
 
 Third-party services are not bundled merely because their names appear in documentation. License and configuration review must precede any new integration.
+
+Subsequent operator-provided storage evidence establishes mdraid RAID1 under BTRFS, with boot/root outside that mirror and seven read-only snapshots at observation time; see [storage audit](STORAGE_AUDIT.md). This does not certify restoration or current health. UPS is disconnected and excluded from work.

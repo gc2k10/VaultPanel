@@ -1,6 +1,6 @@
 # Security
 
-There is no deployed or supported VaultPanel application release yet.
+The recovered application is an authenticated, loopback-only read-only preview. There is no production-supported release. Use only loopback or an SSH tunnel; never expose HTTP Basic credentials on a public connection. Privileged web actions are blocked. See docs/SOURCE_AUDIT.md for the remaining findings.
 
 Never put credentials, personal data or raw device exports in public issues or pull requests. No private vulnerability-reporting channel has been verified for this repository. Establish a private channel with the maintainer before sending sensitive details; a public issue may request a private contact without including the finding.
 

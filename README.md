@@ -1,6 +1,6 @@
 # VaultPanel
 
-A read-only review build of the existing Flask dashboard, with classic and retro layouts. The production-source intake has been reviewed and sanitized. **This is work toward v0.1.0-alpha, not a released or production-validated version.**
+A read-only review build of the existing Flask dashboard, with classic and retro layouts. The production-source intake has been reviewed and sanitized. **This is experimental v0.1.0-alpha code, not a production-validated version. Check GitHub Releases for publication status and verified archives.**
 
 The dashboard reads CPU, memory, uptime and configured storage telemetry. Optional Linux command-based reads are disabled by default. All four administration endpoints return HTTP 403; backup, fan, LED and OLED operations are intentionally unavailable. The original hardware scripts are excluded from the application.
 
@@ -38,3 +38,9 @@ The heuristic scanner intentionally reports some code references and synthetic t
 - [Earlier intake audit](docs/AUDIT.md), [source export procedure](docs/SOURCE_EXPORT.md)
 
 Licensed under [MIT](LICENSE), selected by the owner on 2026-11-27 after confirming authorship and redistribution rights. The first alpha is approved as monitoring-only. Target-device telemetry and manual accessibility validation remain open; see [alpha readiness](docs/ALPHA_READINESS.md). The live NAS was not contacted or modified.
+
+## Existing demo and audited NAS evidence
+
+The [standalone frontend demo](frontend/README.md) and [project site](https://gc2k10.github.io/VaultPanel/about.html) remain synthetic and independent of the local Flask panel.
+
+Reviewed evidence from the parallel source intake is retained: [assets](docs/ASSETS.md), [services](docs/SERVICE_AUDIT.md), [host configuration](docs/CONFIGURATION_AUDIT.md), and [storage](docs/STORAGE_AUDIT.md). Historical scripts and unit references are not production installation instructions. UPS work is explicitly excluded. See [next work](docs/NEXT_WORK.md).

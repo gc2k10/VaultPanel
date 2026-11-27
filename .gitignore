@@ -27,4 +27,13 @@ coverage/
 __pycache__/
 .venv/
 .DS_Store
+
+# Application runtime state
+vaultpanel/state/
+vaultpanel/data/
+vaultpanel/backups/
+instance/
+# Demo test and release outputs
+playwright-report/
+test-results/
 state/

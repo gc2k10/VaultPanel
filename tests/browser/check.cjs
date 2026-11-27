@@ -8,7 +8,7 @@ const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, 'telemetry.json'
 (async () => {
   const engine = process.env.VAULTPANEL_BROWSER || 'chromium';
   assert.ok(['chromium', 'firefox', 'webkit'].includes(engine));
-  const browser = await playwright[engine].launch({...(engine === 'chromium' ? {channel: 'chrome'} : {}), headless: true});
+  const browser = await playwright[engine].launch({...(engine === 'chromium' && process.env.VAULTPANEL_CHROMIUM_CHANNEL !== 'bundled' ? {channel: 'chrome'} : {}), headless: true});
   let passed = 0;
   try {
     for (const route of ['/', '/retro']) {

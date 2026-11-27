@@ -1,0 +1,13 @@
+# REFERENCE ONLY — NOT AN INSTALLABLE OR VALIDATED UNIT
+# Deployment account replaced with the neutral name vaultpanel.
+# See ../../../docs/SERVICE_AUDIT.md before adapting this material.
+[Unit]
+Description=VaultPanel LED Alert Timer
+
+[Timer]
+OnBootSec=30
+OnUnitActiveSec=60
+Unit=vaultpanel-led-alert.service
+
+[Install]
+WantedBy=timers.target

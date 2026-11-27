@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 
 (async () => {
-  const browser = await chromium.launch({channel: 'chrome', headless: true});
+  const browser = await chromium.launch({...(process.env.VAULTPANEL_CHROMIUM_CHANNEL === 'bundled' ? {} : {channel: 'chrome'}), headless: true});
   const results = [];
   try {
     for (const route of ['/', '/retro']) {

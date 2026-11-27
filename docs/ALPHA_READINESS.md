@@ -46,3 +46,7 @@ Owner-approved read-only scope and MIT; portable configuration; disabled mutatio
 - Remote access, production deployment, automated NAS installation/upgrades, hardware controls and backup/restore are outside this release scope.
 
 No additional NAS data, credentials or production access is required to complete these publication steps. The production NAS must remain unchanged.
+
+## Publication authorization — 2026-11-28
+
+The owner explicitly authorized merging PR #1/#3 and publishing v0.1.0-alpha as a prerelease after final tests. Integration also reconciles the pre-existing standalone demo on main. Publication is automated only for the main branch after application and demo checks; no NAS deployment is included. GitHub Releases and its linked validation run are authoritative for publication status.
