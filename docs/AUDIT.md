@@ -1,5 +1,7 @@
 # Baseline audit — 2026-11-26
 
+This is the historical pre-intake baseline. See [the source audit](SOURCE_AUDIT.md) for the later recovery of application code, owner-approved MIT licensing and local Git availability.
+
 ## Evidence and scope
 
 The connected GitHub account exposed one repository, VaultPanel, already public. The GitHub API returned one branch, `main`, at `e571586de4f22db19f8119357914b03e776b2929`. Its root commit has no parents. The recursive tree contains only `README.md` (50 bytes), with the heading VaultPanel and a short infrastructure-dashboard description. The refs endpoint returned only `refs/heads/main`; no tags were listed there. The pull-request collection was empty.

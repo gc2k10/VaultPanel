@@ -1,26 +1,23 @@
-# Architecture and module evidence
+# Architecture and evidence
 
-This document describes an intended boundary, not an implemented system. No service topology, programming language, API contract, ports or hardware wiring has been verified.
+## Recovered implementation
 
-## Proposed boundaries for review after source recovery
+Browser → Flask (`vaultpanel/app.py`) → Python collectors → Linux commands, proc/sys files and local service state.
 
-Browser → authenticated VaultPanel API → narrowly scoped service adapters → host services.
+Classic and retro HTML templates share collector API routes, with separate CSS and JavaScript. The source intake adds a Basic-auth and loopback-host boundary, read-only HTTP policy, escaped dynamic HTML and restrictive browser headers. No proxy headers are trusted. This does not establish a production security model.
 
-The browser should never receive system credentials. The API should run without root privileges. Any privileged helper needs a fixed operation allowlist, explicit authorization, validation and an audit trail; user input must not become a shell command. Destructive storage actions require a separate design and explicit operator confirmation. Avoid exposing the Docker socket to the dashboard.
-
-| Requested module | Available implementation | Evidence needed |
+| Module | Evidence in recovered source | Still missing |
 | --- | --- | --- |
-| VaultPanel frontend | None supplied | Full source, assets, build manifest, lockfile, sanitized screenshots |
-| Backend/API | None supplied | Routes, auth/session handling, manifests, service definitions, tests |
-| NVMe / RAID1 / BTRFS | None supplied | Actual topology, mount and maintenance scripts; determine BTRFS RAID1 vs block-layer RAID |
-| Snapshots / backup | None supplied | Retention, scheduling, off-device backup and tested restore procedures |
-| Samba | None supplied | Share templates, account/group and permission model; no account databases |
-| Nextcloud / PostgreSQL / Redis | None supplied | Deployment files and version constraints; no databases or live config secrets |
-| Pi-hole / Unbound | None supplied | Resolver templates and network bindings; no query logs |
-| Netdata | None supplied | Deployment and access-control configuration; no cloud claim tokens |
-| Tailscale | None supplied | Integration approach; no auth keys or machine state |
-| UPS | None supplied | Model/protocol, daemon choice and tested shutdown behavior |
-| OLED / RGB / fans | None supplied | Hardware revision, pin mapping, controller source and vendor license |
-| Pironman 5 MAX | Mentioned in prior planning only | Confirm actual hardware and redistribution rights for vendor assets |
+| Frontend | Both templates, CSS and JS | Original image rights/review, browser/device QA |
+| Backend | Flask routes, collectors, alert history logic | Production authentication, concurrency and deployment |
+| Storage | lsblk, SMART, BTRFS and mdstat readers | Actual RAID topology, provisioning, repair and failure tests |
+| Backup/snapshots | Snapshot directory readers; backup entry point disabled | Consistent backup/restore and safe retention implementation |
+| Samba | smbd status entry | Share configuration and permission model |
+| Nextcloud | Named Docker container status | Deployment, PostgreSQL/Redis configuration and version inventory |
+| Pi-hole | pihole-FTL service status | Resolver settings and Unbound integration |
+| Netdata | Service status | Access control and deployment |
+| Tailscale | Status/IP collection | Access policy and deployment |
+| UPS | No supplied implementation | Model, daemon, shutdown and power-return tests |
+| OLED/RGB/fans | Python display code and shell adapters | Service units, timers, vendor version, pin mapping, safe privilege model |
 
-RAID and snapshots must not be presented as independent backups. Document recovery and failure behavior for each integration before supporting it. Integration names do not imply bundled third-party software.
+No imported module configures Samba, Nextcloud, DNS, RAID or UPS. Hardware adapters remain disabled by default. Even after manual opt-in, they must be reviewed against the exact hardware revision. The app must never be given unrestricted root, shell or Docker-socket access.

@@ -1,34 +1,35 @@
 # VaultPanel
 
-Preparation workspace for a Raspberry Pi 5 home server and infrastructure dashboard.
+A Raspberry Pi infrastructure dashboard with classic and retro web interfaces.
 
-**Status: source collection and documentation. There is no runnable dashboard or NAS installer in this repository yet.** The existing repository contained only a short README. Frontend, backend, device configuration and hardware integrations have not been supplied or verified.
-
-The intended scope includes storage, file sharing, private cloud, DNS, monitoring, remote access and hardware controls. Inclusion in this scope does not mean an integration exists or works.
+**Status: recovered source, authenticated read-only preview. Not a production release or a NAS installer.** The owner supplied 24 text files from an active installation. This branch preserves the available frontend, backend and hardware adapter source while disabling privileged web actions and adding a local authentication boundary.
 
 ## Start here
 
-- [Audit and missing sources](docs/AUDIT.md)
-- [Architecture and module evidence](docs/ARCHITECTURE.md)
+- [Installation and local preview](docs/INSTALLATION.md)
+- [Recovered-source audit and changes](docs/SOURCE_AUDIT.md)
+- [Architecture and integration evidence](docs/ARCHITECTURE.md)
 - [Safe source export](docs/SOURCE_EXPORT.md)
-- [Installation readiness](docs/INSTALLATION.md)
-- [Licensing and dependency inventory](docs/LICENSING.md)
+- [Licensing and dependencies](docs/LICENSING.md)
 - [Security](SECURITY.md) and [contributing](CONTRIBUTING.md)
 - [Polski](docs/README.pl.md)
 
-## Repository tools
+## What is included
 
-The newly written review tools use Node.js 22 or newer, with built-in modules only. They do not install services, modify disks or connect to a server.
+`vaultpanel/` contains the Flask backend, collectors, both HTML/CSS/JavaScript frontends and gated OLED/RGB/fan adapters. Monitoring covers host resources, storage diagnostics, service status and networking. Observing a service is not installing or managing that service.
+
+Hardware controls and backup POST endpoints return an explicit refusal. No application services, timers, sudo rules, NAS data, databases, logs, private history or original images are imported. Graphics remain pending a separate rights/privacy review; the UI uses a text title.
+
+## Validation
 
 ```sh
 node --test tests/*.test.mjs
+python -m unittest discover -s tests -p 'test_*.py'
 node scripts/review-files.mjs .
 ```
 
-The scanner reports potential sensitive data without printing matched values. A successful scan is only a heuristic check, not clearance to publish. See the manual review and history requirements in [SOURCE_EXPORT.md](docs/SOURCE_EXPORT.md).
+Python tests require `vaultpanel/requirements.txt`; see the installation guide. The heuristic scanner also flags public URLs and synthetic security tests for manual review. It does not certify privacy or inspect Git history.
 
-## Scope and licensing
+## License
 
-No frontend/backend source, package manifests, lockfiles, service units, device screenshots or deployment configurations were present at the baseline audit. A production installation guide cannot be validated until these are recovered.
-
-No project license has been selected. Public visibility is not a grant of an open-source license. Ownership and third-party notices must be reviewed before an open-source release; see [LICENSING.md](docs/LICENSING.md).
+Original project code and documentation are available under [MIT](LICENSE), authorized by the owner. Third-party dependencies retain their own licenses; no rights are asserted over missing graphics or vendor components.
