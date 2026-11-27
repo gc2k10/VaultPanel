@@ -18,7 +18,7 @@ Service example: `[{"name":"Example service","systemd":"example.service","port":
 
 The application always limits requests to loopback clients and loopback Host values, including when loaded by another WSGI server. It does not trust forwarded headers. Authentication is optional for local evaluation; local processes can read telemetry when it is unset. Do not expose the application through a proxy or tunnel. Such deployment requires a separate authentication/TLS and proxy trust review.
 
-Optional diagnostics invoke only enumerated read operations, with argument lists, timeouts and `shell=False`. There is no `sudo`. Missing permissions/tools return unavailable telemetry; do not grant root, Docker socket access or broad sudo permissions to make a display green. Docker reads require high-trust access and are not enabled by default. System utilities are resolved using the operator's PATH; use a trusted PATH in any future deployment.
+Optional diagnostics invoke only enumerated read operations, with argument lists, timeouts and `shell=False`. There is no `sudo`. Output is limited to 64 KiB and stderr is discarded. Missing permissions/tools return unavailable telemetry; do not grant root, Docker socket access or broad sudo permissions to make a display green. Docker reads require high-trust access and are not enabled by default. System utilities are resolved using the operator's PATH; use a trusted PATH in any future deployment.
 
 ## Routes
 
@@ -29,4 +29,8 @@ Optional diagnostics invoke only enumerated read operations, with argument lists
 - `GET /api/capabilities`: explicit read-only capability flags.
 - `POST /api/backup`, `/api/led`, `/api/fans`, `/api/oled`: always HTTP 403 and `ok: false`, including malformed input. No runtime switch enables writes.
 
-Unavailable network probes and Btrfs data are reported as unknown instead of false success. SMART health is not a historical self-test result: `last_smart_test` is a retained compatibility field carrying current aggregate health. Snapshot names are not evidence of a successful, restorable backup. Hardware controls need a separately reviewed adapter, input schemas, authorization, CSRF protection, failure reporting, concurrency control and disposable-device validation before reintroduction.
+Unavailable network probes and Btrfs data are reported as unknown instead of false success. SMART health is not a historical self-test result: `last_smart_test` is a retained compatibility field carrying current aggregate health. Snapshot names and legacy marker files are not evidence of a successful, restorable backup; both backup fields now stay unavailable. Hardware controls need a separately reviewed adapter, input schemas, authorization, CSRF protection, failure reporting, concurrency control and disposable-device validation before reintroduction.
+
+Optional local state reads are restricted to regular, non-symlink files of at most 4 KiB, with a fixed schema for LED/fan JSON values. Parent directories must remain trusted. Missing LED/fan values are unknown, never synthetic success.
+
+Btrfs is marked healthy only with recognizable filesystem output and an explicitly completed, error-free scrub; missing or ambiguous evidence stays unknown. This is a conservative display heuristic, not a filesystem integrity guarantee.

@@ -36,13 +36,19 @@ class Settings:
             if not isinstance(service, dict) or not isinstance(service.get('name'), str):
                 raise ValueError('Service requires a name')
             backends = [k for k in ('systemd', 'docker') if k in service]
-            if len(backends) != 1 or not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_.@-]*', service[backends[0]]):
+            if len(backends) != 1 or not isinstance(service[backends[0]], str) or not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_.@-]*', service[backends[0]]):
                 raise ValueError('Service requires exactly one valid backend identifier')
+            if service.get('port') is not None and (type(service['port']) is not int or not 1 <= service['port'] <= 65535):
+                raise ValueError('Service port must be an integer between 1 and 65535')
             service.setdefault('port', None)
             service['panel'] = None
         targets = [env.get('VAULTPANEL_PING_TARGET', ''), env.get('VAULTPANEL_DNS_TARGET', '')]
         if any(t and not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9.:-]*', t) for t in targets):
             raise ValueError('Invalid probe target')
+        for key, default in [('VAULTPANEL_STORAGE_MOUNT', '/'), ('VAULTPANEL_SNAPSHOT_DIR', '')]:
+            value = env.get(key, default)
+            if (key == 'VAULTPANEL_STORAGE_MOUNT' or value) and (not value.startswith('/') or '\x00' in value):
+                raise ValueError('Storage and snapshot paths must be absolute')
         return cls(storage_mount=env.get('VAULTPANEL_STORAGE_MOUNT', '/'),
                    snapshot_dir=env.get('VAULTPANEL_SNAPSHOT_DIR', ''),
                    state_dir=Path(env.get('VAULTPANEL_STATE_DIR', 'state')),

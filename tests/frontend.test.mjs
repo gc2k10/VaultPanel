@@ -16,7 +16,7 @@ function harness(script) {
   const context = vm.createContext({document: {
     getElementById(id) {if (!ids.has(id)) ids.set(id, element()); return ids.get(id);},
     createElement: element, querySelectorAll: () => [], addEventListener() {},
-  }, setInterval() {}, setTimeout() {}, fetch: () => new Promise(() => {})});
+  }, AbortController, clearTimeout() {}, setInterval() {}, setTimeout() {}, fetch: () => new Promise(() => {})});
   vm.runInContext(fs.readFileSync('static/js/safe-html.js', 'utf8'), context);
   vm.runInContext(fs.readFileSync('static/js/' + script, 'utf8'), context);
   return {context, elements};

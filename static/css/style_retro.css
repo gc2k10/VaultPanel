@@ -8,6 +8,9 @@
   --crit: #d97b7b;
 }
 
+#telemetryStatus { padding: 12px 24px; margin: 0; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+
 * {
   box-sizing: border-box;
 }

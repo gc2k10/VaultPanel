@@ -129,16 +129,15 @@ class BoundaryTests(unittest.TestCase):
             run.assert_not_called()
 
     def test_reads_have_timeout_no_shell_and_no_stderr_data(self):
-        with patch('subprocess.run', return_value=SimpleNamespace(returncode=0, stdout='42\n', stderr='private')) as run:
+        with patch('hardware.capture', return_value=(0, '42\n')) as run:
             self.assertEqual(hardware.read_command(['vcgencmd', 'measure_temp'], enabled=True), '42')
-            self.assertFalse(run.call_args.kwargs['shell'])
-            self.assertEqual(run.call_args.kwargs['timeout'], 3)
-        with patch('subprocess.run', side_effect=subprocess.TimeoutExpired('test', 3)):
+            run.assert_called_once_with(['vcgencmd', 'measure_temp'], 3)
+        with patch('hardware.capture', side_effect=subprocess.TimeoutExpired('test', 3)):
             self.assertEqual(hardware.read_command(['vcgencmd', 'measure_temp'], enabled=True), '')
 
     def test_smart_health_bits_preserve_valid_output(self):
         for code, expected in [(0, 'data'), (8, 'data'), (1, ''), (2, '')]:
-            with patch('subprocess.run', return_value=SimpleNamespace(returncode=code, stdout='data', stderr='private')):
+            with patch('hardware.capture', return_value=(code, 'data')):
                 self.assertEqual(hardware.read_command(['smartctl', '-a', '/dev/test'], enabled=True), expected)
 
     def test_config_validation_and_safe_defaults(self):

@@ -1,5 +1,39 @@
 """Explicit read boundary. No sudo, shell, control driver, or backup execution."""
 import subprocess
+import os
+import selectors
+import time
+
+MAX_OUTPUT_BYTES = 65536
+
+
+def capture(cmd, timeout):
+    """Drain a bounded stdout pipe; discard stderr and reap on every exit."""
+    with subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE,
+                          stderr=subprocess.DEVNULL) as process:
+        try:
+            with selectors.DefaultSelector() as selector:
+                selector.register(process.stdout, selectors.EVENT_READ)
+                deadline = time.monotonic() + timeout
+                chunks = []
+                size = 0
+                while True:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0 or not selector.select(remaining):
+                        raise subprocess.TimeoutExpired(cmd, timeout)
+                    chunk = os.read(process.stdout.fileno(), min(8192, MAX_OUTPUT_BYTES + 1 - size))
+                    if not chunk:
+                        break
+                    size += len(chunk)
+                    if size > MAX_OUTPUT_BYTES:
+                        raise ValueError('Diagnostic output exceeded limit')
+                    chunks.append(chunk)
+                code = process.wait(timeout=max(0.001, deadline - time.monotonic()))
+                return code, b''.join(chunks).decode('utf-8')
+        finally:
+            if process.poll() is None:
+                process.kill()
+            process.wait()
 
 
 def disabled_operation(operation):
@@ -38,11 +72,10 @@ def read_command(cmd, timeout=3, *, enabled=False):
     if not enabled or not permitted_read(cmd):
         return ''
     try:
-        result = subprocess.run(cmd, shell=False, capture_output=True, text=True,
-                                timeout=timeout, check=False)
+        code, output = capture(cmd, timeout)
         # smartctl's health bits can be nonzero while stdout contains valid findings.
-        if result.returncode and (cmd[0] != 'smartctl' or result.returncode & 3):
+        if code and (cmd[0] != 'smartctl' or code & 3):
             return ''
-        return (result.stdout or '').strip()
-    except (OSError, subprocess.TimeoutExpired):
+        return output.strip()
+    except (OSError, ValueError, subprocess.TimeoutExpired):
         return ''

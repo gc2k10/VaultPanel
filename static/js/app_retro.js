@@ -36,9 +36,15 @@ async function retroBootSequence() {
 }
 
 async function fetchJson(url, options) {
-  const res = await fetch(url, options);
-  if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-  return res.json();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(url, {...options, signal: controller.signal});
+    if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+    return await res.json();
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 function activateTab(name) {
@@ -555,22 +561,28 @@ function renderPreviousAlerts() {
   });
 });
 
+let refreshInProgress = false;
 async function refreshAll() {
-  const [overview, cooling, storage, services, network, alerts] = await Promise.all([
-    fetchJson('/api/overview'),
-    fetchJson('/api/cooling'),
-    fetchJson('/api/storage'),
-    fetchJson('/api/services'),
-    fetchJson('/api/network'),
-    fetchJson('/api/alerts')
-  ]);
-
-  renderOverview(overview);
-  renderCooling(cooling);
-  renderStorage(storage);
-  renderServices(services);
-  renderNetwork(network);
-  renderAlerts(alerts);
+  if (refreshInProgress) return;
+  refreshInProgress = true;
+  try {
+    const [overview, cooling, storage, services, network, alerts] = await Promise.all([
+      fetchJson('/api/overview'), fetchJson('/api/cooling'), fetchJson('/api/storage'),
+      fetchJson('/api/services'), fetchJson('/api/network'), fetchJson('/api/alerts')
+    ]);
+    renderOverview(overview);
+    renderCooling(cooling);
+    renderStorage(storage);
+    renderServices(services);
+    renderNetwork(network);
+    renderAlerts(alerts);
+    if ($('telemetryStatus')) $('telemetryStatus').textContent = 'READ-ONLY — telemetry refreshed; unavailable checks remain unknown.';
+  } catch (error) {
+    if ($('globalStatus')) $('globalStatus').textContent = 'STALE';
+    if ($('telemetryStatus')) $('telemetryStatus').textContent = 'Telemetry unavailable. Displayed values may be outdated; retrying automatically.';
+  } finally {
+    refreshInProgress = false;
+  }
 }
 
 $('applyLed')?.addEventListener('click', async () => {

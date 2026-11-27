@@ -9,6 +9,7 @@ import psutil
 import re
 from config import settings
 from hardware import read_command, disabled_operation
+from telemetry import read_state, read_text
 from datetime import datetime
 from typing import Any
 
@@ -52,32 +53,9 @@ def get_cpu_temp() -> float | None:
     return None
 
 def get_last_backup():
-    path = settings.snapshot_dir
-    if not path:
-        return None
-    try:
-        if not os.path.exists(path):
-            return None
+    # A snapshot name is not evidence of a completed or restorable backup.
+    return None
 
-        snapshots = [
-            d for d in os.listdir(path)
-            if os.path.isdir(os.path.join(path, d))
-        ]
-
-        if not snapshots:
-            return None
-
-        latest = sorted(snapshots)[-1]
-
-        m = re.search(r'(\d{4})-(\d{2})-(\d{2})', latest)
-        if m:
-            yyyy, mm, dd = m.groups()
-            return f"{yyyy}-{mm}-{dd} 00:00:00"
-
-        return latest
-
-    except Exception:
-        return None
 
 def get_last_scrub():
     try:
@@ -228,27 +206,18 @@ def get_fans() -> list[dict[str, Any]]:
             fans.append({'label': label, 'rpm': rpm})
         except Exception:
             continue
-    while len(fans) < 3:
-        fans.append({'label': f'FAN{len(fans)+1}', 'rpm': None})
-    return fans[:3]
+    return fans
 
 
 def detect_led_state() -> dict[str, Any]:
-    state_path = str(settings.state_dir / 'led.json')
-    if os.path.exists(state_path):
-        try:
-            with open(state_path) as f:
-                return json.load(f)
-        except Exception:
-            pass
+    state = read_state(settings.state_dir / 'led.json')
     return {
-        'scene': 'VAULT GREEN',
-        'mode': 'STATIC',
-        'color': '#7CFC00',
-        'brightness': 62,
-        'speed': 50,
-        'note': 'Placeholder state. scripts/pironman_led.sh.',
+        'scene': state.get('scene'), 'mode': state.get('mode'),
+        'color': state.get('color'), 'brightness': state.get('brightness'),
+        'speed': state.get('speed'), 'fan_led': state.get('fan_led'),
+        'note': 'Read-only; unavailable state is not inferred.',
     }
+
 
 def list_block_devices() -> list[dict[str, Any]]:
     out = run(['lsblk', '-J', '-o', 'NAME,SIZE,TYPE,MOUNTPOINT,MODEL'])
@@ -311,14 +280,21 @@ def smart_health(device: str) -> str:
 def btrfs_status(path: str = '/') -> dict[str, Any]:
     fs_show = run(['btrfs', 'filesystem', 'show', path], timeout=5)
     scrub = run(['btrfs', 'scrub', 'status', path], timeout=5)
-    degraded = 'degraded' in fs_show.lower() or 'degraded' in scrub.lower()
+    degraded = bool(re.search(r'degraded|missing|unrecoverable|uncorrectable', fs_show, re.I))
+    # Only explicit completed scrub evidence can report healthy. A zero-error
+    # substring alone, an unstarted scrub or unrelated output cannot establish it.
+    completed = bool(re.search(r'^\s*(?:Status:\s*finished|scrub .*finished|finished on)', scrub, re.M | re.I))
+    clean = bool(re.search(r'^\s*(?:Error summary:\s*no errors found|total errors:\s*0)\s*$', scrub, re.M | re.I))
+    counters = re.findall(r'\b(?:read|csum|verify|super|malloc|uncorrectable|uncorrected|corrected|unverified)(?:_errors| errors)?\s*[:=]\s*(\d+)', scrub, re.I)
+    errors = any(int(value) > 0 for value in counters)
+    summary = re.search(r'^\s*Error summary:\s*(.*)$', scrub, re.M | re.I)
+    if summary and summary.group(1).strip().lower() != 'no errors found':
+        errors = True
+    known_fs = bool(re.search(r'\buuid:', fs_show, re.I))
+    healthy = False if degraded or errors else (True if known_fs and completed and clean else None)
+    return {'filesystem_show': fs_show, 'scrub_status': scrub,
+            'degraded': degraded, 'healthy': healthy}
 
-    return {
-        'filesystem_show': fs_show,
-        'scrub_status': scrub,
-        'degraded': degraded,
-        'healthy': (not degraded and 'ERROR' not in fs_show.upper() and 'ERROR' not in scrub.upper()) if fs_show and scrub else None,
-    }
 
 def classify_status(value: float | None, warn: float, crit: float) -> str:
     if value is None:
@@ -361,90 +337,27 @@ def get_overview() -> dict[str, Any]:
     }
 
 def get_rear_fans_state() -> str:
-    state_file = str(settings.state_dir / 'fan-control.state')
-    try:
-        if os.path.exists(state_file):
-            with open(state_file) as f:
-                for line in f:
-                    if line.startswith('LAST_REAR='):
-                        val = line.strip().split('=', 1)[1].strip().lower()
-                        if val == 'on':
-                            return 'ON'
-                        if val == 'off':
-                            return 'OFF'
-        return 'UNKNOWN'
-    except Exception:
-        return 'UNKNOWN'
+    text = read_text(settings.state_dir / 'fan-control.state')
+    for line in text.splitlines():
+        if line == 'LAST_REAR=on':
+            return 'ON'
+        if line == 'LAST_REAR=off':
+            return 'OFF'
+    return 'UNKNOWN'
+
 
 def get_cooling() -> dict[str, Any]:
-    fans = []
-    idx = 1
-    for path in sorted(glob.glob('/sys/class/hwmon/hwmon*/fan*_input')):
-        try:
-            with open(path) as f:
-                rpm = int(f.read().strip())
-            fans.append({
-                'label': f'FAN {idx}',
-                'rpm': rpm,
-            })
-            idx += 1
-        except Exception:
-            pass
-
-    cpu_temp = None
-    temp_raw = run(['vcgencmd', 'measure_temp'])
-    if temp_raw:
-        try:
-            cpu_temp = float(temp_raw.replace("temp=", "").replace("'C", ""))
-        except Exception:
-            cpu_temp = None
-
-    if cpu_temp is None:
-        thermal_status = 'UNKNOWN'
-    elif cpu_temp >= ALERT_THRESHOLDS['cpu_crit']:
-        thermal_status = 'CRITICAL'
-    elif cpu_temp >= ALERT_THRESHOLDS['cpu_warn']:
-        thermal_status = 'WARNING'
-    else:
-        thermal_status = 'NOMINAL'
-
-    state_path = str(settings.state_dir / 'led.json')
-    led = {
-        'scene': '--',
-        'mode': 'STATIC',
-        'color': '#7cfc00',
-        'fan_led':'FOLLOW',
-        'brightness': 62,
-        'speed': 50,
-        'note': '',
-        'oled_mode': get_oled_mode(),
-    }
-
-    try:
-        if os.path.exists(state_path):
-            with open(state_path) as f:
-                led.update(json.load(f))
-    except Exception:
-        pass
-
-    fan_profile = 'UNKNOWN'
-    fan_state_path = str(settings.state_dir / 'fans.json')
-    try:
-        if os.path.exists(fan_state_path):
-            with open(fan_state_path) as f:
-                fan_state = json.load(f)
-                fan_profile = fan_state.get('profile', 'UNKNOWN')
-    except Exception:
-        pass
-
+    cpu_temp = get_cpu_temp()
+    led = detect_led_state()
+    led['oled_mode'] = get_oled_mode()
+    fan_state = read_state(settings.state_dir / 'fans.json')
     return {
-        'cpu_temp_c': cpu_temp,
-        'fans': fans,
-        'thermal_status': thermal_status,
-        'fan_profile': fan_profile,
-        'led': led,
+        'cpu_temp_c': cpu_temp, 'fans': get_fans(),
+        'thermal_status': classify_status(cpu_temp, ALERT_THRESHOLDS['cpu_warn'], ALERT_THRESHOLDS['cpu_crit']),
+        'fan_profile': fan_state.get('profile', 'UNKNOWN'), 'led': led,
         'rear_fans': get_rear_fans_state(),
     }
+
 
 def get_snapshot_info():
     path = settings.snapshot_dir
@@ -452,7 +365,7 @@ def get_snapshot_info():
         return {"snapshot_count": None, "newest_snapshot": None}
     try:
         if not os.path.exists(path):
-            return {"snapshot_count": 0, "newest_snapshot": None}
+            return {"snapshot_count": None, "newest_snapshot": None}
 
         snapshots = [
             d for d in os.listdir(path)
@@ -477,7 +390,7 @@ def get_snapshot_info():
         }
 
     except Exception:
-        return {"snapshot_count": 0, "newest_snapshot": None}
+        return {"snapshot_count": None, "newest_snapshot": None}
 
 def get_storage() -> dict[str, Any]:
     storage_mount = settings.storage_mount
@@ -633,10 +546,10 @@ def get_alerts() -> dict[str, Any]:
                 'source': dev['name'].upper(),
                 'message': "SMART data unavailable"
             })
-    if storage['btrfs']['degraded']:
-        alerts.append({'level': 'CRITICAL', 'source': 'BTRFS', 'message': 'Filesystem appears degraded'})
+    if storage['btrfs']['healthy'] is False:
+        alerts.append({'level': 'CRITICAL', 'source': 'BTRFS', 'message': 'Filesystem health requires review'})
     if not alerts:
-        alerts.append({'level': 'INFO', 'source': 'SYSTEM', 'message': 'No active alerts'})
+        alerts.append({'level': 'INFO', 'source': 'SYSTEM', 'message': 'No alerts from available telemetry; unavailable checks are not verified'})
     return {'alerts': alerts, 'generated_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 def apply_led_settings(payload: dict[str, Any]) -> dict[str, Any]:
@@ -651,11 +564,9 @@ def get_oled_mode() -> str:
         return 'UNKNOWN'
 
 def get_last_vaultpanel_backup():
-    try:
-        with open(settings.state_dir / 'last-backup') as f:
-            return f.read().strip()
-    except:
-        return None
+    # Legacy markers did not prove success; the backup adapter is disabled.
+    return None
+
 
 def apply_oled_mode(payload: dict[str, Any]) -> dict[str, Any]:
     return disabled_operation('oled')

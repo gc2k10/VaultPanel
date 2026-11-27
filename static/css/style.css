@@ -92,6 +92,13 @@ input, select {
 }
 .table-row { display: grid; grid-template-columns: 1.6fr .8fr 1.1fr .6fr; gap: 10px; }
 .table-head { color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 8px; }
+#telemetryStatus { padding: 12px 20px; margin: 0; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.kv > strong { overflow-wrap: anywhere; min-width: 0; text-align: right; }
+@media (max-width: 600px) {
+  .topbar { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .right-meta { text-align: left; }
+}
 @media (max-width: 1100px) {
   .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .two-col { grid-template-columns: 1fr; }

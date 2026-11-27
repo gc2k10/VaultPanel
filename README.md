@@ -6,7 +6,7 @@ The dashboard reads CPU, memory, uptime and configured storage telemetry. Option
 
 ## Local evaluation
 
-Use a disposable development environment, never a live NAS for this review. Python 3.10+ is the target for further validation. Local compatibility tests were run on Python 3.9.6; no supported runtime matrix is claimed yet.
+Use a disposable development environment, never a live NAS for this review. Python 3.10+ is the target for further validation. Local tests passed on Python 3.12.14, with earlier compatibility checks on Python 3.9.6; Linux matrix validation is tracked in the PR.
 
 ```sh
 python3 -m venv .venv
