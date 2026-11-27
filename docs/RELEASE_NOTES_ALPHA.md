@@ -25,3 +25,5 @@ Fan, LED, OLED and backup controls are disabled with no runtime switch to enable
 Use the reviewed source archive and [local evaluation guide](INSTALLATION.md). Report issues without credentials, host identifiers, personal configuration or raw NAS logs.
 
 The existing standalone synthetic demo, seven reviewed owner-approved graphics, and sanitized service/configuration/storage audit evidence are retained. Historical hardware scripts are not executable components of this alpha. UPS is excluded.
+
+The retained synthetic demo recalculates chart geometry after container layout settles, preserving readable axis labels on narrow WebKit screens.

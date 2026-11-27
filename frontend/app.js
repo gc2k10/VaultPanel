@@ -23,5 +23,16 @@ function draw(){
  document.querySelector("#summary").textContent="Simulated range: "+Math.min(...values)+"–"+Math.max(...values)+"%.";
 }
 period.addEventListener("change",draw);draw();
-// Only viewport changes resize this standalone chart; avoid observing our own SVG mutations.
-window.addEventListener('resize', () => { if(chartWidth() !== renderedWidth) draw(); });
+// Layout can settle after the first draw without a window resize (notably WebKit).
+// Observe the container, defer mutations, and redraw only when width changes.
+let resizeFrame = 0;
+function scheduleResize() {
+ if (resizeFrame) return;
+ resizeFrame = requestAnimationFrame(() => {
+  resizeFrame = 0;
+  if (chartWidth() !== renderedWidth) draw();
+ });
+}
+window.addEventListener('resize', scheduleResize);
+new ResizeObserver(scheduleResize).observe(chart.parentElement);
+window.addEventListener('load', scheduleResize);
