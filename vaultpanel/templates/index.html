@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+</head>
+<body>
+  <p role="status">Source intake preview — read-only. Hardware controls and backups are disabled.</p>
+  <div class="screen"></div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-title">VaultPanel</div>
+        <div class="brand-sub">RPI CONTROL TERMINAL</div>
+      </div>
+      <nav>
+        <button class="nav-btn active" data-tab="overview">Overview</button>
+        <button class="nav-btn" data-tab="cooling">Cooling / LED</button>
+        <button class="nav-btn" data-tab="storage">Storage</button>
+        <button class="nav-btn" data-tab="services">Services</button>
+        <button class="nav-btn" data-tab="network">Network</button>
+        <button class="nav-btn" data-tab="alerts">Alerts / Logs</button>
+      </nav>
+      <div class="footer-note">TERMINAL UI // FALLBACK SAFE MODE</div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <div id="hostname">VAULTPANEL</div>
+          <div class="subline" id="platform">initializing...</div>
+        </div>
+        <div class="right-meta">
+          <div id="clock">--:--:--</div>
+          <div id="globalStatus" class="status-pill nominal">NOMINAL</div>
+        </div>
+      </header>
+
+      <section id="tab-overview" class="tab active">
+        <div class="grid metrics-grid">
+          <div class="card metric"><span>CPU LOAD</span><strong id="cpuUsage">--</strong></div>
+          <div class="card metric"><span>CPU TEMP</span><strong id="cpuTemp">--</strong></div>
+          <div class="card metric"><span>RAM USAGE</span><strong id="ramUsage">--</strong></div>
+          <div class="card metric"><span>STORAGE</span><strong id="storageUsage">--</strong></div>
+          <div class="card metric"><span>INTERNET</span><strong id="internetStatus">--</strong></div>
+          <div class="card metric"><span>SERVICES</span><strong id="servicesStatus">--</strong></div>
+          </br>
+        </div>
+        <div class="grid two-col">
+          <div class="card">
+            <h3>System summary</h3>
+            <div class="kv"><span>Generated at</span><strong id="generatedAt"></strong></div>
+            <div class="kv"><span>Uptime</span><strong id="uptime"></strong></div>
+            <div class="kv"><span>Load avg</span><strong id="loadAvg"></strong></div>
+            <div class="kv"><span>LAN IP</span><strong id="lanIp"></strong></div>
+            <div class="kv"><span>Tailscale IP</span><strong id="tsIp"></strong></div>
+            <div class="kv"><span>Last backup</span><strong id="lastBackup">--</strong></div>
+	    <div class="kv"><span>Last RAID scrub</span><strong id="lastScrub">--</strong></div>
+            <div class="kv"><span>Last SMART test</span><strong id="lastSmart">--</strong></div>
+          </div>
+
+          <div class="card">
+            <h3>Quick health</h3>
+            <div id="quickHealth" class="service-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-cooling" class="tab">
+        <div class="grid two-col">
+          <div class="card">
+            <h3>Fan telemetry</h3>
+            <div id="fans"></div>
+            <div class="kv"><span>Thermal state</span><strong id="thermalState"></strong></div>
+            <div class="kv"><span>Fan profile</span><strong id="fanProfile"></strong></div>
+            <div class="button-row">
+              <button disabled title="Disabled in read-only preview" class="action-btn" data-profile="AUTO">AUTO</button>
+              <button disabled title="Disabled in read-only preview" class="action-btn" data-profile="SILENT">SILENT</button>
+              <button disabled title="Disabled in read-only preview" class="action-btn" data-profile="BALANCED">BALANCED</button>
+              <button disabled title="Disabled in read-only preview" class="action-btn" data-profile="PERFORMANCE">PERFORMANCE</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>IO Lighting + Fan LED</h3>
+            <div class="kv"><span>Current scene</span><strong id="ledScene"></strong></div>
+            <div class="kv"><span>Current mode</span><strong id="ledMode"></strong></div>
+            <div class="kv"><span>Brightness</span><strong id="ledBrightness"></strong></div>
+            <div class="kv"><span>Speed</span><strong id="ledSpeed"></strong></div>
+            <div class="control-grid">
+              <label>IO Style
+                <select disabled id="modeSelect">
+                  <option>STATIC</option><option>RAINBOW</option><option>BREATHING</option>
+                  <option>PULSE</option><option>THERMAL</option><option>NIGHT</option><option>CUSTOM</option>
+                </select>
+              </label>
+              <label>IO Color
+                <input disabled type="color" id="colorInput" value="#7cfc00">
+              </label>
+              <label>Brightness
+                <input disabled type="range" id="brightnessInput" min="0" max="100" value="62">
+              </label>
+              <label>Speed
+                <input disabled type="range" id="speedInput" min="0" max="100" value="50">
+              </label>
+              <label>Fan LED Mode
+                <select disabled id="fanLedSelect">
+                  <option>FOLLOW</option>
+                  <option>ON</option>
+                  <option>OFF</option>
+                </select>
+              </label>
+              <label>OLED Mode
+                <select disabled id="oledModeSelect">
+                  <option>AUTO</option>
+                  <option>CUSTOM</option>
+                </select>
+              </label>
+          </div>
+            <div class="button-row presets">
+              <button disabled title="Disabled in read-only preview" class="preset-btn" data-scene="VAULT GREEN" data-mode="STATIC" data-color="#7cfc00">VAULT GREEN</button>
+              <button disabled title="Disabled in read-only preview" class="preset-btn" data-scene="ICE" data-mode="STATIC" data-color="#8ef6ff">ICE</button>
+              <button disabled title="Disabled in read-only preview" class="preset-btn" data-scene="WARNING" data-mode="STATIC" data-color="#ffb000">WARNING</button>
+              <button disabled title="Disabled in read-only preview" class="preset-btn" data-scene="DANGER" data-mode="PULSE" data-color="#ff4d4d">DANGER</button>
+              <button disabled title="Disabled in read-only preview" class="preset-btn" data-scene="NIGHT" data-mode="NIGHT" data-color="#2e6f2e">NIGHT</button>
+            </div>
+            <div class="button-row">
+              <button disabled title="Disabled in read-only preview" id="applyLed" class="action-btn">APPLY LED</button>
+            </div>
+            <div class="button-row">
+              <button disabled title="Disabled in read-only preview" id="applyOledMode" class="action-btn">APPLY OLED MODE</button>
+            </div>
+           <p class="muted" id="ledNote"></p>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-storage" class="tab">
+        <div class="grid two-col">
+          <div class="card">
+            <h3>Filesystem</h3>
+            <div class="kv"><span>Used</span><strong id="rootUsed"></strong></div>
+            <div class="kv"><span>Free</span><strong id="rootFree"></strong></div>
+            <div class="kv"><span>Total</span><strong id="rootTotal"></strong></div>
+            <div class="bar"><div id="rootBar"></div></div>
+            <pre id="btrfsStatus" class="terminal-box"></pre>
+          </div>
+          <div class="card">
+            <h3>Block devices</h3>
+            <div id="devices"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-services" class="tab">
+        <div class="card">
+          <h3>Service status</h3>
+          <div id="servicesTable"></div>
+        </div>
+      </section>
+
+      <section id="tab-network" class="tab">
+        <div class="grid two-col">
+          <div class="card">
+            <h3>Network summary</h3>
+            <div class="kv"><span>LAN IP</span><strong id="netLan"></strong></div>
+            <div class="kv"><span>Tailscale IP</span><strong id="netTs"></strong></div>
+            <div class="kv"><span>Gateway</span><strong id="gateway"></strong></div>
+            <div class="kv"><span>Internet</span><strong id="netInternet"></strong></div>
+            <div class="kv"><span>DNS</span><strong id="dnsStatus"></strong></div>
+          </div>
+          <div class="card">
+            <h3>Tailscale / DNS detail</h3>
+            <pre id="tsStatus" class="terminal-box"></pre>
+            <pre id="resolvConf" class="terminal-box"></pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-alerts" class="tab">
+        <div class="card">
+          <h3>Current alerts</h3>
+          <div id="alertsList"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="{{ url_for('static', filename='js/safe-html.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

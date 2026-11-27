@@ -1,10 +1,15 @@
-## Summary
+## Change and evidence
 
-## Testing and evidence
+Describe the problem, resulting behavior and whether source is new or recovered.
 
-## Checklist
+## Validation
 
-- [ ] Documentation and comments are in English.
-- [ ] No credentials or private data are included.
-- [ ] Tests and known limitations are documented.
-- [ ] Safety and rollback implications are reviewed.
+List tests actually run, results and remaining limitations.
+
+## Source intake review
+
+- [ ] Secrets, personal data, filenames and relevant history reviewed
+- [ ] Provenance, licenses and third-party notices checked
+- [ ] Examples contain placeholders; no device data or production credentials
+- [ ] Missing/unverified capabilities are clearly identified
+- [ ] No destructive storage or visibility changes included

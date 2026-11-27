@@ -1,0 +1,15 @@
+# REFERENCE ONLY — NOT AN INSTALLABLE OR VALIDATED UNIT
+# Deployment account replaced with the neutral name vaultpanel.
+# See ../../../docs/SERVICE_AUDIT.md before adapting this material.
+[Unit]
+Description=VaultPanel LED Schedule Timer
+
+[Timer]
+OnCalendar=*-*-* 08:00:00
+OnCalendar=*-*-* 18:00:00
+OnCalendar=*-*-* 22:00:00
+Persistent=true
+Unit=vaultpanel-led-schedule.service
+
+[Install]
+WantedBy=timers.target

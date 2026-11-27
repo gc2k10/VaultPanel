@@ -1,61 +1,42 @@
 # VaultPanel
 
-<img src="frontend/assets/brand/vaultpanel.png" alt="VaultPanel logo" width="480">
+A Raspberry Pi infrastructure dashboard with classic and retro web interfaces.
 
-[Project website](https://gc2k10.github.io/VaultPanel/about.html) · [Interactive demo](https://gc2k10.github.io/VaultPanel/)
+**Status: recovered source, authenticated read-only preview. Not a production release or a NAS installer.** The owner supplied 24 text files from an active installation. This branch preserves the available frontend, backend and hardware adapter source while disabling privileged web actions and adding a local authentication boundary.
 
-A self-hosted infrastructure dashboard for Raspberry Pi and home servers.
+## Start here
 
-VaultPanel aims to bring storage, services, networking, hardware health and alerts into a single responsive interface.
+- [Installation and local preview](docs/INSTALLATION.md)
+- [Recovered-source audit and changes](docs/SOURCE_AUDIT.md)
+- [Service and schedule audit](docs/SERVICE_AUDIT.md)
+- [Privilege, cron and proxy audit](docs/CONFIGURATION_AUDIT.md)
+- [Architecture and integration evidence](docs/ARCHITECTURE.md)
+- [Observed storage topology](docs/STORAGE_AUDIT.md)
+- [Safe source export](docs/SOURCE_EXPORT.md)
+- [Licensing and dependencies](docs/LICENSING.md)
+- [Security](SECURITY.md) and [contributing](CONTRIBUTING.md)
+- [Polski](docs/README.pl.md)
 
-## Try the frontend demo
+## What is included
 
-[Open the live demo](https://gc2k10.github.io/VaultPanel/), or run this from the repository root with Python 3:
+`vaultpanel/` contains the Flask backend, collectors, both HTML/CSS/JavaScript frontends and gated OLED/RGB/fan adapters. Monitoring covers host resources, storage diagnostics, service status and networking. Observing a service is not installing or managing that service.
+
+Hardware controls and backup POST endpoints return an explicit refusal. Sanitized service/timer definitions are retained as non-installable reference files. No sudo rules, NAS data, databases, logs, private history are imported. Seven owner-authorized images are included; one personal OLED logo is deliberately excluded. See [asset review](docs/ASSETS.md).
+
+## Validation
 
 ```sh
-python3 -m http.server 8000 --bind 127.0.0.1 --directory frontend
+node --test tests/*.test.mjs
+python -m unittest discover -s tests -p 'test_*.py'
+node scripts/review-files.mjs .
 ```
 
-Open http://127.0.0.1:8000. No device connection or credentials are needed. All readings are synthetic.
+Python tests require `vaultpanel/requirements.txt`; see the installation guide. The heuristic scanner also flags public URLs and synthetic security tests for manual review. It does not certify privacy or inspect Git history.
 
-The `v0.1.0-demo` prerelease is prepared as a draft. See the [quick-start guide](docs/demo-start.md), [verified test scope](docs/demo-validation.md) and [release notes](docs/releases/v0.1.0-demo.md).
+## License
 
-## Project status
+Original project code and documentation are available under [MIT](LICENSE), authorized by the owner. Third-party dependencies retain their own licenses; the seven included owner-supplied graphics are also MIT. No rights are asserted over vendor components.
 
-Early public repository. A local Flask prototype has been reported; public application code, installation and feature availability have not yet been verified. The following is the intended scope, not a claim of released functionality.
+## Standalone synthetic demo
 
-## Planned capabilities
-
-| Module | Scope |
-|---|---|
-| Overview | System health and resource usage |
-| Storage | RAID, Btrfs, capacity and snapshots |
-| Services | Service status and controlled actions |
-| Network | Connectivity and network service health |
-| Hardware | UPS, cooling, RGB and OLED monitoring |
-| Alerts | Health warnings and event history |
-
-## Target architecture
-
-Python / Flask backend, modular system collectors, responsive web frontend and narrowly scoped administrative actions. The public implementation will use sanitized example configurations and synthetic demonstration data.
-
-## Installation
-
-A tested installation guide is not yet available. Do not deploy unverified code on a production NAS. A clean Raspberry Pi OS installation, non-root service account and documented rollback procedure are release requirements.
-
-## Security
-
-Never expose the administration interface directly to the internet. Do not publish credentials, private network details or production logs. Administrative actions must be authenticated and explicitly authorized.
-
-## Roadmap
-
-1. Inventory and sanitize the existing prototype.
-2. Establish a reproducible installation and read-only monitoring.
-3. Build and test the responsive dashboard.
-4. Add narrowly scoped controls and automated tests.
-5. Publish a documented release.
-
-## License and support
-
-Licensed under the [MIT License](LICENSE). Optional support: [Buy Me a Coffee](https://buymeacoffee.com/gc2k10f). No payment is required to view this repository.
-
+The existing [frontend demo](frontend/README.md) and [project site](https://gc2k10.github.io/VaultPanel/about.html) remain available. They use synthetic data and do not connect to a NAS. See [demo validation](docs/demo-validation.md).

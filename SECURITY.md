@@ -1,19 +1,11 @@
-# Security policy
+# Security
 
-## Supported versions
+The recovered application is an authenticated, loopback-only read-only preview. There is no production-supported release. Use only loopback or an SSH tunnel; never expose HTTP Basic credentials on a public connection. Privileged web actions are blocked. See docs/SOURCE_AUDIT.md for the remaining findings.
 
-This project is in early development. No stable release or security support commitment has been established.
+Never put credentials, personal data or raw device exports in public issues or pull requests. No private vulnerability-reporting channel has been verified for this repository. Establish a private channel with the maintainer before sending sensitive details; a public issue may request a private contact without including the finding.
 
-## Reporting a vulnerability
+If a credential has been exposed, revoke or rotate it at its issuer first. Deleting a file or rewriting history does not revoke a credential and cannot remove all existing copies. History changes require owner approval and a recovery plan.
 
-Use GitHub private vulnerability reporting if enabled. Do not post exploitable details, credentials or private logs in public issues. If private reporting is unavailable, request a private reporting channel through a public issue without disclosing sensitive details.
+Review files, filenames, Git authors/commit messages, all refs, screenshots, build artifacts and logs. Replace deployment-specific values in review copies with explicit placeholders. Keep real secrets in local environment files or a suitable secret store, not source code. `.gitignore` does not remove already tracked material.
 
-## Safe development
-
-- Never commit credentials, tokens, private configurations or production logs.
-- Use synthetic data and placeholder configuration values.
-- Review dependencies and scan changes and Git history for secrets.
-- Apply least privilege and keep administrative interfaces off the public internet.
-- Test hardware and administrative controls in an isolated environment before deployment.
-
-If a secret is exposed, revoke or rotate it immediately. Removing it from the latest commit alone is insufficient.
+The included scanner is heuristic, not a secret detection or privacy guarantee. It does not inspect Git history, decode binary assets or certify licenses. Its output includes filenames and line numbers; treat reports as private until filenames have also been reviewed.

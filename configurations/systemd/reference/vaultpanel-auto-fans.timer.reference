@@ -1,0 +1,13 @@
+# REFERENCE ONLY — NOT AN INSTALLABLE OR VALIDATED UNIT
+# Deployment account replaced with the neutral name vaultpanel.
+# See ../../../docs/SERVICE_AUDIT.md before adapting this material.
+[Unit]
+Description=Run VaultPanel auto fan refresh every 30 seconds
+
+[Timer]
+OnBootSec=30
+OnUnitActiveSec=30
+Unit=vaultpanel-auto-fans.service
+
+[Install]
+WantedBy=timers.target
