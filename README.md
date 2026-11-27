@@ -8,6 +8,18 @@ A self-hosted infrastructure dashboard for Raspberry Pi and home servers.
 
 VaultPanel aims to bring storage, services, networking, hardware health and alerts into a single responsive interface.
 
+## Try the frontend demo
+
+[Open the live demo](https://gc2k10.github.io/VaultPanel/), or run this from the repository root with Python 3:
+
+```sh
+python3 -m http.server 8000 --bind 127.0.0.1 --directory frontend
+```
+
+Open http://127.0.0.1:8000. No device connection or credentials are needed. All readings are synthetic.
+
+The `v0.1.0-demo` prerelease is prepared as a draft. See the [quick-start guide](docs/demo-start.md), [verified test scope](docs/demo-validation.md) and [release notes](docs/releases/v0.1.0-demo.md).
+
 ## Project status
 
 Early public repository. A local Flask prototype has been reported; public application code, installation and feature availability have not yet been verified. The following is the intended scope, not a claim of released functionality.
