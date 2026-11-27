@@ -1,34 +1,38 @@
 # VaultPanel
 
-Preparation workspace for a Raspberry Pi 5 home server and infrastructure dashboard.
+A read-only review build of the existing Flask dashboard, with classic and retro layouts. The production-source intake has been reviewed and sanitized. **This is work toward v0.1.0-alpha, not a released or production-validated version.**
 
-**Status: source collection and documentation. There is no runnable dashboard or NAS installer in this repository yet.** The existing repository contained only a short README. Frontend, backend, device configuration and hardware integrations have not been supplied or verified.
+The dashboard reads CPU, memory, uptime and configured storage telemetry. Optional Linux command-based reads are disabled by default. All four administration endpoints return HTTP 403; backup, fan, LED and OLED operations are intentionally unavailable. The original hardware scripts are excluded from the application.
 
-The intended scope includes storage, file sharing, private cloud, DNS, monitoring, remote access and hardware controls. Inclusion in this scope does not mean an integration exists or works.
+## Local evaluation
 
-## Start here
-
-- [Audit and missing sources](docs/AUDIT.md)
-- [Architecture and module evidence](docs/ARCHITECTURE.md)
-- [Safe source export](docs/SOURCE_EXPORT.md)
-- [Installation readiness](docs/INSTALLATION.md)
-- [Licensing and dependency inventory](docs/LICENSING.md)
-- [Security](SECURITY.md) and [contributing](CONTRIBUTING.md)
-- [Polski](docs/README.pl.md)
-
-## Repository tools
-
-The newly written review tools use Node.js 22 or newer, with built-in modules only. They do not install services, modify disks or connect to a server.
+Use a disposable development environment, never a live NAS for this review. Python 3.10+ is the target for further validation. Local compatibility tests were run on Python 3.9.6; no supported runtime matrix is claimed yet.
 
 ```sh
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements.txt
+python app.py
+```
+
+Open the loopback address `127.0.0.1:8090`; `/retro` selects the retro layout. Do not run as root. The Flask development server is for local evaluation only. No service installer, privileged permissions, disk changes or deployment are performed by these steps.
+
+Configuration uses environment variables documented in [.env.example](.env.example) and [CONFIGURATION.md](docs/CONFIGURATION.md). The example is not loaded automatically. No private network address, service selection, disk name or host identity is bundled.
+
+## Review and validation
+
+```sh
+python -m unittest discover -s tests -v
 node --test tests/*.test.mjs
 node scripts/review-files.mjs .
 ```
 
-The scanner reports potential sensitive data without printing matched values. A successful scan is only a heuristic check, not clearance to publish. See the manual review and history requirements in [SOURCE_EXPORT.md](docs/SOURCE_EXPORT.md).
+The heuristic scanner intentionally reports some code references and synthetic test data; review its findings, do not treat an exit code as a privacy guarantee. Node.js 22+ is required for the intake tools and JavaScript tests.
 
-## Scope and licensing
+- [Source audit, all 24 original files](docs/SOURCE_REVIEW.md)
+- [Validation results and release blockers](docs/VALIDATION.md)
+- [Configuration and API changes](docs/CONFIGURATION.md)
+- [Security](SECURITY.md), [licensing](docs/LICENSING.md), and [contributing](CONTRIBUTING.md)
+- [Earlier intake audit](docs/AUDIT.md), [source export procedure](docs/SOURCE_EXPORT.md)
 
-No frontend/backend source, package manifests, lockfiles, service units, device screenshots or deployment configurations were present at the baseline audit. A production installation guide cannot be validated until these are recovered.
-
-No project license has been selected. Public visibility is not a grant of an open-source license. Ownership and third-party notices must be reviewed before an open-source release; see [LICENSING.md](docs/LICENSING.md).
+No license grant is added by this work. Source ownership, asset provenance, supported Linux runtimes and isolated hardware validation remain release gates. The live NAS was not contacted or modified.

@@ -1,3 +1,5 @@
+> Aktualizacja: dostępna jest oczyszczona wersja przeglądowa tylko do odczytu. Wyniki audytu i ograniczenia opisują [SOURCE_REVIEW.md](SOURCE_REVIEW.md) i [VALIDATION.md](VALIDATION.md). Poniższy tekst zachowuje wcześniejszy etap zbierania źródeł.
+
 # VaultPanel — stan projektu
 
 Repozytorium jest na etapie zbierania źródeł. Nie zawiera jeszcze działającego panelu, backendu ani instalatora NAS. Moduły wymienione w dokumentacji są zakresem do zweryfikowania, a nie gotowymi funkcjami.

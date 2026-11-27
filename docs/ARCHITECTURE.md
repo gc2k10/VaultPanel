@@ -1,3 +1,5 @@
+> Intake-stage record. A sanitized read-only application is now present; see [SOURCE_REVIEW.md](SOURCE_REVIEW.md), [CONFIGURATION.md](CONFIGURATION.md) and [VALIDATION.md](VALIDATION.md) for the current evidence. Earlier statements about missing application source describe the original baseline. Licensing and release gates remain open.
+
 # Architecture and module evidence
 
 This document describes an intended boundary, not an implemented system. No service topology, programming language, API contract, ports or hardware wiring has been verified.

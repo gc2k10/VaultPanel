@@ -27,3 +27,4 @@ coverage/
 __pycache__/
 .venv/
 .DS_Store
+state/

@@ -1,3 +1,5 @@
+> Intake-stage record. A sanitized read-only application is now present; see [SOURCE_REVIEW.md](SOURCE_REVIEW.md), [CONFIGURATION.md](CONFIGURATION.md) and [VALIDATION.md](VALIDATION.md) for the current evidence. Earlier statements about missing application source describe the original baseline. Licensing and release gates remain open.
+
 # Licensing and dependency intake
 
 The baseline repository has no license. This preparation does not assign a license to missing, vendor or third-party code. MIT is a candidate for original project code only after ownership is confirmed; no license grant is asserted here.
