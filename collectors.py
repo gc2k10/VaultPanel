@@ -316,7 +316,8 @@ def get_overview() -> dict[str, Any]:
     total = len(services)
     return {
         'hostname': get_hostname(),
-        'platform': platform.platform(),
+        # platform.platform() may execute uname -p; keep default reads process-free.
+        'platform': ' '.join((platform.system(), platform.release(), platform.machine())),
         'generated_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'uptime': get_uptime(),
         'cpu_temp_c': temp,

@@ -6,12 +6,12 @@ The dashboard reads CPU, memory, uptime and configured storage telemetry. Option
 
 ## Local evaluation
 
-Use a disposable development environment, never a live NAS for this review. Python 3.10+ is the target for further validation. Local tests passed on Python 3.12.14, with earlier compatibility checks on Python 3.9.6; Linux matrix validation is tracked in the PR.
+Use a disposable development environment, never a live NAS for this review. Python 3.10+ is the target for further validation. Tests passed on Python 3.10/3.12/3.13 on Linux x64 and Python 3.13.5 on Linux ARM64; current results are tracked in the PR. This does not validate physical Raspberry Pi sensors.
 
 ```sh
 python3 -m venv .venv
 . .venv/bin/activate
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-alpha.txt
 python app.py
 ```
 
@@ -29,6 +29,8 @@ node scripts/review-files.mjs .
 
 The heuristic scanner intentionally reports some code references and synthetic test data; review its findings, do not treat an exit code as a privacy guarantee. Node.js 22+ is required for the intake tools and JavaScript tests.
 
+- [Local evaluation and removal](docs/INSTALLATION.md)
+- [Draft alpha release notes](docs/RELEASE_NOTES_ALPHA.md)
 - [Source audit, all 24 original files](docs/SOURCE_REVIEW.md)
 - [Validation results and release blockers](docs/VALIDATION.md)
 - [Configuration and API changes](docs/CONFIGURATION.md)

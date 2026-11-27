@@ -1,26 +1,31 @@
-> Intake-stage record. A sanitized read-only application is now present; see [SOURCE_REVIEW.md](SOURCE_REVIEW.md), [CONFIGURATION.md](CONFIGURATION.md) and [VALIDATION.md](VALIDATION.md) for the current evidence. Earlier statements about missing application source describe the original baseline. Licensing and release gates remain open.
+# Local evaluation of the alpha candidate
 
-# Installation readiness
+This is a read-only review candidate, not a production NAS installer. Use a separate development machine or disposable VM. Do not install it over an existing VaultPanel or change any NAS services. No second physical NAS is required.
 
-## What can run today
+## Start from the reviewed source archive
 
-Only the repository review/export tools. They require Node.js 22+ and no downloaded dependencies. Run from the repository root:
+Extract the reviewed source ZIP into a new empty directory. Use the ZIP checksum supplied with the candidate to verify the exact download before extraction. Open a terminal in the extracted VaultPanel directory. Python 3.10+ with venv support is required; Node is needed only for developer tests.
 
 ```sh
-node --test tests/*.test.mjs
-node scripts/review-files.mjs .
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements-alpha.txt
+python -m pip check
+python -B app.py
 ```
 
-There is no VaultPanel application to build or start, and `.env.example` is a planning template, not a runtime contract. Do not run guessed installer commands or format existing disks to follow this documentation.
+These commands install dependencies only into the local virtual environment. Do not use sudo. Open `http://127.0.0.1:8090/` or `/retro` on that same machine. If the port is already in use, stop this evaluation attempt; do not stop an unknown service or overwrite a live installation. The Flask development server is only for local evaluation.
 
-## Before an installation guide can be accepted
+Start with no VAULTPANEL environment overrides. `.env.example` is documentation and is not loaded automatically. Diagnostic commands default to disabled, service/device lists are empty and missing readings remain unknown. All four write endpoints deny requests. No disks, accounts, services, firewall rules or startup tasks are configured. The displayed telemetry belongs to the evaluation machine, not the NAS.
 
-- Confirm device model, RAM, storage controller, disks, UPS and display hardware.
-- Establish supported operating system, architecture, package versions and upstream sources from the recovered implementation.
-- Record required ports and privileges. Default administrative services to loopback or a deliberately restricted management network; authentication is still required.
-- Provide module-by-module installation, preflight checks, rollback and uninstall behavior that preserves user data.
-- Identify disks by stable identifiers; require a verified backup and explicit device selection for any destructive operation. Never assume a device name.
-- Validate storage degradation/recovery, backup restore, DNS failure, UPS shutdown and power return on a disposable test system.
-- Test a fresh installation and an upgrade from each supported version. Document exact tested versions and outcomes.
+The optional `VAULTPANEL_ACCESS_TOKEN` protects local access with Basic authentication; configure it privately if needed. Local-only binding is not isolation from other local users/processes. Do not expose this build through a proxy or tunnel. See [configuration](CONFIGURATION.md).
 
-Until then, deployment, performance and data durability are unverified. No default password, public bind address or automatic disk initialization is provided.
+## Stop and remove the evaluation
+
+Press Ctrl+C in the terminal running the server, then run `deactivate`. Remove only the new directory created for this evaluation if no longer needed. No system service is installed, so there is no service uninstall or reboot step. Do not delete an existing deployment or its data. This procedure is not an upgrade or rollback plan for a production installation.
+
+## Checks performed and limits
+
+A fresh local Python environment installs the pinned dependency set and passes `pip check`. The distribution smoke test creates a source ZIP from tracked files, extracts it into a temporary directory, and imports it in a new isolated Python process from a different working directory. It requests both pages, local assets, eight read APIs and four denied write APIs. Command execution and outbound socket connections are trapped; source hashes and the empty working directory must remain unchanged. API response contents are not printed or published.
+
+CI repeats the test on Linux x64 and ARM64. This uses the Flask request test client, not a production HTTP server or the physical Raspberry Pi. Browser tests use synthetic fixtures. Never deploy `tests/browser_server.py`.

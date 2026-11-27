@@ -1,6 +1,6 @@
 # Contributing
 
-The first milestone is verified source intake, not a runnable release.
+The current milestone is a reviewed, experimental read-only alpha. See docs/ALPHA_READINESS.md for evidence and release decisions.
 
 Use a separate branch and a draft pull request. Keep changes small enough to review and describe whether code is newly authored or recovered from an existing installation. Never import device data or private Git history into a public branch.
 

@@ -25,11 +25,24 @@ The Python 3.13 Linux CI job passed, but that does not establish compatibility w
 
 Only these non-identifying platform facts are retained. Do not publish terminal transcripts, network addresses, host/user names, login history, passwords, keys, serial numbers, production configuration or NAS data. No production access is needed for further offline work.
 
-## Validation still required
+## Release decision: experimental read-only alpha
 
-- Continue Linux virtual-machine and synthetic-fixture checks without production access. Mocked Linux CI does not validate real sensors, permissions or vendor output; clearly disclose this limitation for the read-only alpha. Hardware-specific validation must not be claimed without evidence.
-- Extended accessibility checks cover 24 views at 320/1280 pixels. Gradient contrast is checked at both background endpoints; real screen-reader use and full accessibility conformance remain unvalidated. See VALIDATION.md.
-- Review the candidate and choose an explicit version/tag only after agreed release gates pass. No release tag or GitHub Release exists as a result of this work.
-- Before future hardware controls: validate failure-safe behavior, permissions, thermal limits and controller ownership on disposable hardware. Before any backup claim: implement and test restoration. These features must not be advertised as working in the proposed read-only alpha.
+Physical fan/LED/OLED tests and backup restoration are prerequisites for future enabled features, not blockers for the approved alpha in which those operations are unavailable. Likewise, unverified sensor integration and manual screen-reader coverage must be disclosed; this alpha must not claim certified hardware support, production readiness or full accessibility conformance.
 
-The production NAS must remain unchanged. No deployment or production connection is part of these checks.
+### Required before publication
+
+1. The final candidate must pass all five CI jobs, including pinned dependency installation, `pip check`, the source-ZIP smoke test and the ARM64/Python 3.13.5 suite. Record the exact commit and run in the PR and external validation report.
+2. Maintainer review/acceptance of the complete sanitized candidate and draft release notes must be completed. PR #3 is still a draft stacked on intake PR #1; neither has been merged. Complete the reviewed branch integration before tagging a mainline release. Branch API mergeability alone is not evidence of a content conflict; the inspected intake comparison is directly ahead of main.
+3. Select the exact approved release commit, regenerate/check the source archive and checksums for that commit, and explicitly authorize publication as a prerelease. A preparation request is not treated as an instruction to merge or publish.
+
+### Completed preparation
+
+Owner-approved read-only scope and MIT; portable configuration; disabled mutation boundaries; dependency inventory and privacy review; Linux x64/ARM64 tests; three-browser fixture checks; automated accessibility and gradient-bound contrast checks; reviewed narrow-screen screenshots; a source-ZIP test outside the checkout; local evaluation/removal instructions; draft release notes. See VALIDATION.md and the PR for commit-specific results.
+
+### Known limitations, not silently waived claims
+
+- Actual Debian 13/Raspberry Pi 5/Pironman sensor integration is unvalidated. Unavailable telemetry stays unknown.
+- Manual screen-reader use and full accessibility conformance remain unverified.
+- Remote access, production deployment, automated NAS installation/upgrades, hardware controls and backup/restore are outside this release scope.
+
+No additional NAS data, credentials or production access is required to complete these publication steps. The production NAS must remain unchanged.
