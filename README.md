@@ -8,6 +8,7 @@ A Raspberry Pi infrastructure dashboard with classic and retro web interfaces.
 
 - [Installation and local preview](docs/INSTALLATION.md)
 - [Recovered-source audit and changes](docs/SOURCE_AUDIT.md)
+- [Service and schedule audit](docs/SERVICE_AUDIT.md)
 - [Architecture and integration evidence](docs/ARCHITECTURE.md)
 - [Safe source export](docs/SOURCE_EXPORT.md)
 - [Licensing and dependencies](docs/LICENSING.md)
@@ -18,7 +19,7 @@ A Raspberry Pi infrastructure dashboard with classic and retro web interfaces.
 
 `vaultpanel/` contains the Flask backend, collectors, both HTML/CSS/JavaScript frontends and gated OLED/RGB/fan adapters. Monitoring covers host resources, storage diagnostics, service status and networking. Observing a service is not installing or managing that service.
 
-Hardware controls and backup POST endpoints return an explicit refusal. No application services, timers, sudo rules, NAS data, databases, logs, private history or original images are imported. Graphics remain pending a separate rights/privacy review; the UI uses a text title.
+Hardware controls and backup POST endpoints return an explicit refusal. Sanitized service/timer definitions are retained as non-installable reference files. No sudo rules, NAS data, databases, logs, private history or original images are imported. Graphics remain pending a separate rights/privacy review; the UI uses a text title.
 
 ## Validation
 

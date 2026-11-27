@@ -1,0 +1,10 @@
+# REFERENCE ONLY — NOT AN INSTALLABLE OR VALIDATED UNIT
+# Deployment account replaced with the neutral name vaultpanel.
+# See ../../../docs/SERVICE_AUDIT.md before adapting this material.
+[Unit]
+Description=VaultPanel LED Alert Hourly Check
+
+[Service]
+Type=oneshot
+User=vaultpanel
+ExecStart=/opt/vaultpanel/scripts/vaultpanel_led_alert_hourly.sh

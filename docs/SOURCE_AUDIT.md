@@ -35,7 +35,7 @@ The repository scanner flags expected public/loopback URLs, authentication code 
 ## Outstanding release blockers
 
 - Confirm actual BTRFS versus mdraid topology. `api/system.sh` assumes mdraid and reads external status files; its SMART/RAID summaries must not be used as authoritative health evidence.
-- Obtain and review service units, timers/cron, sudo rules, reverse-proxy setup and actual package versions. Do not publish Environment values or raw command-line secrets.
+- Service and timer definitions were subsequently reviewed; see [service audit](SERVICE_AUDIT.md). Cron jobs, sudo rules, reverse-proxy setup and actual package versions are still needed. Do not publish Environment values or raw command-line secrets.
 - The recovered LED alert script feeds both a heredoc and a JSON pipe into stdin; parsing needs repair. Other LED variants search history as well as current alerts. All remain gated; they are not advertised as validated automation.
 - Fixed hwmon/device identifiers, mutable `/tmp` state, vendor restart behavior, privileged shell use and service failure handling need device-specific redesign before any hardware support is enabled. Gates are not a substitute for those fixes.
 - Collector errors, slow synchronous probes, mount assumptions and platform-specific diagnostics need target-system tests. External network probes remain in the recovered collectors.

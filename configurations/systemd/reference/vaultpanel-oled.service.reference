@@ -1,0 +1,13 @@
+# REFERENCE ONLY — NOT AN INSTALLABLE OR VALIDATED UNIT
+# Deployment account replaced with the neutral name vaultpanel.
+# See ../../../docs/SERVICE_AUDIT.md before adapting this material.
+[Unit]
+Description=VaultPanel OLED renderer
+
+[Service]
+ExecStart=/opt/vaultpanel/venv/bin/python /opt/vaultpanel/scripts/vaultpanel_oled.py
+Restart=always
+User=vaultpanel
+
+[Install]
+WantedBy=multi-user.target

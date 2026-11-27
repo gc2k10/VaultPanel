@@ -17,7 +17,9 @@ Classic and retro HTML templates share collector API routes, with separate CSS a
 | Pi-hole | pihole-FTL service status | Resolver settings and Unbound integration |
 | Netdata | Service status | Access control and deployment |
 | Tailscale | Status/IP collection | Access policy and deployment |
-| UPS | No supplied implementation | Model, daemon, shutdown and power-return tests |
-| OLED/RGB/fans | Python display code and shell adapters | Service units, timers, vendor version, pin mapping, safe privilege model |
+| UPS | Operator-listed apcupsd unit, enabled at boot | Configuration, model, active status, shutdown and power-return tests |
+| OLED/RGB/fans | Python/shell adapters plus service/timer references | Vendor version, pin mapping, safe privilege model and hardware tests |
 
 No imported module configures Samba, Nextcloud, DNS, RAID or UPS. Hardware adapters remain disabled by default. Even after manual opt-in, they must be reviewed against the exact hardware revision. The app must never be given unrestricted root, shell or Docker-socket access.
+
+See [service audit](SERVICE_AUDIT.md) for the 14 supplied unit definitions and their compatibility limitations. The operator also listed Unbound as installed/enabled, but its configuration was not supplied.

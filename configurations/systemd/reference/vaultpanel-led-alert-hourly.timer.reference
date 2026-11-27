@@ -1,0 +1,14 @@
+# REFERENCE ONLY — NOT AN INSTALLABLE OR VALIDATED UNIT
+# Deployment account replaced with the neutral name vaultpanel.
+# See ../../../docs/SERVICE_AUDIT.md before adapting this material.
+[Unit]
+Description=VaultPanel LED Alert Hourly Timer
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1h
+Persistent=true
+Unit=vaultpanel-led-alert-hourly.service
+
+[Install]
+WantedBy=timers.target

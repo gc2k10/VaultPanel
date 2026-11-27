@@ -26,3 +26,7 @@ The application requirements declare Flask and the previously missing psutil dep
 The supplied OLED scripts import Pillow and luma.oled/luma.core; these are listed as optional hardware dependencies but were not installed, license-audited at a pinned version or exercised on hardware. The scripts also invoke a vendor pironman5 executable that was not supplied. Review exact versions, licenses and hardware compatibility before enabling them.
 
 Samba, Nextcloud, Pi-hole, Unbound, Netdata, Tailscale, BTRFS tools and UPS software are not bundled or installed by this project. Service names and command invocations do not grant redistribution rights. Fonts, logos, screenshots and other assets require a separate source and rights record.
+
+## Service-definition intake
+
+Thirteen owner-supplied VaultPanel service/timer definitions are retained as sanitized references. The separately supplied vendor pironman5 service is summarized in the service audit rather than redistributed: its package version and upstream license have not been verified.
