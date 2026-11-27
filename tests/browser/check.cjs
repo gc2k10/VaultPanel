@@ -61,6 +61,44 @@ const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, 'telemetry.json'
       passed++;
       console.log(`PASS ${route}: hostile telemetry displayed as text`);
       await page.close();
+
+      const longPage = await browser.newPage({viewport: {width: 390, height: 900}});
+      await longPage.route('**/api/*', async r => {
+        const key = r.request().url().split('/').pop();
+        const data = JSON.parse(JSON.stringify(fixture[key]));
+        if (key === 'overview') data.hostname = 'example-'.repeat(30);
+        if (key === 'services') data.services[0].name = 'example-'.repeat(30);
+        if (key === 'alerts') data.alerts[0].message = 'LongMessage'.repeat(30);
+        await r.fulfill({json: data});
+      });
+      await longPage.goto('http://127.0.0.1:8091' + route);
+      await longPage.getByText('telemetry refreshed', {exact: false}).waitFor();
+      for (const tab of ['overview', 'services', 'alerts']) {
+        await longPage.locator(`[data-tab="${tab}"]`).click();
+        assert.ok(await longPage.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${route}: long ${tab} overflows`);
+      }
+      passed++;
+      console.log(`PASS ${route}: long telemetry fits mobile width`);
+      await longPage.close();
+
+      const slowPage = await browser.newPage();
+      let slowRequests = 0;
+      await slowPage.route('**/api/overview', r => {
+        slowRequests++;
+        return new Promise(resolve => setTimeout(() => r.abort().catch(() => {}).finally(resolve), 12000));
+      });
+      await slowPage.route('**/api/services', r => r.fulfill({status: 503, body: '{}'}));
+      await slowPage.goto('http://127.0.0.1:8091' + route);
+      await slowPage.waitForTimeout(6000);
+      assert.equal(slowRequests, 1, 'A fast failure must not permit overlapping a slow sibling request');
+      await slowPage.getByText('Telemetry unavailable.', {exact: false}).waitFor({timeout: 12000});
+      assert.equal(slowRequests, 1, 'Polling must not overlap an in-flight refresh');
+      await slowPage.unroute('**/api/overview');
+      await slowPage.unroute('**/api/services');
+      await slowPage.getByText('telemetry refreshed', {exact: false}).waitFor({timeout: 12000});
+      passed++;
+      console.log(`PASS ${route}: hung API timeout, no overlapping refresh, recovery`);
+      await slowPage.close();
     }
     console.log(`${passed} browser scenarios passed; Chrome ${browser.version()}`);
   } finally {

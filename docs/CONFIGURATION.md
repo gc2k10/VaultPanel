@@ -34,3 +34,5 @@ Unavailable network probes and Btrfs data are reported as unknown instead of fal
 Optional local state reads are restricted to regular, non-symlink files of at most 4 KiB, with a fixed schema for LED/fan JSON values. Parent directories must remain trusted. Missing LED/fan values are unknown, never synthetic success.
 
 Btrfs is marked healthy only with recognizable filesystem output and an explicitly completed, error-free scrub; missing or ambiguous evidence stays unknown. This is a conservative display heuristic, not a filesystem integrity guarantee.
+
+A service with unavailable diagnostics is reported as `active: null` and displayed as UNKNOWN. Recognized systemd inactive/failed states remain explicit. Empty or unavailable Docker output is treated conservatively as unknown.

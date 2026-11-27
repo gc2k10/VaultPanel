@@ -114,7 +114,7 @@ function renderServicesHealth(data) {
     div.innerHTML = safeHtml`
       <span>${(item.name || '--').toUpperCase()}</span>
       <span class="dots"></span>
-      <strong class="${item.active ? 'ok' : 'crit'}">${item.active ? 'ONLINE' : 'OFFLINE'}</strong>
+      <strong class="${item.active == null ? 'warn' : item.active ? 'ok' : 'crit'}">${item.active == null ? 'UNKNOWN' : item.active ? 'ONLINE' : 'OFFLINE'}</strong>
     `;
     el.appendChild(div);
   });
@@ -347,8 +347,8 @@ function renderServices(data) {
 
   (data.services || []).forEach(item => {
     const name = (item.name || '--').toUpperCase();
-    const status = item.active ? 'ONLINE' : (item.active_text || 'FAILED').toUpperCase();
-    const statusCls = item.active ? 'ok' : 'crit';
+    const status = item.active == null ? 'UNKNOWN' : item.active ? 'ONLINE' : (item.active_text || 'FAILED').toUpperCase();
+    const statusCls = item.active == null ? 'warn' : item.active ? 'ok' : 'crit';
 
     const port = item.port ? `port: ${item.port}` : 'port: --';
     const since = item.since_short ? `since: ${item.since_short}` : 'since: --';
@@ -566,10 +566,12 @@ async function refreshAll() {
   if (refreshInProgress) return;
   refreshInProgress = true;
   try {
-    const [overview, cooling, storage, services, network, alerts] = await Promise.all([
+    const results = await Promise.allSettled([
       fetchJson('/api/overview'), fetchJson('/api/cooling'), fetchJson('/api/storage'),
       fetchJson('/api/services'), fetchJson('/api/network'), fetchJson('/api/alerts')
     ]);
+    if (results.some(result => result.status === 'rejected')) throw new Error('Telemetry unavailable');
+    const [overview, cooling, storage, services, network, alerts] = results.map(result => result.value);
     renderOverview(overview);
     renderCooling(cooling);
     renderStorage(storage);

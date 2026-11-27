@@ -817,3 +817,8 @@ input[type="range"] {
   color: var(--text);
   text-transform: uppercase;
 }
+
+.terminal-subheader > span { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+.row { grid-template-columns: minmax(0, auto) minmax(12px, 1fr) minmax(0, auto); }
+.row > span, .row > strong { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+.row > span:first-child { white-space: normal; }

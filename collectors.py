@@ -185,7 +185,7 @@ def systemd_status(name: str) -> dict[str, Any]:
     enabled = run(['systemctl', 'is-enabled', name])
     since = run(["systemctl", "show", name, "-p", "ActiveEnterTimestamp", "--value"])
     return {
-        'active': active == 'active',
+        'active': (active == 'active') if active in {'active', 'inactive', 'failed'} else None,
         'active_text': active or 'unknown',
         'enabled': enabled,
         'since': since,
@@ -468,16 +468,17 @@ def docker_started_at(container: str) -> str:
 
 def get_services() -> dict[str, Any]:
     items = []
-    docker_names = run(["docker", "ps", "--format", "{{.Names}}"] ).splitlines()
+    docker_output = run(["docker", "ps", "--format", "{{.Names}}"] )
+    docker_names = docker_output.splitlines()
 
     for service in SERVICES:
         if 'docker' in service:
             container = service['docker']
-            is_active = container in docker_names
+            is_active = (container in docker_names) if docker_output else None
             started = docker_started_at(container) if is_active else ''
             status = {
                 'active': is_active,
-                'active_text': 'active' if is_active else 'inactive',
+                'active_text': 'unknown' if is_active is None else ('active' if is_active else 'inactive'),
                 'enabled': 'docker',
                 'since': started,
             }

@@ -41,3 +41,12 @@ Remaining validation includes real Linux/Raspberry Pi telemetry, hardware failur
 ### Reproduce browser checks
 
 Install Playwright 1.62.1 in a separate development tools directory and make it available to Node (for example via `NODE_PATH`), with Chrome installed. In the project root, start `python tests/browser_server.py`; in another terminal run `node tests/browser/check.cjs`. Optionally set `VAULTPANEL_SCREENSHOTS` to a private output directory. The fixture server uses port 8091 and replaces all endpoint collectors with synthetic data. Do not deploy this test server.
+
+## Extended verification — 2026-11-27
+
+- GitHub Actions run [46034285288](https://github.com/gc2k10/VaultPanel/actions/runs/46034285288) completed successfully for commit `3874e89c5f64fc89259082f7b7c75fe2b3e65579`: Python 3.10, 3.12 and 3.13 on Linux, plus Node.js 24. All four jobs and their test steps succeeded. These are mocked/integration checks, not real NAS telemetry validation.
+- detect-secrets 1.5.0 scanned all 24 original files and the source-only sanitized export with network verification disabled. Original: 0 findings. Sanitized export: 6 high-entropy findings, manually verified as SHA-256 hashes of dependency license files. No credential was confirmed. Scanner output containing hashes remains in private work files; it is not a guarantee that unknown/custom secrets are absent.
+- A further service-status regression test distinguishes unavailable telemetry from a known inactive/failed service. Current local suite: 26 Python tests and 11 Node tests passed.
+- Polling waits for every request to settle, so a fast error cannot start another refresh while a sibling request is still pending. Eight-second request timeouts remain in effect. Both layouts now wrap long host/service/alert values on mobile.
+
+The final 12 Chrome/Playwright scenarios passed, including long values and a mixed fast-failure/hung-request cycle with automatic recovery. Newest Linux CI outcomes are attached to the PR validation summary. No hardware writes, production deployment, merge or release was performed.

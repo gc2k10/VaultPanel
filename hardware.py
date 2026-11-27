@@ -73,6 +73,10 @@ def read_command(cmd, timeout=3, *, enabled=False):
         return ''
     try:
         code, output = capture(cmd, timeout)
+        if cmd[:2] == ['systemctl', 'is-active'] and code in {3, 4} and output.strip() in {'inactive', 'failed', 'unknown'}:
+            return output.strip()
+        if cmd[:2] == ['systemctl', 'is-enabled'] and code == 1 and output.strip() in {'disabled', 'masked'}:
+            return output.strip()
         # smartctl's health bits can be nonzero while stdout contains valid findings.
         if code and (cmd[0] != 'smartctl' or code & 3):
             return ''

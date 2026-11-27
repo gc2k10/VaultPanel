@@ -23,6 +23,13 @@ function harness(script) {
 }
 
 for (const script of ['app.js', 'app_retro.js']) {
+  test(`${script}: unavailable service is labelled UNKNOWN`, () => {
+    const {context, elements} = harness(script);
+    vm.runInContext(`renderServices({services: [{name: 'Example', active: null, active_text: 'unknown'}]})`, context);
+    const html = elements.map(el => el.innerHTML).join('\n');
+    assert.match(html, /UNKNOWN/);
+    assert.doesNotMatch(html, /OFFLINE|FAILED/);
+  });
   test(`${script}: hostile telemetry is escaped at every rendered HTML sink`, () => {
     const {context, elements} = harness(script);
     context.evil = '<img src=x onerror="attack()">';

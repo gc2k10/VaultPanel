@@ -95,6 +95,7 @@ input, select {
 #telemetryStatus { padding: 12px 20px; margin: 0; }
 button:disabled { opacity: .45; cursor: not-allowed; }
 .kv > strong { overflow-wrap: anywhere; min-width: 0; text-align: right; }
+.row > * { min-width: 0; overflow-wrap: anywhere; }
 @media (max-width: 600px) {
   .topbar { align-items: flex-start; flex-direction: column; gap: 12px; }
   .right-meta { text-align: left; }

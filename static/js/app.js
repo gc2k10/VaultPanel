@@ -56,7 +56,7 @@ function renderServicesHealth(data) {
   data.services.forEach(item => {
     const div = document.createElement('div');
     div.className = 'row';
-    div.innerHTML = safeHtml`<span>${item.name}</span><strong class="badge ${item.active ? 'ok' : 'crit'}">${item.active ? 'ONLINE' : 'OFFLINE'}</strong>`;
+    div.innerHTML = safeHtml`<span>${item.name}</span><strong class="badge ${item.active == null ? 'warn' : item.active ? 'ok' : 'crit'}">${item.active == null ? 'UNKNOWN' : item.active ? 'ONLINE' : 'OFFLINE'}</strong>`;
     el.appendChild(div);
   });
 }
@@ -124,7 +124,7 @@ function renderServices(data) {
     const row = document.createElement('div');
     row.className = 'table-row row';
     row.innerHTML = safeHtml`<span>${item.name}</span>
-      <strong class="badge ${item.active ? 'ok' : 'crit'}">${item.active ? 'ONLINE' : item.active_text.toUpperCase()}</strong>
+      <strong class="badge ${item.active == null ? 'warn' : item.active ? 'ok' : 'crit'}">${item.active == null ? 'UNKNOWN' : item.active ? 'ONLINE' : item.active_text.toUpperCase()}</strong>
       <span>${item.since || '--'}</span>
       <span>${item.port || '--'}</span>`;
     el.appendChild(row);
@@ -174,10 +174,12 @@ async function refreshAll() {
   if (refreshInProgress) return;
   refreshInProgress = true;
   try {
-    const [overview, cooling, storage, services, network, alerts] = await Promise.all([
+    const results = await Promise.allSettled([
       fetchJson('/api/overview'), fetchJson('/api/cooling'), fetchJson('/api/storage'),
       fetchJson('/api/services'), fetchJson('/api/network'), fetchJson('/api/alerts')
     ]);
+    if (results.some(result => result.status === 'rejected')) throw new Error('Telemetry unavailable');
+    const [overview, cooling, storage, services, network, alerts] = results.map(result => result.value);
     renderOverview(overview);
     renderCooling(cooling);
     renderStorage(storage);

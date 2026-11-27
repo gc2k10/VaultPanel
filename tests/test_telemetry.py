@@ -9,12 +9,24 @@ import unittest
 from unittest.mock import patch
 
 import collectors
+import hardware
 from config import Settings
 from hardware import capture, MAX_OUTPUT_BYTES
 from telemetry import read_state, read_text, MAX_STATE_BYTES
 
 
 class TelemetryTests(unittest.TestCase):
+    def test_service_unavailable_is_not_offline(self):
+        with patch.object(collectors, 'run', return_value=''):
+            self.assertIsNone(collectors.systemd_status('example')['active'])
+            with patch.object(collectors, 'SERVICES', [{'name': 'Example', 'docker': 'example', 'port': None, 'panel': None}]):
+                result = collectors.get_services()['services'][0]
+                self.assertIsNone(result['active'])
+                self.assertEqual(result['active_text'], 'unknown')
+        for code, value in [(3, 'inactive'), (3, 'failed'), (4, 'unknown')]:
+            with patch.object(hardware, 'capture', return_value=(code, value)):
+                self.assertEqual(hardware.read_command(['systemctl', 'is-active', 'example'], enabled=True), value)
+
     def test_regular_bounded_state_and_schema(self):
         with tempfile.TemporaryDirectory() as folder:
             root = pathlib.Path(folder)
