@@ -44,13 +44,15 @@ test('period selector updates the chart and accessible summary', async ({ page }
   const summary = page.locator('#summary');
   await expect(summary).toHaveAttribute('aria-live', 'polite');
   await expect(summary).toHaveText(brand.ranges[0]);
-  const initial = await page.locator('#chart polyline').getAttribute('points');
+  // X coordinates may settle after responsive layout; compare the plotted data values.
+  const values = async () => (await page.locator('#chart polyline').getAttribute('points')).split(' ').map(point => Number(point.split(',')[1]));
+  const initial = await values();
   await page.getByLabel('Period').selectOption('7');
   await expect(summary).toHaveText(brand.ranges[1]);
-  expect(await page.locator('#chart polyline').getAttribute('points')).not.toBe(initial);
+  await expect.poll(values).not.toEqual(initial);
   await page.getByLabel('Period').selectOption('24');
   await expect(summary).toHaveText(brand.ranges[0]);
-  expect(await page.locator('#chart polyline').getAttribute('points')).toBe(initial);
+  await expect.poll(values).toEqual(initial);
 });
 
 test('presentation and dashboard navigation work in both directions', async ({ page }) => {
