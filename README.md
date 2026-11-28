@@ -25,6 +25,10 @@ Open the loopback address `127.0.0.1:8090`; `/retro` is a compatibility alias fo
 
 Configuration uses environment variables documented in [.env.example](.env.example) and [CONFIGURATION.md](docs/CONFIGURATION.md). The example is not loaded automatically. No private network address, service selection, disk name or host identity is bundled.
 
+## Next candidate
+
+The working identifier is **v0.2.0-alpha (unreleased)**. [Changes and limitations](docs/releases/v0.2.0-alpha.md) · [Build/verify a source candidate](docs/CANDIDATE_WORKFLOW.md). Candidate artifacts never install on a NAS or create a release.
+
 ## Review and validation
 
 ```sh

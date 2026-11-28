@@ -70,3 +70,19 @@ jobs:
             VAULTPANEL_BROWSER="$engine" node tests/browser/check.cjs
           done
           node tests/browser/accessibility.cjs
+
+  candidate:
+    needs: [python, javascript, application-browsers]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Build unreleased source candidate
+        run: python3 scripts/package-alpha.py --version v0.2.0-alpha
+      - uses: actions/upload-artifact@v4
+        with:
+          name: VaultPanel-v0.2.0-alpha-candidate
+          path: dist/candidates/v0.2.0-alpha/
+          retention-days: 14
