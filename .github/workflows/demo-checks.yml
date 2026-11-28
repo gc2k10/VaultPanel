@@ -4,6 +4,9 @@ on:
     branches: [main]
     paths:
       - 'frontend/**'
+      - 'templates/**'
+      - 'static/**'
+      - 'scripts/build-original-demo.py'
       - 'tests/browser/**'
       - 'playwright.config.cjs'
       - 'package.json'
