@@ -4,6 +4,9 @@ on:
     branches: [main]
     paths:
       - 'frontend/**'
+      - 'templates/**'
+      - 'static/**'
+      - 'scripts/build-original-demo.py'
       - 'tests/browser/**'
       - 'playwright.config.cjs'
       - 'package.json'
@@ -22,6 +25,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install -r requirements-alpha.txt
+      - run: python scripts/build-original-demo.py
       - run: npm install --ignore-scripts --package-lock=false
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm test

@@ -37,3 +37,6 @@ instance/
 playwright-report/
 test-results/
 state/
+
+frontend/original/
+public-demo/
