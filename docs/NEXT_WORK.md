@@ -8,9 +8,9 @@ Confirmed operator evidence: mdraid RAID1 below BTRFS; boot/root outside the dat
 
 ## Unreleased follow-up implementation
 
-The follow-up implementation connects the bounded mdstat parser to `/api/storage` through an independent opt-in read adapter. Both layouts distinguish array membership from BTRFS scrub results. Reads default to disabled; the adapter never invokes commands or writes. Synthetic tests cover disabled access, read failures, API separation, both layouts and a single-member array that cannot establish redundancy. This work is not part of the published v0.1.0-alpha. Physical sensor and storage topology validation remains outstanding.
+The follow-up implementation connects the bounded mdstat parser to `/api/storage` through an independent opt-in read adapter. The Retro layout distinguishes array membership from BTRFS scrub results. Reads default to disabled; the adapter never invokes commands or writes. Synthetic tests cover disabled access, read failures, API separation, the UI and a single-member array that cannot establish redundancy. This work is not part of the published v0.1.0-alpha. Physical sensor and storage topology validation remains outstanding.
 
-The original Classic and Retro static previews use the same templates and scripts. Their missing RAID evidence stays UNKNOWN. Browser tests cover this contract without a backend or hardware reads. The published alpha archive remains unchanged.
+Retro is the only application and demo layout; former Classic links forward to it. The static preview uses the same template and scripts. Missing RAID evidence stays UNKNOWN. Browser tests cover this contract without a backend or hardware reads. The published alpha archive remains unchanged.
 
 ## Later work and evidence needed
 

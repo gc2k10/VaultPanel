@@ -23,7 +23,7 @@ Optional diagnostics invoke only enumerated read operations, with argument lists
 
 ## Routes
 
-- `GET /`, `/retro`: preserved layouts, disabled administration buttons, read-only notice.
+- `GET /`, `/retro`: the same Retro layout (the latter is a compatibility alias), disabled administration buttons, read-only notice.
 - `GET /api/overview`, `/api/cooling`, `/api/storage`, `/api/services`, `/api/network`: telemetry.
 - `GET /api/alerts`: current alerts and an empty history list. No persistence as a side effect of a GET.
 - `GET /api/system`: now JSON overview data; the old plain-text shell-script contract is removed. Neither supplied frontend uses that old endpoint.
@@ -42,4 +42,4 @@ A service with unavailable diagnostics is reported as `active: null` and display
 
 `GET /api/storage` adds `mdraid: {available, arrays}`. Reads are disabled by default, independent of command diagnostics. When explicitly enabled, the adapter reads at most 64 KiB plus an overflow byte from the fixed `/proc/mdstat` path. Missing files, permissions, invalid UTF-8 or excess output remain unavailable. No device names, UUIDs or raw input are returned; no `mdadm`, sudo or repair commands are invoked.
 
-The two layouts display UNKNOWN, DEGRADED, BUSY or MEMBERS PRESENT from this evidence alone. All recognized arrays must have consistent active RAID1 membership with at least two members for MEMBERS PRESENT. This does not establish filesystem integrity, durability, backups or which array backs the configured mount. An unsupported array keeps the combined display unknown; degraded evidence takes priority. BTRFS scrub results remain separate. No NAS configuration is necessary for offline tests or the public synthetic demo.
+The Retro layout displays UNKNOWN, DEGRADED, BUSY or MEMBERS PRESENT from this evidence alone. All recognized arrays must have consistent active RAID1 membership with at least two members for MEMBERS PRESENT. This does not establish filesystem integrity, durability, backups or which array backs the configured mount. An unsupported array keeps the combined display unknown; degraded evidence takes priority. BTRFS scrub results remain separate. No NAS configuration is necessary for offline tests or the public synthetic demo.

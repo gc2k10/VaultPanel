@@ -11,7 +11,7 @@ const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, 'telemetry.json'
   const browser = await playwright[engine].launch({...(engine === 'chromium' && process.env.VAULTPANEL_CHROMIUM_CHANNEL !== 'bundled' ? {channel: 'chrome'} : {}), headless: true});
   let passed = 0;
   try {
-    for (const route of ['/', '/retro']) {
+    for (const route of ['/']) {
       for (const width of [390, 1280]) {
         const page = await browser.newPage({viewport: {width, height: 900}});
         const errors = [];
@@ -20,12 +20,7 @@ const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, 'telemetry.json'
         page.on('request', r => {if (r.method() === 'POST') writes.push(r.url());});
         await page.goto('http://127.0.0.1:8091' + route);
         await page.getByText('telemetry refreshed', {exact: false}).waitFor();
-        assert.equal(await page.locator('#hostname').textContent(), route === '/' ? 'example-host // VAULTPANEL' : 'example-host');
-        if (route === '/' && width === 390) {
-          const host = await page.locator('#hostname').boundingBox();
-          const clock = await page.locator('#clock').boundingBox();
-          assert.ok(clock.y >= host.y + host.height, 'Mobile clock must be below hostname');
-        }
+        assert.equal(await page.locator('#hostname').textContent(), 'example-host');
         for (const tab of ['overview', 'cooling', 'storage', 'services', 'network', 'alerts']) {
           await page.locator(`[data-tab="${tab}"]`).click();
           assert.ok(await page.locator(`#tab-${tab}`).isVisible());
@@ -38,7 +33,7 @@ const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, 'telemetry.json'
         if (dest) {
           fs.mkdirSync(dest, {recursive: true});
           await page.locator('[data-tab="overview"]').click();
-          await page.screenshot({path: path.join(dest, `${route === '/' ? 'classic' : 'retro'}-${width}.png`), fullPage: true});
+          await page.screenshot({path: path.join(dest, `retro-${width}.png`), fullPage: true});
         }
         passed++;
         console.log(`PASS ${route} ${width}: tabs, controls, layout, console`);

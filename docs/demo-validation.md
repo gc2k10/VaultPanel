@@ -1,3 +1,5 @@
+> Historical validation log: earlier counts and chart checks below apply to the retired presentation dashboard. Current main uses only Retro, tests its tabs and legacy-link forwarding, and checks the About page separately. See PR checks for current results. Historical release archives are not rewritten.
+
 # VaultPanel demo validation
 
 Date: 27 November 2026 (Europe/Warsaw).

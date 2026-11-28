@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const brand = require('./brand.json');
 
-for (const route of ['/', '/about.html']) {
+for (const route of ['/about.html']) {
   test(route + ' loads safely without overflow or broken assets', async ({ page, request }, testInfo) => {
     const errors = [];
     const unexpectedRequests = [];
@@ -38,47 +38,13 @@ for (const route of ['/', '/about.html']) {
   });
 }
 
-test('period selector updates the chart and accessible summary', async ({ page }) => {
+test('site root opens Retro and project navigation returns to Retro', async ({page}) => {
   await page.goto('/');
-  await expect(page.getByText('Synthetic data only. No connection to real devices. No hardware controls.')).toBeVisible();
-  const summary = page.locator('#summary');
-  await expect(summary).toHaveAttribute('aria-live', 'polite');
-  await expect(summary).toHaveText(brand.ranges[0]);
-  // X coordinates may settle after responsive layout; compare the plotted data values.
-  const values = async () => (await page.locator('#chart polyline').getAttribute('points')).split(' ').map(point => Number(point.split(',')[1]));
-  const initial = await values();
-  await page.getByLabel('Period').selectOption('7');
-  await expect(summary).toHaveText(brand.ranges[1]);
-  await expect.poll(values).not.toEqual(initial);
-  await page.getByLabel('Period').selectOption('24');
-  await expect(summary).toHaveText(brand.ranges[0]);
-  await expect.poll(values).toEqual(initial);
-});
-
-test('presentation and dashboard navigation work in both directions', async ({ page }) => {
-  await page.goto('/');
-  await page.getByRole('link', { name: 'About the project', exact: true }).click();
-  await expect(page).toHaveURL(/\/about\.html$/);
-  await expect(page.getByRole('heading', { name: 'Project status', exact: true })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'View source code', exact: true })).toHaveAttribute('href', brand.repository);
-  await expect(page.getByRole('link', { name: 'Buy Me a Coffee', exact: true })).toHaveAttribute('href', 'https://buymeacoffee.com/gc2k10f');
-  await page.getByRole('link', { name: 'Explore interactive demo', exact: true }).click();
-  await expect(page.getByLabel('Period')).toBeVisible();
-});
-
-test('chart labels remain readable and period control remains touch-sized', async ({ page }) => {
-  const errors = [];
-  page.on('pageerror', e => errors.push(e.message));
-  await page.goto('/');
-  const select = page.getByLabel('Period');
-  expect((await select.boundingBox()).height).toBeGreaterThanOrEqual(44);
-  const label = page.locator('#chart text').first();
-  await expect.poll(() => label.evaluate(el => parseFloat(getComputedStyle(el).fontSize) * el.getScreenCTM().a)).toBeGreaterThanOrEqual(11.9);
-  await select.selectOption('7');
-  for (const width of [390, 768, 320, 1280, 390]) {
-    await page.setViewportSize({ width, height: 900 });
-    await expect(page.locator('#summary')).toHaveText(brand.ranges[1]);
-    await expect.poll(() => label.evaluate(el => parseFloat(getComputedStyle(el).fontSize) * el.getScreenCTM().a)).toBeGreaterThanOrEqual(11.9);
-  }
-  expect(errors).toEqual([]);
+  await expect(page).toHaveURL(/original\/retro\.html$/);
+  await expect(page.locator('#hostname')).toContainText('DEMO-NAS');
+  await page.getByRole('link', {name: 'About the project', exact:true}).click();
+  await expect(page.getByRole('heading', {name:'Project status',exact:true})).toBeVisible();
+  await page.getByRole('link', {name:'Explore interactive demo',exact:true}).click();
+  await expect(page).toHaveURL(/original\/retro\.html$/);
+  await expect(page.locator('#hostname')).toContainText('DEMO-NAS');
 });

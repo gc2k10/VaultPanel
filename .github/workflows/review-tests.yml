@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: '24'
       - run: node --test tests/*.test.mjs
-      - run: node --check static/js/app.js && node --check static/js/app_retro.js
+      - run: node --check static/js/app_retro.js
   application-browsers:
     runs-on: ubuntu-latest
     timeout-minutes: 15

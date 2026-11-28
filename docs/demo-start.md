@@ -1,39 +1,20 @@
-# VaultPanel demo — Quick start
+# VaultPanel Retro demo — Quick start
 
-This package is a standalone demonstration with synthetic data. It does not connect to sensors, servers, storage or payment systems and cannot control hardware.
+Open https://gc2k10.github.io/VaultPanel/ for the single Retro dashboard. All readings are synthetic; no NAS connection, login or installation is needed. The original Classic URL forwards to Retro. The About page contains project information, not a second dashboard.
 
-## Run the downloaded demo package
+## Local source preview
 
-1. Extract the entire ZIP into a new directory. Keep the assets directory beside index.html.
-2. Open a terminal in that extracted directory.
-3. With Python 3 installed, run:
+Use the isolated Python environment described in INSTALLATION.md. From the repository root:
 
 ```sh
-python3 -m http.server 8000 --bind 127.0.0.1
+python scripts/build-original-demo.py
+python -m http.server 8000 --bind 127.0.0.1 --directory frontend
 ```
 
-4. Open http://127.0.0.1:8000 in your browser.
-5. Use Period to switch between 24 hours and 7 days. Open About the project to view the presentation.
-6. Stop the server with Ctrl+C.
+Open http://127.0.0.1:8000/. Use the six tabs to explore readings and service examples. Stop with Ctrl+C. The builder refuses to overwrite existing output; specify a fresh destination when rebuilding. See [original-demo.md](original-demo.md).
 
-No Python packages, Node.js, database, account, credentials or device access are required to run the demo. The server listens on this computer only. If port 8000 is occupied, use 8001 and open the matching address.
+## Newly built standalone demo ZIP
 
-## Run from the repository
+Extract the complete ZIP into a fresh directory and serve it with `python3 -m http.server 8000 --bind 127.0.0.1` from that directory. No Python packages are needed to serve the exported files. The index opens Retro. Keep the original/ and assets/ directories intact. manifest.json records source provenance and file hashes.
 
-From the repository root:
-
-```sh
-python3 -m http.server 8000 --bind 127.0.0.1 --directory frontend
-```
-
-The demo is also available at https://gc2k10.github.io/VaultPanel/.
-
-## Expected behavior and limitations
-
-All readings and status messages are predefined examples, not live measurements. The chart period changes only the sample series. There is no backend, authentication, persistence, installation service or device control. This is a prerelease demo, not a production management application.
-
-If images are missing, verify that the ZIP was fully extracted and that assets/brand exists. If old branding appears online, reload without the browser cache. Physical-device testing and assistive-technology testing are not covered by the automated browser matrix.
-
-## Verify the package
-
-SHA256SUMS accompanies the download. On macOS run `shasum -a 256 <archive-name>.zip`; on Linux run `sha256sum <archive-name>.zip` and compare the result. manifest.json records the source commit and SHA-256 of each packaged file.
+Historical release archives are immutable and may contain older layouts. These instructions describe the current source and newly generated demo package, not a replacement of an existing release. The preview has no backend or functioning hardware controls and does not validate real sensors.

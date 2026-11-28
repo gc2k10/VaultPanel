@@ -32,7 +32,7 @@ jobs:
       - name: Stage public demo assets
         run: |
           mkdir -p public-demo/assets/brand
-          cp frontend/index.html frontend/style.css frontend/app.js frontend/about.html public-demo/
+          cp frontend/index.html frontend/style.css frontend/about.html public-demo/
           # Publish reviewed brand files only; never copy the entire repository.
           cp frontend/assets/brand/vaultpanel.png frontend/assets/brand/favicon.ico frontend/assets/brand/favicon-32.png frontend/assets/brand/apple-touch-icon.png public-demo/assets/brand/
       - name: Build original layouts with synthetic data
