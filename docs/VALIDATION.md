@@ -1,5 +1,9 @@
 # Validation of the read-only review build
 
+## Reading this historical validation log
+
+The dated sections below record earlier candidate states and are not a current release checklist. v0.1.0-alpha was published from `eecca724e84825bb37e4e7c141c990a48b8de1da` after [the final release workflow passed](https://github.com/gc2k10/VaultPanel/actions/runs/46084341766). See [current readiness and limitations](ALPHA_READINESS.md). New work on main is not included in that fixed archive; consult its PR-specific checks. No physical NAS validation is implied.
+
 Date: 2026-11-27. Status: review candidate toward v0.1.0-alpha; **not released**.
 
 For current release decisions, use `ALPHA_READINESS.md` and the latest verification section below. Earlier sections retain historical results.

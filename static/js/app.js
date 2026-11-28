@@ -102,6 +102,7 @@ function renderCooling(data) {
 }
 function renderStorage(data) {
   state.storage = data;
+  $('raidStatus').textContent = mdraidLabel(data.mdraid);
   $('rootUsed').textContent = `${data.root.used_gb} GB (${data.root.used_pct}%)`;
   $('rootFree').textContent = `${data.root.free_gb} GB`;
   $('rootTotal').textContent = `${data.root.total_gb} GB`;

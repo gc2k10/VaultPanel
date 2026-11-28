@@ -61,7 +61,7 @@
             <div class="kv"><span>LAN IP</span><strong id="lanIp"></strong></div>
             <div class="kv"><span>Tailscale IP</span><strong id="tsIp"></strong></div>
             <div class="kv"><span>Last backup</span><strong id="lastBackup">--</strong></div>
-	    <div class="kv"><span>Last RAID scrub</span><strong id="lastScrub">--</strong></div>
+	    <div class="kv"><span>Last BTRFS scrub</span><strong id="lastScrub">--</strong></div>
             <div class="kv"><span>Last SMART test</span><strong id="lastSmart">--</strong></div>
           </div>
 
@@ -144,6 +144,7 @@
         <div class="grid two-col">
           <div class="card">
             <h2>Filesystem</h2>
+            <div class="kv"><span>RAID members</span><strong id="raidStatus">UNKNOWN</strong></div>
             <div class="kv"><span>Used</span><strong id="rootUsed"></strong></div>
             <div class="kv"><span>Free</span><strong id="rootFree"></strong></div>
             <div class="kv"><span>Total</span><strong id="rootTotal"></strong></div>

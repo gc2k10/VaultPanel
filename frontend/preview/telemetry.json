@@ -79,7 +79,11 @@
     ],
     "mountpoint": "/",
     "snapshot_count": null,
-    "newest_snapshot": null
+    "newest_snapshot": null,
+    "mdraid": {
+      "available": false,
+      "arrays": []
+    }
   },
   "services": {
     "services": [

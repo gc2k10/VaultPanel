@@ -13,6 +13,7 @@ for (const layout of ['index', 'retro']) {
     for (const tab of ['overview', 'cooling', 'storage', 'services', 'network', 'alerts']) {
       await page.locator(`[data-tab="${tab}"]`).click();
       await expect(page.locator(`#tab-${tab}`)).toBeVisible();
+      if (tab === 'storage') await expect(page.locator('#raidStatus')).toHaveText('UNKNOWN');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     }
     expect(await page.locator('button.action-btn:not([disabled]),button.preset-btn:not([disabled])').count()).toBe(0);

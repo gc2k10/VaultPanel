@@ -44,3 +44,21 @@ for (const script of ['app.js', 'app_retro.js']) {
     assert.doesNotMatch(html, /<img/i);
   });
 }
+
+for (const script of ['app.js', 'app_retro.js']) {
+  test(`${script}: RAID membership is independent of a successful BTRFS scrub`, () => {
+    const {context} = harness(script);
+    for (const [mdraid, expected] of [
+      [undefined, 'UNKNOWN'], [{available: false, arrays: []}, 'UNKNOWN'],
+      [{available: true, arrays: []}, 'UNKNOWN'],
+      [{available: true, arrays: [{status: 'degraded', healthy: false}]}, 'DEGRADED'],
+      [{available: true, arrays: [{status: 'busy', healthy: null}]}, 'BUSY'],
+      [{available: true, arrays: [{status: 'ok', healthy: true}]}, 'MEMBERS PRESENT'],
+      [{available: true, arrays: [{status: 'ok', healthy: true}, {status: 'unknown', healthy: null}]}, 'UNKNOWN'],
+    ]) {
+      context.storage = {root: {}, devices: [], btrfs: {healthy: true}, mdraid};
+      vm.runInContext('renderStorage(storage)', context);
+      assert.equal(vm.runInContext("document.getElementById('raidStatus').textContent", context), expected);
+    }
+  });
+}

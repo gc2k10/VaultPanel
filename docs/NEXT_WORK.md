@@ -6,9 +6,11 @@ The parallel intake supplied owner-approved graphics, sanitized non-installable 
 
 Confirmed operator evidence: mdraid RAID1 below BTRFS; boot/root outside the data mirror; seven read-only snapshots at collection time; controller-reported SMART health. None of this is a recovery guarantee. UPS is disconnected and work on it is excluded by the owner.
 
-## Next bounded implementation
+## Unreleased follow-up implementation
 
-Add a read-only mdraid status parser with synthetic fixtures for healthy, degraded, recovery, malformed and unavailable states. Keep mdraid membership separate from BTRFS scrub status. No repair, assembly, resync or topology changes. New optional reads must stay disabled until explicitly configured, and absence must never produce a healthy result.
+The follow-up implementation connects the bounded mdstat parser to `/api/storage` through an independent opt-in read adapter. Both layouts distinguish array membership from BTRFS scrub results. Reads default to disabled; the adapter never invokes commands or writes. Synthetic tests cover disabled access, read failures, API separation, both layouts and a single-member array that cannot establish redundancy. This work is not part of the published v0.1.0-alpha. Physical sensor and storage topology validation remains outstanding.
+
+The original Classic and Retro static previews use the same templates and scripts. Their missing RAID evidence stays UNKNOWN. Browser tests cover this contract without a backend or hardware reads. The published alpha archive remains unchanged.
 
 ## Later work and evidence needed
 

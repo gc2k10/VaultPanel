@@ -8,7 +8,8 @@ import socket
 import psutil
 import re
 from config import settings
-from hardware import read_command, disabled_operation
+from hardware import read_command, disabled_operation, read_mdstat
+from mdraid import parse_mdstat
 from telemetry import read_state, read_text
 from datetime import datetime
 from typing import Any
@@ -415,6 +416,7 @@ def get_storage() -> dict[str, Any]:
         'root': root,
         'devices': devices,
         'btrfs': btrfs,
+        'mdraid': parse_mdstat(read_mdstat(enabled=settings.mdraid_reads)),
         'nvme_temps': nvme_temps,
         'mountpoint': storage_mount,
         'snapshot_count': snapshot_info['snapshot_count'],

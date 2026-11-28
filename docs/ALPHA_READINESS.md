@@ -1,6 +1,8 @@
 # v0.1.0-alpha readiness
 
-Status on 2026-11-27: draft review candidate, not released.
+Status on 2026-11-28: [v0.1.0-alpha was published as a prerelease](https://github.com/gc2k10/VaultPanel/releases/tag/v0.1.0-alpha) from `eecca724e84825bb37e4e7c141c990a48b8de1da`. [Final publication checks passed](https://github.com/gc2k10/VaultPanel/actions/runs/46084341766); the release includes the source archive, source commit and checksums. PRs #1, #3 and #5 were merged before publication.
+
+Mainline follow-up work, including original-interface previews and optional mdraid membership, is separate from that fixed release archive. No subsequent release is claimed here. The live NAS has not been accessed or modified.
 
 ## Approved scope — 2026-11-27
 
@@ -29,11 +31,13 @@ Only these non-identifying platform facts are retained. Do not publish terminal 
 
 Physical fan/LED/OLED tests and backup restoration are prerequisites for future enabled features, not blockers for the approved alpha in which those operations are unavailable. Likewise, unverified sensor integration and manual screen-reader coverage must be disclosed; this alpha must not claim certified hardware support, production readiness or full accessibility conformance.
 
-### Required before publication
+### Completed publication gates
 
-1. The final candidate must pass all five CI jobs, including pinned dependency installation, `pip check`, the source-ZIP smoke test and the ARM64/Python 3.13.5 suite. Record the exact commit and run in the PR and external validation report.
-2. Maintainer review/acceptance of the complete sanitized candidate and draft release notes must be completed. PR #3 is still a draft stacked on intake PR #1; neither has been merged. Complete the reviewed branch integration before tagging a mainline release. Branch API mergeability alone is not evidence of a content conflict; the inspected intake comparison is directly ahead of main.
-3. Select the exact approved release commit, regenerate/check the source archive and checksums for that commit, and explicitly authorize publication as a prerelease. A preparation request is not treated as an instruction to merge or publish.
+The approved read-only scope and MIT license were applied. The final candidate passed dependency, source-ZIP, Linux x64/ARM64, JavaScript, browser and automated accessibility checks. The owner authorized merge and publication; sanitized source integration was completed. The release archive was checked against the selected commit before publication. See the release and workflow links above for the fixed historical evidence.
+
+### Gates for a future release
+
+Choose an explicit version and final commit; validate that combined tree; review the changed behavior and limitations; regenerate and verify its archive/checksums. Passing tests or merging a follow-up PR does not itself publish a new version or validate physical sensors.
 
 ### Completed preparation
 

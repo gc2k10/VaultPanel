@@ -83,3 +83,18 @@ def read_command(cmd, timeout=3, *, enabled=False):
         return output.strip()
     except (OSError, ValueError, subprocess.TimeoutExpired):
         return ''
+
+
+def read_mdstat(*, enabled=False):
+    """Read only the fixed kernel status file, with an explicit independent opt-in."""
+    if not enabled:
+        return ''
+    from mdraid import MAX_MDSTAT_BYTES
+    try:
+        with open('/proc/mdstat', 'rb') as source:
+            data = source.read(MAX_MDSTAT_BYTES + 1)
+        if len(data) > MAX_MDSTAT_BYTES:
+            return ''
+        return data.decode('utf-8')
+    except (OSError, UnicodeError):
+        return ''
