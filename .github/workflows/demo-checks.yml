@@ -33,6 +33,10 @@ jobs:
       - run: npm install --ignore-scripts --package-lock=false
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm test
+      - name: Verify standalone Retro demo package
+        run: |
+          python scripts/package-demo.py --source-commit "$GITHUB_SHA"
+          python scripts/check-demo-package.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

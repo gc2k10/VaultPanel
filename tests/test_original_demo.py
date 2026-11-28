@@ -17,13 +17,16 @@ class OriginalDemoTests(unittest.TestCase):
             module.build(dest)
             files = {str(p.relative_to(dest)) for p in dest.rglob('*') if p.is_file()}
             self.assertEqual(files, {'index.html', 'retro.html', 'preview.js', 'preview-data.js', 'preview.css'} | {'static/' + a for a in module.ASSETS})
-            for layout in ('index', 'retro'):
+            for layout in ('retro',):
                 html = (dest / (layout + '.html')).read_text()
                 self.assertIn("connect-src 'none'", html)
                 self.assertIn('DEMO — SYNTHETIC DATA ONLY', html)
                 self.assertNotIn('href="/"', html)
                 self.assertNotIn('{{', html)
                 self.assertLess(html.index('src="preview.js"'), html.index('src="static/js/app'))
+            self.assertIn('0;url=retro.html', (dest / 'index.html').read_text())
+            self.assertNotIn('Classic', (dest / 'retro.html').read_text())
+            self.assertNotIn('UI:', (dest / 'retro.html').read_text())
             for asset in module.ASSETS:
                 self.assertEqual((dest / 'static' / asset).read_bytes(), (ROOT / 'static' / asset).read_bytes())
             with self.assertRaises(FileExistsError):

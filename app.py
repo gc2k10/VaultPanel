@@ -46,9 +46,6 @@ def create_app(config=None):
         return response
 
     @app.get('/')
-    def index():
-        return render_template('index.html', title='VaultPanel')
-
     @app.get('/retro')
     def retro():
         return render_template('index_retro.html', title='VaultPanel Retro')

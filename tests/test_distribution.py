@@ -22,8 +22,8 @@ with patch('subprocess.Popen', side_effect=AssertionError('Unexpected command'))
     assert not settings.command_reads
     assert not settings.services and not settings.smart_devices
     client = app.app.test_client()
-    for route in ['/', '/retro', '/static/css/style.css', '/static/css/style_retro.css',
-                  '/static/js/app.js', '/static/js/app_retro.js', '/static/js/safe-html.js']:
+    for route in ['/', '/retro', '/static/css/style_retro.css',
+                  '/static/js/app_retro.js', '/static/js/safe-html.js']:
         response = client.get(route)
         assert response.status_code == 200, route
     for name in ['overview', 'cooling', 'storage', 'services', 'network', 'alerts', 'system', 'capabilities']:

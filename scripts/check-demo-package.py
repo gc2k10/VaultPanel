@@ -32,7 +32,7 @@ class Links(HTMLParser):
 with TemporaryDirectory(prefix="demo-check-") as folder:
     with ZipFile(archive) as bundle:
         names = bundle.namelist()
-        assert len(names) == len(set(names)) == 13, names
+        assert len(names) == len(set(names)) == 22, names
         assert all(not Path(n).is_absolute() and ".." not in Path(n).parts for n in names)
         manifest = json.loads(bundle.read("manifest.json"))
         assert manifest["synthetic_data_only"] is True
@@ -45,7 +45,7 @@ with TemporaryDirectory(prefix="demo-check-") as folder:
     thread.start()
     try:
         base = "http://127.0.0.1:" + str(server.server_port) + "/"
-        for page in ["index.html", "about.html"]:
+        for page in ["index.html", "about.html", "original/index.html", "original/retro.html"]:
             with urlopen(base + page) as response:
                 parser = Links()
                 parser.feed(response.read().decode())
@@ -53,7 +53,7 @@ with TemporaryDirectory(prefix="demo-check-") as folder:
                 with urlopen(urljoin(base + page, target)) as response:
                     assert response.status == 200, target
                     assert response.read(), target
-        print("Verified: 13 allowlisted files, manifest hashes, local HTTP pages and assets")
+        print("Verified: 22 allowlisted files, manifest hashes, local HTTP pages and assets")
     finally:
         server.shutdown()
         server.server_close()

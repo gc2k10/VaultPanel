@@ -7,8 +7,8 @@ import sys
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 ROOT = Path(__file__).resolve().parents[1]
-ASSETS = ('css/style.css', 'css/style_retro.css', 'js/safe-html.js',
-          'js/app.js', 'js/app_retro.js', 'favicon.ico', 'apple-touch-icon.png')
+ASSETS = ('css/style_retro.css', 'js/safe-html.js',
+          'js/app_retro.js', 'favicon.ico', 'apple-touch-icon.png')
 
 
 def build(destination):
@@ -19,14 +19,15 @@ def build(destination):
         if endpoint != 'static' or filename not in (*ASSETS, 'site.webmanifest'):
             raise ValueError('Unreviewed template asset')
         return 'static/' + filename
-    banner = '''<aside class="demo-notice" aria-label="Demonstration notice"><strong>DEMO — SYNTHETIC DATA ONLY</strong><span>Original VaultPanel interface. No NAS connection. Controls disabled.</span><nav aria-label="Demo layouts"><a href="index.html">Classic</a> · <a href="retro.html">Retro</a> · <a href="../index.html">Project presentation</a></nav></aside>'''
-    for source, target, title in [('index.html', 'index.html', 'VaultPanel — Classic demo'), ('index_retro.html', 'retro.html', 'VaultPanel — Retro demo')]:
+    banner = '''<aside class="demo-notice" aria-label="Demonstration notice"><strong>DEMO — SYNTHETIC DATA ONLY</strong><span>Original VaultPanel interface. No NAS connection. Controls disabled.</span><nav aria-label="Project information"><a href="../about.html">About the project</a></nav></aside>'''
+    for source, target, title in [('index_retro.html', 'retro.html', 'VaultPanel — Retro demo')]:
         html = env.get_template(source).render(title=title, url_for=asset_url)
         html = html.replace('<link rel="manifest" href="static/site.webmanifest">', '')
         html = html.replace('</head>', '<meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src \'self\'; connect-src \'none\'; script-src \'self\'; style-src \'self\' \'unsafe-inline\'; object-src \'none\'; base-uri \'none\'"><link rel="stylesheet" href="preview.css"></head>')
         html = html.replace('<body>', '<body>' + banner).replace('href="/"', 'href="index.html"')
         html = html.replace('<script src="static/js/safe-html.js">', '<script src="preview-data.js"></script><script src="preview.js"></script><script src="static/js/safe-html.js">')
         (destination / target).write_text(html)
+    (destination / 'index.html').write_text('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=retro.html"><title>VaultPanel Retro</title></head><body><a href="retro.html">Open VaultPanel Retro</a></body></html>')
     for name in ASSETS:
         source = ROOT / 'static' / name
         if source.is_symlink():

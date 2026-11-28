@@ -69,6 +69,12 @@ class AppTests(unittest.TestCase):
             self.assertIn(b'safe-html.js', response.data)
             self.assertIn("script-src 'self'", response.headers['Content-Security-Policy'])
 
+    def test_retro_is_the_only_layout(self):
+        self.assertEqual(self.client.get('/').data, self.client.get('/retro').data)
+        self.assertIn(b'terminal-title', self.client.get('/').data)
+        for path in ['/static/js/app.js', '/static/css/style.css']:
+            self.assertEqual(self.client.get(path).status_code, 404)
+
     def test_imports_have_no_hardware_side_effects(self):
         with patch('subprocess.run') as run, patch('subprocess.Popen') as popen, patch('builtins.open') as opened:
             importlib.reload(collectors)

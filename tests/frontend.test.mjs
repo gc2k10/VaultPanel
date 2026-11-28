@@ -22,7 +22,7 @@ function harness(script) {
   return {context, elements};
 }
 
-for (const script of ['app.js', 'app_retro.js']) {
+for (const script of ['app_retro.js']) {
   test(`${script}: unavailable service is labelled UNKNOWN`, () => {
     const {context, elements} = harness(script);
     vm.runInContext(`renderServices({services: [{name: 'Example', active: null, active_text: 'unknown'}]})`, context);
@@ -45,7 +45,7 @@ for (const script of ['app.js', 'app_retro.js']) {
   });
 }
 
-for (const script of ['app.js', 'app_retro.js']) {
+for (const script of ['app_retro.js']) {
   test(`${script}: RAID membership is independent of a successful BTRFS scrub`, () => {
     const {context} = harness(script);
     for (const [mdraid, expected] of [

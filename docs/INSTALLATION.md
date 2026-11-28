@@ -4,9 +4,9 @@ The published alpha is a read-only preview, not a production NAS installer. Use 
 
 ## Preview without installation
 
-Open the [classic](https://gc2k10.github.io/VaultPanel/original/index.html) or [retro](https://gc2k10.github.io/VaultPanel/original/retro.html) preview on your existing computer. These previews use the application templates with synthetic values, do not contact your NAS and require no login or server address. RAID membership is UNKNOWN because the fixture contains no array evidence. The website root remains a separate project presentation. A normal web visit contacts GitHub Pages; do not enter secrets or upload configuration.
+Open the [Retro preview](https://gc2k10.github.io/VaultPanel/) on your existing computer. It uses the application template with synthetic values, does not contact your NAS and requires no login or server address. RAID membership is UNKNOWN because the fixture contains no array evidence. Retro is the sole layout; former Classic links forward to it. A normal web visit contacts GitHub Pages; do not enter secrets or upload configuration.
 
-For the original layouts and local build steps, follow [original-demo.md](original-demo.md). The already published preview needs only a browser. The separate presentation has its own [quick start](demo-start.md). You can stop here: installing on a NAS is not required to review the project.
+For the Retro layout and local build steps, follow [original-demo.md](original-demo.md). The already published preview needs only a browser. The separate presentation has its own [quick start](demo-start.md). You can stop here: installing on a NAS is not required to review the project.
 
 ## Start from the reviewed source archive
 

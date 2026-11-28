@@ -1,5 +1,5 @@
 const {test, expect} = require('@playwright/test');
-for (const layout of ['index', 'retro']) {
+for (const layout of ['retro']) {
   test(`original ${layout}: real layout, synthetic data, no backend`, async ({page}) => {
     const errors = [], forbidden = [];
     page.on('pageerror', e => errors.push(e.message));
@@ -28,7 +28,9 @@ for (const layout of ['index', 'retro']) {
     expect(denied).toBe(403);
     expect(errors).toEqual([]);
     expect(forbidden).toEqual([]);
-    await page.getByRole('link', {name: layout === 'index' ? 'Retro' : 'Classic', exact:true}).click();
+    await expect(page.getByRole('link', {name: 'Classic', exact:true})).toHaveCount(0);
+    await page.goto('/original/index.html');
+    await expect(page).toHaveURL(/original\/retro\.html$/);
     await expect(page.locator('#hostname')).toContainText('DEMO-NAS');
   });
 }
