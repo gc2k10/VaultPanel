@@ -128,7 +128,7 @@ function renderServices(data) {
   data.services.forEach(item => {
     const row = document.createElement('div');
     row.className = 'table-row row';
-    row.innerHTML = safeHtml`<span>${item.name}</span>
+    row.innerHTML = safeHtml`<span>${item.name}<small class="muted" style="display:block">${item.description || ''}</small></span>
       <strong class="badge ${item.active == null ? 'warn' : item.active ? 'ok' : 'crit'}">${item.active == null ? 'UNKNOWN' : item.active ? 'ONLINE' : item.active_text.toUpperCase()}</strong>
       <span>${item.since || '--'}</span>
       <span>${item.port || '--'}</span>`;

@@ -13,6 +13,13 @@ for (const layout of ['index', 'retro']) {
     for (const tab of ['overview', 'cooling', 'storage', 'services', 'network', 'alerts']) {
       await page.locator(`[data-tab="${tab}"]`).click();
       await expect(page.locator(`#tab-${tab}`)).toBeVisible();
+      if (tab === 'overview' || tab === 'services') {
+        const list = page.locator(tab === 'overview' ? '#quickHealth' : '#servicesTable');
+        for (const name of ['Samba', 'Tailscale', 'Pi-hole', 'Netdata', 'Nginx', 'SSH', 'Nextcloud']) {
+          await expect(list).toContainText(new RegExp(name + ' [(]demo[)]', 'i'));
+        }
+        if (tab === 'services') await expect(list).toContainText('Share files with computers on your network.');
+      }
       if (tab === 'storage') await expect(page.locator('#raidStatus')).toHaveText('UNKNOWN');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     }

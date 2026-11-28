@@ -7,6 +7,8 @@ The original application's classic and retro layouts can be viewed without insta
 
 These pages are rendered from the reviewed application templates and use the same CSS and JavaScript. A permanent banner distinguishes the preview from live telemetry. Every reading is fictional. Controls remain disabled. The browser serves telemetry from bundled synthetic data, never from a server; Content Security Policy additionally blocks network connections for telemetry. Opening the page downloads public assets from GitHub Pages, not from a NAS.
 
+The Services examples include Samba (file sharing), Tailscale (private device networking), Pi-hole (DNS filtering), Netdata (performance metrics), Nginx (web serving/proxy), SSH (encrypted terminal access), and Nextcloud (file sync, calendars and contacts). Names and online states are explicitly simulated; they are not detected installations or a promise of dedicated integration. Nothing is installed or enabled by viewing the demo.
+
 This is the sanitized read-only application layout. Personal configuration and private graphics are not reproduced. The separate project presentation remains available at the website root. The preview does not install anything, validate hardware, or change the published alpha release.
 
 ## Build a local static preview

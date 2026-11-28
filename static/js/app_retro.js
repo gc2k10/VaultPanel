@@ -363,6 +363,7 @@ function renderServices(data) {
         <span class="dots"></span>
         <strong class="${statusCls}">${status}</strong>
       </div>
+      <div class="subtle">${item.description || ''}</div>
       <div class="row subtle">
         <span>${port}</span>
         <span></span>
