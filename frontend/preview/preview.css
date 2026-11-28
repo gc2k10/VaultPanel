@@ -1,0 +1,4 @@
+.demo-notice {position:relative;z-index:10;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;padding:14px 20px;background:#18202c;color:#f4f7fb;border-bottom:2px solid #9bc9ff;font:14px/1.5 system-ui,sans-serif;}
+.demo-notice a {color:#b6d8ff;text-decoration:underline;}
+.demo-notice nav {display:block;}
+.demo-notice a:focus-visible {outline:2px solid #fff;outline-offset:3px;}

@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - 'frontend/**'
+      - 'templates/**'
+      - 'static/**'
+      - 'scripts/build-original-demo.py'
       - '.github/workflows/pages.yml'
 permissions:
   contents: read
@@ -21,6 +24,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install -r requirements-alpha.txt
       - uses: actions/configure-pages@v5
       - name: Stage public demo assets
         run: |
@@ -28,6 +35,8 @@ jobs:
           cp frontend/index.html frontend/style.css frontend/app.js frontend/about.html public-demo/
           # Publish reviewed brand files only; never copy the entire repository.
           cp frontend/assets/brand/vaultpanel.png frontend/assets/brand/favicon.ico frontend/assets/brand/favicon-32.png frontend/assets/brand/apple-touch-icon.png public-demo/assets/brand/
+      - name: Build original layouts with synthetic data
+        run: python scripts/build-original-demo.py public-demo/original
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public-demo
