@@ -4,6 +4,19 @@ All notable changes are documented here. Versioned releases follow Semantic Vers
 
 ## [Unreleased]
 
+Working candidate: v0.2.0-alpha; not published. See [candidate notes](docs/releases/v0.2.0-alpha.md).
+
+- Keep only Retro; retire Classic and the earlier presentation dashboard.
+- Add optional, default-off RAID membership reads independent of BTRFS.
+- Provide a static Retro preview, seven described service examples and restored README branding.
+- Build versioned, verified source candidates without creating a release; disable automatic publication on documentation changes.
+
+## [0.1.0-alpha] - 2026-11-28
+
+- Publish the sanitized local read-only application under MIT with portable configuration and disabled hardware/backup operations.
+- Validate pinned dependencies, source archives, Linux x64/ARM64 and browser checks before publication.
+- This fixed historical release retains the layouts present at that time; later changes do not modify its archive.
+
 ## [0.1.0-demo] - 2026-11-27 (draft prerelease)
 
 - Add a standalone synthetic dashboard and project presentation.

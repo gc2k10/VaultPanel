@@ -1,10 +1,5 @@
-name: Publish validated v0.1.0-alpha
+name: Historical v0.1.0-alpha publisher (manual only)
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/alpha-release.yml'
-      - 'docs/RELEASE_NOTES_ALPHA.md'
   workflow_dispatch:
 permissions:
   contents: read
@@ -30,7 +25,7 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          python3 scripts/package-alpha.py
+          python3 scripts/package-alpha.py --version v0.1.0-alpha --output dist/alpha
           cp docs/RELEASE_NOTES_ALPHA.md "$RUNNER_TEMP/alpha-notes.md"
           printf '\n## Validation evidence\n\nSource commit: %s\n\nAll application and demo checks passed: https://github.com/%s/actions/runs/%s\n' "$GITHUB_SHA" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" >> "$RUNNER_TEMP/alpha-notes.md"
           if gh release view v0.1.0-alpha --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
