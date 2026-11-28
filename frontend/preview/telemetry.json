@@ -12,8 +12,8 @@
       "used_pct": 30
     },
     "internet_ok": null,
-    "services_online": 3,
-    "services_total": 3,
+    "services_online": 7,
+    "services_total": 7,
     "generated_at": "2026-01-01T12:00:00Z",
     "uptime": "3d 4h 12m",
     "loadavg": {
@@ -88,25 +88,67 @@
   "services": {
     "services": [
       {
-        "name": "File sharing (demo)",
+        "name": "Samba (demo)",
+        "description": "Share files with computers on your network.",
         "active": true,
         "active_text": "active",
-        "port": null,
-        "since_short": "Example"
+        "since": null,
+        "since_short": null,
+        "port": null
       },
       {
-        "name": "Cloud (demo)",
+        "name": "Tailscale (demo)",
+        "description": "Connect your devices over a private network.",
         "active": true,
         "active_text": "active",
-        "port": null,
-        "since_short": "Example"
+        "since": null,
+        "since_short": null,
+        "port": null
       },
       {
-        "name": "DNS (demo)",
+        "name": "Pi-hole (demo)",
+        "description": "Filter unwanted domains using network-wide DNS.",
         "active": true,
         "active_text": "active",
-        "port": null,
-        "since_short": "Example"
+        "since": null,
+        "since_short": null,
+        "port": null
+      },
+      {
+        "name": "Netdata (demo)",
+        "description": "View performance metrics for your server.",
+        "active": true,
+        "active_text": "active",
+        "since": null,
+        "since_short": null,
+        "port": null
+      },
+      {
+        "name": "Nginx (demo)",
+        "description": "Serve websites or route requests to web applications.",
+        "active": true,
+        "active_text": "active",
+        "since": null,
+        "since_short": null,
+        "port": null
+      },
+      {
+        "name": "SSH (demo)",
+        "description": "Access the server terminal over an encrypted connection.",
+        "active": true,
+        "active_text": "active",
+        "since": null,
+        "since_short": null,
+        "port": null
+      },
+      {
+        "name": "Nextcloud (demo)",
+        "description": "Host file sync, calendars and contacts.",
+        "active": true,
+        "active_text": "active",
+        "since": null,
+        "since_short": null,
+        "port": null
       }
     ]
   },

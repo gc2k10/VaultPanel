@@ -34,7 +34,7 @@ for (const script of ['app.js', 'app_retro.js']) {
     const {context, elements} = harness(script);
     context.evil = '<img src=x onerror="attack()">';
     vm.runInContext(`
-      renderServices({services: [{name: evil, active: false, active_text: evil, port: evil, since: evil, since_short: evil}]});
+      renderServices({services: [{name: evil, description: evil, active: false, active_text: evil, port: evil, since: evil, since_short: evil}]});
       renderCooling({fans: [{label: evil, rpm: evil}], led: {}});
       renderStorage({root: {}, btrfs: {}, devices: [{name: evil, model: evil, size: evil, smart_health: evil, temperature_c: evil}]});
       renderAlerts({alerts: [{source: evil, message: evil, level: evil}], history: [{timestamp: evil, message: evil}]});
