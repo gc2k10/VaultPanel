@@ -40,18 +40,15 @@ jobs:
         run: |
           set -euo pipefail
           gh api "repos/$GITHUB_REPOSITORY/contents/docs/releases/v0.2.0-alpha-publication.md?ref=$GITHUB_SHA" --jq .content | base64 --decode > "$RUNNER_TEMP/notes.md"
-          if gh release view v0.2.0-alpha --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo 'Release already exists; refusing replacement.'
-            exit 1
-          fi
-          gh release create v0.2.0-alpha dist/candidates/v0.2.0-alpha/VaultPanel-v0.2.0-alpha.zip dist/candidates/v0.2.0-alpha/SOURCE_COMMIT.txt dist/candidates/v0.2.0-alpha/SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" --target 21fdb8f0f88dc3e46926ba91f34df7a91216bb13 --title 'v0.2.0-alpha — Retro read-only VaultPanel' --notes-file "$RUNNER_TEMP/notes.md" --draft --prerelease --latest=false
-          gh api "repos/$GITHUB_REPOSITORY/releases/tags/v0.2.0-alpha" > "$RUNNER_TEMP/release.json"
+          gh api "repos/$GITHUB_REPOSITORY/releases/461703506" > "$RUNNER_TEMP/release.json"
           python - <<'PY'
           import hashlib, json, os
           from pathlib import Path
           release = json.loads((Path(os.environ['RUNNER_TEMP']) / 'release.json').read_text())
           folder = Path('dist/candidates/v0.2.0-alpha')
+          assert release['id'] == 461703506 and release['tag_name'] == 'v0.2.0-alpha'
           assert release['draft'] and release['prerelease']
+          assert release['body'].strip() == (Path(os.environ['RUNNER_TEMP']) / 'notes.md').read_text().strip()
           assert release['target_commitish'] == '21fdb8f0f88dc3e46926ba91f34df7a91216bb13'
           assert {a['name'] for a in release['assets']} == {p.name for p in folder.iterdir()}
           for asset in release['assets']:
@@ -59,4 +56,13 @@ jobs:
               assert asset['state'] == 'uploaded' and asset['size'] == len(data)
               assert asset['digest'] == 'sha256:' + hashlib.sha256(data).hexdigest()
           PY
-          gh release edit v0.2.0-alpha --repo "$GITHUB_REPOSITORY" --draft=false --prerelease --latest=false
+          gh api --method PATCH "repos/$GITHUB_REPOSITORY/releases/461703506" -F draft=false -F prerelease=true -f make_latest=false > "$RUNNER_TEMP/published.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          r = json.loads((Path(os.environ['RUNNER_TEMP']) / 'published.json').read_text())
+          assert r['id'] == 461703506 and r['tag_name'] == 'v0.2.0-alpha'
+          assert not r['draft'] and r['prerelease']
+          assert r['target_commitish'] == '21fdb8f0f88dc3e46926ba91f34df7a91216bb13'
+          print(r['html_url'])
+          PY
