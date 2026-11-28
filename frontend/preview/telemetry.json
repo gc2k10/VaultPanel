@@ -1,0 +1,133 @@
+{
+  "overview": {
+    "hostname": "DEMO-NAS",
+    "platform": "Raspberry Pi 5 \u2014 simulated",
+    "global_status": "UNKNOWN",
+    "cpu_usage_pct": 12,
+    "cpu_temp_c": 42,
+    "memory": {
+      "used_pct": 25
+    },
+    "storage": {
+      "used_pct": 30
+    },
+    "internet_ok": null,
+    "services_online": 3,
+    "services_total": 3,
+    "generated_at": "2026-01-01T12:00:00Z",
+    "uptime": "3d 4h 12m",
+    "loadavg": {
+      "1m": 0.1,
+      "5m": 0.2,
+      "15m": 0.3
+    },
+    "ips": {
+      "lan_ip": null,
+      "tailscale_ip": null
+    },
+    "last_backup": null,
+    "last_scrub": null,
+    "last_smart_test": "NO DATA",
+    "vaultpanel_backup": null
+  },
+  "cooling": {
+    "fans": [
+      {
+        "label": "CPU fan (demo)",
+        "rpm": 1200
+      },
+      {
+        "label": "Case fan (demo)",
+        "rpm": 900
+      }
+    ],
+    "cpu_temp_c": 42,
+    "thermal_status": "NOMINAL",
+    "fan_profile": "UNKNOWN",
+    "rear_fans": "UNKNOWN",
+    "led": {
+      "scene": null,
+      "mode": null,
+      "brightness": null,
+      "speed": null,
+      "oled_mode": "UNKNOWN",
+      "note": "Unavailable state is not inferred."
+    }
+  },
+  "storage": {
+    "root": {
+      "path": "/",
+      "used_gb": 30,
+      "free_gb": 70,
+      "total_gb": 100,
+      "used_pct": 30
+    },
+    "btrfs": {
+      "filesystem_show": "",
+      "scrub_status": "",
+      "degraded": false,
+      "healthy": null
+    },
+    "devices": [
+      {
+        "name": "example-disk",
+        "model": "Synthetic device",
+        "size": "100G",
+        "temperature_c": null,
+        "smart_health": "unknown"
+      }
+    ],
+    "mountpoint": "/",
+    "snapshot_count": null,
+    "newest_snapshot": null,
+    "mdraid": {
+      "available": false,
+      "arrays": []
+    }
+  },
+  "services": {
+    "services": [
+      {
+        "name": "File sharing (demo)",
+        "active": true,
+        "active_text": "active",
+        "port": null,
+        "since_short": "Example"
+      },
+      {
+        "name": "Cloud (demo)",
+        "active": true,
+        "active_text": "active",
+        "port": null,
+        "since_short": "Example"
+      },
+      {
+        "name": "DNS (demo)",
+        "active": true,
+        "active_text": "active",
+        "port": null,
+        "since_short": "Example"
+      }
+    ]
+  },
+  "network": {
+    "ips": {
+      "lan_ip": null,
+      "tailscale_ip": null
+    },
+    "gateway": null,
+    "internet_ok": null,
+    "dns_ok": null,
+    "tailscale_status": "Unavailable",
+    "resolv_conf": "Not exposed"
+  },
+  "alerts": {
+    "alerts": [
+      {
+        "source": "SYSTEM",
+        "level": "INFO",
+        "message": "Demonstration only: every reading is fictional. No NAS connection."
+      }
+    ]
+  }
+}

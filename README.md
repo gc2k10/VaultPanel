@@ -1,8 +1,12 @@
 # VaultPanel
 
-A read-only review build of the existing Flask dashboard, with classic and retro layouts. The production-source intake has been reviewed and sanitized. **This is experimental v0.1.0-alpha code, not a production-validated version. Check GitHub Releases for publication status and verified archives.**
+A read-only review build of the existing Flask dashboard, with classic and retro layouts. The production-source intake has been reviewed and sanitized. **The main branch includes unreleased follow-up changes beyond v0.1.0-alpha. Use GitHub Releases for a fixed, verified archive. Neither is production-validated.**
 
 The dashboard reads CPU, memory, uptime and configured storage telemetry. Optional Linux command-based reads are disabled by default. All four administration endpoints return HTTP 403; backup, fan, LED and OLED operations are intentionally unavailable. The original hardware scripts are excluded from the application.
+
+## Preview without installation
+
+Open the original [Classic](https://gc2k10.github.io/VaultPanel/original/index.html) or [Retro](https://gc2k10.github.io/VaultPanel/original/retro.html) layout. These use the application's templates and styles with fictional data, disabled controls and no NAS connection. [Preview details](docs/original-demo.md). The site root is a separate project presentation.
 
 ## Local evaluation
 
