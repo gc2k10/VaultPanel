@@ -1,0 +1,62 @@
+name: Publish approved v0.2.0-alpha
+on:
+  push:
+    branches: [release/publish-approved-v020]
+permissions:
+  contents: read
+concurrency:
+  group: publish-approved-v020
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 21fdb8f0f88dc3e46926ba91f34df7a91216bb13
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Verify the approved source and exact archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = '21fdb8f0f88dc3e46926ba91f34df7a91216bb13'
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/46156249412" --jq 'select(.head_sha == "21fdb8f0f88dc3e46926ba91f34df7a91216bb13" and .conclusion == "success") | .id' | grep -qx 46156249412
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/46155823442" --jq 'select(.head_sha == "6f6656003b304073e0faccbdd2a7b4b9022cb88a" and .conclusion == "success") | .id' | grep -qx 46155823442
+          test "$(gh api "repos/$GITHUB_REPOSITORY/git/commits/6f6656003b304073e0faccbdd2a7b4b9022cb88a" --jq .tree.sha)" = "$(git rev-parse 'HEAD^{tree}')"
+          python scripts/package-alpha.py --version v0.2.0-alpha
+          cd dist/candidates/v0.2.0-alpha
+          printf '%s\n' '95c7f7b93d9f27faf4eb7611533120f77768f7ef93f6fe3cf6ce24ca6f381075  VaultPanel-v0.2.0-alpha.zip' 'e7257c9c9acdbae3a7cb756d2fd17e86b4fdc058e9fe83bc9abf07176bd39429  SOURCE_COMMIT.txt' | sha256sum --check
+          sha256sum --check SHA256SUMS.txt
+      - name: Publish only the verified assets as a prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/$GITHUB_REPOSITORY/contents/docs/releases/v0.2.0-alpha-publication.md?ref=$GITHUB_SHA" --jq .content | base64 --decode > "$RUNNER_TEMP/notes.md"
+          if gh release view v0.2.0-alpha --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo 'Release already exists; refusing replacement.'
+            exit 1
+          fi
+          gh release create v0.2.0-alpha dist/candidates/v0.2.0-alpha/VaultPanel-v0.2.0-alpha.zip dist/candidates/v0.2.0-alpha/SOURCE_COMMIT.txt dist/candidates/v0.2.0-alpha/SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" --target 21fdb8f0f88dc3e46926ba91f34df7a91216bb13 --title 'v0.2.0-alpha — Retro read-only VaultPanel' --notes-file "$RUNNER_TEMP/notes.md" --draft --prerelease --latest=false
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/v0.2.0-alpha" > "$RUNNER_TEMP/release.json"
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          release = json.loads((Path(os.environ['RUNNER_TEMP']) / 'release.json').read_text())
+          folder = Path('dist/candidates/v0.2.0-alpha')
+          assert release['draft'] and release['prerelease']
+          assert release['target_commitish'] == '21fdb8f0f88dc3e46926ba91f34df7a91216bb13'
+          assert {a['name'] for a in release['assets']} == {p.name for p in folder.iterdir()}
+          for asset in release['assets']:
+              data = (folder / asset['name']).read_bytes()
+              assert asset['state'] == 'uploaded' and asset['size'] == len(data)
+              assert asset['digest'] == 'sha256:' + hashlib.sha256(data).hexdigest()
+          PY
+          gh release edit v0.2.0-alpha --repo "$GITHUB_REPOSITORY" --draft=false --prerelease --latest=false
