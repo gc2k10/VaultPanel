@@ -9,6 +9,7 @@ Environment variables are read once at startup. Restart after changing them. The
 | `VAULTPANEL_STATE_DIR` | `state` | Optional existing state files to read; never created or written |
 | `VAULTPANEL_SMART_DEVICES` | empty | Comma-separated explicit `/dev/` device paths; SMART reads restricted to these |
 | `VAULTPANEL_SERVICES` | `[]` | JSON list of service objects with `name` and exactly one of `systemd` or `docker`; optional `port` |
+| `VAULTPANEL_MDRAID_READS` | `false` | Independent opt-in to read the fixed `/proc/mdstat` file; no commands or writes |
 | `VAULTPANEL_COMMAND_READS` | `false` | Explicit opt-in for allowlisted diagnostic subprocesses |
 | `VAULTPANEL_PING_TARGET` | empty | Optional connectivity target; no probe without a value and command opt-in |
 | `VAULTPANEL_DNS_TARGET` | empty | Optional DNS target, also requires command opt-in |
@@ -36,3 +37,9 @@ Optional local state reads are restricted to regular, non-symlink files of at mo
 Btrfs is marked healthy only with recognizable filesystem output and an explicitly completed, error-free scrub; missing or ambiguous evidence stays unknown. This is a conservative display heuristic, not a filesystem integrity guarantee.
 
 A service with unavailable diagnostics is reported as `active: null` and displayed as UNKNOWN. Recognized systemd inactive/failed states remain explicit. Empty or unavailable Docker output is treated conservatively as unknown.
+
+## RAID membership (follow-up branch; not in v0.1.0-alpha)
+
+`GET /api/storage` adds `mdraid: {available, arrays}`. Reads are disabled by default, independent of command diagnostics. When explicitly enabled, the adapter reads at most 64 KiB plus an overflow byte from the fixed `/proc/mdstat` path. Missing files, permissions, invalid UTF-8 or excess output remain unavailable. No device names, UUIDs or raw input are returned; no `mdadm`, sudo or repair commands are invoked.
+
+The two layouts display UNKNOWN, DEGRADED, BUSY or MEMBERS PRESENT from this evidence alone. All recognized arrays must have consistent active RAID1 membership with at least two members for MEMBERS PRESENT. This does not establish filesystem integrity, durability, backups or which array backs the configured mount. An unsupported array keeps the combined display unknown; degraded evidence takes priority. BTRFS scrub results remain separate. No NAS configuration is necessary for offline tests or the public synthetic demo.

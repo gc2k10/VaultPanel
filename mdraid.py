@@ -53,7 +53,7 @@ def parse_mdstat(text):
             if active and level == 'raid1' and consistent:
                 if online < expected:
                     result.update(status='degraded', healthy=False)
-                elif '(F)' not in header and operation is None:
+                elif expected >= 2 and '(F)' not in header and operation is None:
                     result.update(status='ok', healthy=True)
                 elif operation is not None:
                     result['status'] = 'busy'

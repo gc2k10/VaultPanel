@@ -15,6 +15,7 @@ class Settings:
     state_dir: Path = Path('state')
     smart_devices: tuple = ()
     services: tuple = ()
+    mdraid_reads: bool = False
     command_reads: bool = False
     ping_target: str = ''
     dns_target: str = ''
@@ -26,6 +27,9 @@ class Settings:
         flag = env.get('VAULTPANEL_COMMAND_READS', 'false').lower()
         if flag not in {'true', 'false'}:
             raise ValueError('VAULTPANEL_COMMAND_READS must be true or false')
+        mdraid_flag = env.get('VAULTPANEL_MDRAID_READS', 'false').lower()
+        if mdraid_flag not in {'true', 'false'}:
+            raise ValueError('VAULTPANEL_MDRAID_READS must be true or false')
         devices = tuple(filter(None, env.get('VAULTPANEL_SMART_DEVICES', '').split(',')))
         if any(not re.fullmatch(r'/dev/[a-zA-Z0-9_-]+', d) for d in devices):
             raise ValueError('Invalid SMART device path')
@@ -52,6 +56,7 @@ class Settings:
         return cls(storage_mount=env.get('VAULTPANEL_STORAGE_MOUNT', '/'),
                    snapshot_dir=env.get('VAULTPANEL_SNAPSHOT_DIR', ''),
                    state_dir=Path(env.get('VAULTPANEL_STATE_DIR', 'state')),
+                   mdraid_reads=mdraid_flag == 'true',
                    smart_devices=devices, services=tuple(services), command_reads=flag == 'true',
                    ping_target=targets[0], dns_target=targets[1],
                    access_token=env.get('VAULTPANEL_ACCESS_TOKEN', ''))

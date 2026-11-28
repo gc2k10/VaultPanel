@@ -1,6 +1,12 @@
-# Local evaluation of the alpha candidate
+# Local evaluation without a NAS
 
-This is a read-only review candidate, not a production NAS installer. Use a separate development machine or disposable VM. Do not install it over an existing VaultPanel or change any NAS services. No second physical NAS is required.
+The published alpha is a read-only preview, not a production NAS installer. Use a separate development machine or disposable VM. Do not install it over an existing VaultPanel or change any NAS services. No second physical NAS is required.
+
+## Preview without installation
+
+Open https://gc2k10.github.io/VaultPanel/ on your existing computer. This standalone demo uses synthetic values, does not contact your NAS and requires no login or server address. It presents the design rather than real telemetry or the new mdraid implementation. A normal web visit contacts GitHub Pages; do not enter secrets or upload configuration.
+
+For a fully local synthetic preview, follow [demo-start.md](demo-start.md). No application dependencies are needed for that static demo. You can stop here: installing on a NAS is not required to review the project.
 
 ## Start from the reviewed source archive
 
@@ -29,3 +35,7 @@ Press Ctrl+C in the terminal running the server, then run `deactivate`. Remove o
 A fresh local Python environment installs the pinned dependency set and passes `pip check`. The distribution smoke test creates a source ZIP from tracked files, extracts it into a temporary directory, and imports it in a new isolated Python process from a different working directory. It requests both pages, local assets, eight read APIs and four denied write APIs. Command execution and outbound socket connections are trapped; source hashes and the empty working directory must remain unchanged. API response contents are not printed or published.
 
 CI repeats the test on Linux x64 and ARM64. This uses the Flask request test client, not a production HTTP server or the physical Raspberry Pi. Browser tests use synthetic fixtures. Never deploy `tests/browser_server.py`.
+
+## Follow-up RAID review
+
+The RAID changes on PR #4 are separate from the published alpha ZIP. Keep `VAULTPANEL_MDRAID_READS=false` for local evaluation. Tests inject synthetic mdstat text and mocked reads; do not copy `/proc/mdstat` or configuration from the NAS. Running the app on a laptop displays laptop telemetry, not NAS data. No remote NAS connection exists. Real hardware acceptance and any permanent installation remain later, separately planned work.

@@ -8,7 +8,7 @@ Confirmed operator evidence: mdraid RAID1 below BTRFS; boot/root outside the dat
 
 ## Follow-up implementation in review
 
-The follow-up `mdraid.py` module parses supplied mdstat text with synthetic fixtures for healthy membership, degraded arrays, maintenance, malformed and unavailable states. Seven tests cover these cases, multiple/duplicate arrays, input size and invalid encoding/counts. It performs no reads or commands and is not yet wired into the application API. Keep mdraid membership separate from BTRFS scrub status. No repair, assembly, resync or topology changes. New optional reads must stay disabled until explicitly configured, and absence must never produce a healthy result.
+The follow-up branch connects the bounded mdstat parser to `/api/storage` through an independent opt-in read adapter. Both layouts distinguish array membership from BTRFS scrub results. Reads default to disabled; the adapter never invokes commands or writes. Synthetic tests cover disabled access, read failures, API separation, both layouts and a single-member array that cannot establish redundancy. This work is not part of the published v0.1.0-alpha. Physical sensor and storage topology validation remains outstanding.
 
 ## Later work and evidence needed
 

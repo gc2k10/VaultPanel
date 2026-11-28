@@ -64,6 +64,26 @@ const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, 'telemetry.json'
       console.log(`PASS ${route}: hostile telemetry displayed as text`);
       await page.close();
 
+      const raidPage = await browser.newPage();
+      let raidEvidence = {available: false, arrays: []};
+      await raidPage.route('**/api/storage', r => r.fulfill({json: {
+        ...fixture.storage, btrfs: {...fixture.storage.btrfs, healthy: true}, mdraid: raidEvidence
+      }}));
+      await raidPage.goto('http://127.0.0.1:8091' + route);
+      await raidPage.locator('[data-tab="storage"]').click();
+      for (const [evidence, label] of [
+        [{available: false, arrays: []}, 'UNKNOWN'],
+        [{available: true, arrays: [{status: 'degraded', healthy: false}]}, 'DEGRADED'],
+        [{available: true, arrays: [{status: 'busy', healthy: null}]}, 'BUSY'],
+        [{available: true, arrays: [{status: 'ok', healthy: true}]}, 'MEMBERS PRESENT'],
+      ]) {
+        raidEvidence = evidence;
+        await raidPage.waitForFunction(expected => document.getElementById('raidStatus').textContent === expected, label, {timeout: 12000});
+      }
+      passed++;
+      console.log(`PASS ${route}: RAID membership independent of BTRFS scrub`);
+      await raidPage.close();
+
       const longPage = await browser.newPage({viewport: {width: 390, height: 900}});
       await longPage.route('**/api/*', async r => {
         const key = r.request().url().split('/').pop();

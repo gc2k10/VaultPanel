@@ -238,12 +238,10 @@ function renderStorage(data) {
   const nvme1 = devicesData[1];
 
   if ($('raidStatus')) {
-    let raid = '--';
-    if (btrfs.degraded === true) raid = 'DEGRADED';
-    else if (btrfs.healthy === true) raid = 'HEALTHY';
+    const raid = mdraidLabel(data.mdraid);
     $('raidStatus').textContent = raid;
     $('raidStatus').classList.remove('ok', 'warn', 'crit');
-    if (raid === 'HEALTHY') $('raidStatus').classList.add('ok');
+    if (raid === 'MEMBERS PRESENT') $('raidStatus').classList.add('ok');
     else if (raid === 'DEGRADED') $('raidStatus').classList.add('crit');
   }
 

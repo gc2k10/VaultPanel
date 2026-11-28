@@ -53,3 +53,61 @@ class MdraidParserTests(unittest.TestCase):
             array = parse_mdstat(sample(extra='recovery = ' + progress))['arrays'][0]
             self.assertIsNone(array['progress_pct'])
             self.assertIsNone(array['healthy'])
+
+class MdraidReadTests(unittest.TestCase):
+    def test_single_member_array_is_not_redundancy(self):
+        array = parse_mdstat(sample('[1/1] [U]'))['arrays'][0]
+        self.assertEqual(array['status'], 'unknown')
+        self.assertIsNone(array['healthy'])
+
+    def test_reads_require_separate_explicit_opt_in(self):
+        from config import Settings
+        from hardware import read_mdstat
+        from unittest.mock import patch
+        self.assertFalse(Settings.from_env({}).mdraid_reads)
+        self.assertFalse(Settings.from_env({'VAULTPANEL_COMMAND_READS': 'true'}).mdraid_reads)
+        self.assertTrue(Settings.from_env({'VAULTPANEL_MDRAID_READS': 'true'}).mdraid_reads)
+        with self.assertRaises(ValueError):
+            Settings.from_env({'VAULTPANEL_MDRAID_READS': 'yes'})
+        with patch('builtins.open') as opened, patch('subprocess.Popen') as process:
+            self.assertEqual(read_mdstat(), '')
+            opened.assert_not_called()
+            process.assert_not_called()
+
+    def test_fixed_bounded_read_and_failures(self):
+        from hardware import read_mdstat
+        from unittest.mock import patch, mock_open
+        for content, expected in [(sample().encode(), sample()), (b'x' * (MAX_MDSTAT_BYTES + 1), ''), (b'\xff', '')]:
+            opened = mock_open(read_data=content)
+            with patch('builtins.open', opened), patch('subprocess.Popen') as process:
+                self.assertEqual(read_mdstat(enabled=True), expected)
+                opened.assert_called_once_with('/proc/mdstat', 'rb')
+                opened().read.assert_called_once_with(MAX_MDSTAT_BYTES + 1)
+                process.assert_not_called()
+        for error in [PermissionError, FileNotFoundError, OSError]:
+            with patch('builtins.open', side_effect=error):
+                self.assertEqual(read_mdstat(enabled=True), '')
+
+    def test_storage_api_keeps_membership_separate_from_btrfs(self):
+        import app
+        import collectors
+        from config import Settings
+        from unittest.mock import patch
+        from contextlib import ExitStack
+        client = app.create_app({'TESTING': True, 'ACCESS_TOKEN': ''}).test_client()
+        for text, btrfs, status in [(sample('[2/1] [U_]'), {'healthy': True}, 'degraded'),
+                                     (sample(), {'healthy': False}, 'ok'),
+                                     ('', {'healthy': True}, None)]:
+            with ExitStack() as stack:
+                stack.enter_context(patch.object(collectors, 'settings', Settings(mdraid_reads=True)))
+                stack.enter_context(patch.object(collectors, 'disk_usage', return_value={}))
+                stack.enter_context(patch.object(collectors, 'btrfs_status', return_value=btrfs))
+                stack.enter_context(patch.object(collectors, 'list_block_devices', return_value=[]))
+                stack.enter_context(patch.object(collectors, 'get_snapshot_info', return_value={'snapshot_count': None, 'newest_snapshot': None}))
+                read = stack.enter_context(patch.object(collectors, 'read_mdstat', return_value=text))
+                response = client.get('/api/storage')
+                self.assertEqual(response.status_code, 200)
+                read.assert_called_once_with(enabled=True)
+                self.assertEqual(response.json['btrfs'], btrfs)
+                arrays = response.json['mdraid']['arrays']
+                self.assertEqual(arrays[0]['status'] if arrays else None, status)
