@@ -34,7 +34,7 @@ node scripts/review-files.mjs .
 The heuristic scanner intentionally reports some code references and synthetic test data; review its findings, do not treat an exit code as a privacy guarantee. Node.js 22+ is required for the intake tools and JavaScript tests.
 
 - [Local evaluation and removal](docs/INSTALLATION.md)
-- [Draft alpha release notes](docs/RELEASE_NOTES_ALPHA.md)
+- [Alpha release notes](docs/RELEASE_NOTES_ALPHA.md)
 - [Source audit, all 24 original files](docs/SOURCE_REVIEW.md)
 - [Validation results and release blockers](docs/VALIDATION.md)
 - [Configuration and API changes](docs/CONFIGURATION.md)
